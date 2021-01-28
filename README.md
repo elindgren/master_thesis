@@ -1,4 +1,5 @@
-# Master's thesis template
-Template for master's (and bachelor's) thesis at Chalmers by Joel Karlsson and Carl Eklind.
+# Predicting Neurodegenerative diseases using Graph Convolutional Neural Networks
 
-Based on the template [*Chalmers University of Technology Master's Thesis* by Magnus Gustaver](https://sv.overleaf.com/latex/templates/chalmers-university-of-technology-masters-thesis/vnjxsndxqxfy) [(Licensed under CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) which in turn is based on a template by David Frisk.
+Master Thesis in MPPHS regarding graph convolutional neural networks as applied to neuroscientific data. This project is a collaboration between Chalmers/GU, Syntronic AB and Karolinska Institutet. 
+
+The template used for the master thesis is created by Joel Karlsson and Carl Eklind, and can be found at: https://github.com/kajoel/master_thesis_template. Go check it out! :)
