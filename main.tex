@@ -1,0 +1,64 @@
+% TEMPLATE INSTRUCTIONS
+% Fill in the information in template/information.tex
+% The front matter (abstract and acknowledgements) needs slight modification for Bachelor theses.
+
+% IMPORT SETTINGS
+\documentclass[12pt, a4paper, twoside, openright]{report}
+\input{template/information}
+\input{template/settings/basic}
+\input{template/settings/optional}
+\input{template/settings/commands}
+
+% CHOOSE SUBSET OF FILES TO COMPILE (USES OLD .aux FILES)
+% Sometimes, this will cause a blank page at the beginning.
+% One way to fix this is to add \cleardoublepage at the end of every
+% included file.
+\if\thesisStatus d % only effective in draft mode
+    % \includeonly{chapters/methods}
+\fi
+
+\begin{document}
+
+% COVER PAGE, TITLE PAGE AND IMPRINT PAGE
+\if\thesisStatus f
+    \include{template/pages/cover}
+\fi
+\pagenumbering{roman}
+\include{template/pages/title}
+\if\thesisStatus f
+    \include{template/pages/imprint}
+\fi
+
+% ABSTRACT & ACKNOWLEDGEMENTS
+\include{frontmatter/abstract}
+\include{frontmatter/acknowledgements}
+
+% TABLE OF CONTENTS
+\include{template/pages/tableofcontents}
+
+% BEGINNING OF MAIN DOCUMENT
+\pagenumbering{arabic}	% Arabic numbering starting from 1 (one)
+
+% CHAPTERS
+\include{chapters/introduction}
+\include{chapters/theory}
+\include{chapters/methods}
+\include{chapters/results}
+\include{chapters/conclusion}
+
+% REFERENCES / BIBLIOGRAPHY
+\include{template/pages/bibliography}
+
+% APPENDICES
+\cleardoublepage
+\appendix
+\pagenumbering{bychapter}
+\include{appendices/first_appendix}
+\include{appendices/second_appendix}
+
+% LAST PAGE
+\if\thesisStatus f
+    \include{template/pages/lastpage}
+\fi
+
+\end{document}
