@@ -1,44 +1,19 @@
 \chapter{Introduction}
-This chapter presents the section levels that can be used in the template.
 
-\section{Section levels}
-The following table presents an overview of the section levels that are used in this document. The number of levels that are numbered and included in the table of contents is set in the settings file \texttt{Settings.tex}. The levels are shown in \cref{sec:introduction_section}\footnote{
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placeratac, adipiscing vitae, felis. Curabitur dictum gravida mauris.}%
-\footnote{Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placeratac, adipiscing vitae, felis. Curabitur dictum gravida mauris.}%
-.
+\section{Background}
+Insight into healthy ageing of the brain may be used to extract new age-related biomarkers. These biomarkers can be used to identify deviations between chronological and predicted age, which could be an indicator of abnormal changes in the brain, for instance due to neurodegenerative disease \cite{multiplex}. One way to study how the brain ages is by analysing how the connections between various parts of the brain changes \cite{grady}. These connections can either be structural or functional. Structural connections refer to different parts of the brain being anatomically connected, whilst functional connections are slightly more abstract in that two brain regions are connected if their activation is correlated in time \cite{sporns}. Structural connections can be obtained through methods such as MRI and DTI, whilst functional connections are studied through e.g. functional-MRI (fMRI), PET, EEG and MEG \cite{hirsch}. Mapping these connections throughout the brain yields structural and functional brain networks, respectively. The functional networks can further be divided into several smaller specialized networks. The largest of these is the default-mode network (DMN), which is primarily active when the brain experiences no external stimuli and for example considered to be responsible for mind wandering \cite{alves_dmn}.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{ll} \hline\hline
-Name & Command\\ \hline
-Chapter & \textbackslash\texttt{chapter\{\emph{Chapter name}\}}\\
-Section & \textbackslash\texttt{section\{\emph{Section name}\}}\\
-Subsection & \textbackslash\texttt{subsection\{\emph{Subsection name}\}}\\
-Subsubsection & \textbackslash\texttt{subsubsection\{\emph{Subsubsection name}\}}\\
-Paragraph & \textbackslash\texttt{paragraph\{\emph{Paragraph name}\}}\\
-Subparagraph & \textbackslash\texttt{paragraph\{\emph{Subparagraph name}\}}\\ \hline\hline
-\end{tabular}
-\end{table}
+Changes in functional brain networks have previously been correlated to age \cite{grady}. Specifically, age differences in brain activity have been observed during certain task-specific activities \cite{grady}. For older people, typically a larger fraction of the brain gets activated when performing a task than for younger people. This has been discussed as both the brain becoming less efficient in the use of cognitive resources and that the selectivity in what brain regions are activated for certain tasks decreases with age. However, these results aren't entirely conclusive in it's connection to ageing, mainly due to two factors. Firstly, the analysis of task-specific functional networks has yielded conflicting results between studies. Secondly, there are a lot of factors influencing ageing, which can vary from individual to individual (e.g. genetics and life experience) \cite{grady}. 
 
-%\footnote{\lipsum[2]}.
+One approach that has shown promising results in addressing the issue with task-specific functional networks is the use of resting-state functional networks. Contrary to task-related networks, resting-state networks are mapped when the patient is not exposed to external stimuli, that is, in a resting state. One technique for obtaining such resting-state networks is resting-state fMRI (R-fMRI). The situation for the second issue, being that a lot of factors influences ageing including individual deviations, can be somewhat improved by considering larger data sets \cite{grady}. In Biswal et al. \cite{biswal}, these two approaches were combined to yield correlations between resting-state functional data from a large data set and both age and sex. 
 
-\section{Section} \label{sec:introduction_section}
-\subsection{Subsection}
-\subsubsection{Subsubsection}
-\paragraph{Paragraph}
-\subparagraph{Subparagraph}
-\subparagraph{Subparagraph 2}
-\newpage
+Graph theory is one possible framework for analyzing networks, where the network can be summarized through the use of certain graph theoretical measures. This approach has previously been applied on functional brain networks with promising results. In Chan et al. \cite{chan}, graph measures where used to analyze the functional connections between various specialized brain networks, and the graph theoretical measure of segregation among the specialized networks was correlated to ageing. However, there still exists a need for more accurate biomarkers that can be related to healthy ageing and cognitive decline \cite{multiplex}. 
 
-\section{Section}
-\lipsum[1]
-\subsection{Subsection}
-\lipsum[2]
-\subsubsection{Subsubsection}
-\lipsum[3]
-\paragraph{Paragraph}
-\lipsum[4]
-\subparagraph{Subparagraph}
-\lipsum[5]
-\subparagraph{Subparagraph 2}
-\lipsum[6]
+Inspired by recent advances in machine learning, artifical neural networks (ANNs) could be utilized to obtain more accurate and complex biomarkers for ageing. ANNs typically excel at finding complex patterns in large data sets. However, classical ANNs are heavily dependent on the input data forming ordered tensors. This is not the case for graph structured data, since graphs by definition are node order invariant. Thus, if one wants to combine ANNs with the promising approach of analyzing functional brain networks as graphs, one needs to turn to a class of ANNs known as graph neural networks (GNNs). GNNs operate directly on the graph structure. Graph convolutional neural networks, GCNs, are a subclass of GNNs which have shown promising results when applied to graph data in general \cite{kipf_semi_supervised} \cite{kipf_vae} \cite{wu_review}, and also specifically for the task of predicting neurodegenerative disease in human brains based on graphs derived from structural-MRI data \cite{jansson_sandstrom}. Motivated by these results, GCNs applied on large functional data sets could build upon the results of Biswal et. al \cite{biswal} and Chan et. al \cite{chan} by deriving more complex biomarkers in order to gain more insight into the ageing brain. 
+
+\section{Aim of the project}
+
+\subsection{Delimitations}
+
+\section{Structure of the report}
+
