@@ -2,23 +2,110 @@
 
 \section{General graph theory}
 
+A graph $\mathcal{G} = \{V, E \} $ is defined by the set of its nodes $V$ and edges $E$. The edges forms the connections between nodes, and for a pair a pair of nodes $(i,j)$ the corresponding edge may be denoted $e_{ij}$. We may define the neighbours to a certain node $v \in V$ as $N(v)$, which thus are the nodes $u \in V$ that are connected to $v$, $e_{vu} \neq 0$. Each node $v$ may also be associated with \textit{node features}, $x_v$.
+
+A graph is considered to be \textit{undirected} if the edges are undirected, $e_{ij} \equiv e_{ji}$, and \textit{directed} if the edges are directed, $e_{ij} \not\equiv e_{ji}$. Furthermore, a graph can either be \textit{binary} or \textit{weighted}. In a binary graph, edges are either present or not, whilst in a weighted graph each edge $e_{ij}$ is associated with a weight $w_{ij}$. \cite{source} Weights in a weighted graph may be interpreted differently depending on the application. They can be seen as the connection strength between devices in a cellular network, the flow of goods in a logistics setting, a distance metric etc.
+
+The edges in a graph may be succinctly summarised in an \textit{adjacency matrix} $A$. $A$ is defined as
+
+\begin{equation}
+    A_{ij} = \begin{cases} \mbox{1,} & \mbox{if } e_{ij} \in E \\ \mbox{0,} & \mbox{otherwise} \end{cases}
+    \label{eq:adjacencydefinition}
+\end{equation}
+In the case of a weighted graph, $A_{ij} = w_{ij}$. From definition \eqref{eq:adjacencydefinition} follows that undirected graphs have a symmetric adjacency matrix, $A_{ij} = A_{ji}$. In this work we mainly focus on the edges rather than the nodes of the brain networks, and thus adjacency matrices will be our primary way of representing graphs.
+
 \section{Similarity measure and population graphs}
 
+Population graphs are graphs in which each node corresponds to an individual in a population. The set of nodes $V$ thus corresponds to the population, and the edges $E$ relate all individuals to each other. The idea behind this construction is that the nodes contain features related to each subject, whilst the edges contain information on how they relate to one another \cite{stankeviciute}. The set of edges $E$ can be calculated from a similarity measure, which thus encodes information on the similarity between subjects. The similarity measure greatly shapes the resulting population graph, and should be chosen with a specific application in mind. 
+
 \section{Machine learning on graphs}
-\subsection{Graph classification}
-\subsection{Node classification}
-\subsection{regression}
+
+Graphs are very versatile in storing data, and are thus abundant in many areas of science. It is thus interesting how one incorporates them into the framework of machine learning. Specifically, how does one formulate a problem to suitably be solved using machine learning on graphs? 
+
+One common class of problems is \textit{graph classification}. As the name implies, given a graph $\mathcal{G}$ the task is to classify it as belonging to one of several classes. Another class of problem is \textit{node classification}. The task here is to classify each node in the set of nodes $V$ belonging to the graph $\mathcal{G} = \{V, E \}$. The schematics of graph classification and node classification can be seen in figures \ref{fig:graph_classification} and \ref{fig:node_classification} respectively. Graph and node classification can be generalised to graph and node \textit{regression}, in which a continuous value is predicted for each graph or node, respectively.
+
+% \subsection{Graph classification}
+% \subsection{Node classification}
+% \subsection{regression}
 
 
 
 \section{Graph Convolutional Neural Networks}
+
+Graph Convolutional Neural Networks (GCNs) are a class of neural networks that generalize the notion of convolutions from grid data to graph structured data \cite{wu_review}. Regular convolutional operations typically operate on structured grids of data, for instance the pixels in an image, where each grid point is only connected to its adjacent neighbours. This may not be the case in graph structured data, where any pair of nodes can be connected. This difference can be visualised as in figure \ref{fig:grid_graph_data}. 
+
+The idea behind GCNs is to aggregate the features $x_v$ for each node $v$ and $x_u$ for all of its neighbours $u \in N(v)$, and thus successively share information across the graph. Heuristically, this can be seen as a form of \textit{message passing}, in which each node communicates its features to all of its neighbours. 
+
 \subsection{Convolutions in the graph domain}
+
+We follow Jansson and Sandström \cite{jansson_sandstrom} in the following derivation. Consider an undirected graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ with $N$ nodes and adjacency matrix $A$. The degree matrix $D$ to $\mathcal{G}$ is defined as 
+\begin{equation}
+    D_{ij} = \begin{cases} \sum_j A_{ij}, & \mbox{if } i = j \\ \mbox{0,} & \mbox{otherwise} \end{cases}.
+    \label{eq:degreematrixdefinition}
+\end{equation}
+We can now define the graph Laplacian $L= D-A $ for the graph $\mathcal{G}$. $L$ can be normalized according to 
+\begin{equation}
+    L_\text{norm} = D^{-1/2} L D^{-1/2} =  I_N - D^{-1/2} A D^{-1/2},
+    \label{eq:normalized_graph_laplacian}
+\end{equation}
+where $I_N$ is the $N$x$N$ identity matrix. In the following we assume that the graph Laplacian $L$ is normalized according to equation \eqref{eq:normalized_graph_laplacian}. $L$ is symmetric and has only real entries, and may thus be diagonalized by an orthogonal matrix $U$ according to the spectral theorem. The spectral decomposition of $L$ may be written as 
+
+\begin{equation}
+    L = U \Lambda U^T,
+    \label{eq:laplacian_decomposition}
+\end{equation}
+where $\Lambda$ is a diagonal matrix of the eigenvalues $\lambda_i$ in $L$, and $U$ is an orthogonal matrix containing the corresponding eigenvectors $\varphi_i$. 
+
+We may now define the graph Fourier transform, which maps signals between the graph vertex domain and the graph spectral domain. Consider a signal $x$, defined on the nodes $\mathcal{V}$. The graph Fourier transform of $x$ may be written as
+\begin{equation}
+    \hat{x} = \mathcal{GF}(x) = \langle x, \phi_i \rangle = \sum_{i=1}^N x \varphi_i^* = U^T x,
+    \label{eq:graph_fourier_transform}
+\end{equation}
+where $\varphi_i^*$ is the conjugate transpose of $\varphi_i$. Similarly, the inverse transform is defined as 
+\begin{equation}
+    x = U\hat{x}
+    \label{eq:inverse_graph_fourier_transform}
+\end{equation}
+The convolution of the signal $x$ with a filter $g_\theta = diag(\theta)$, parametrized by a parameter $\theta \in R^N$ in the Fourier domain, then becomes 
+\begin{equation}
+    g_\theta * x = U g_\theta U^T x
+    \label{eq:graph_convolution}
+\end{equation}
+However, performing convolutions using equation \ref{eq:graph_convolution} may be computationally intractable in practice, partly because multiplication with $U$ is $\mathcal{O}(N^2)$ and partly because calculating the eigendecomposition of $L$ in equation \eqref{eq:laplacian_decomposition} may be very computationally expensive for large graphs \cite{kipf_semi_supervised}. A way around this problem is discussed in Kipf et. al \cite{kipf_semi_supervised}. First, we note that $g_\theta$ may be interpreted as a function of the eigenvalues of $L$, i.e. $g_\theta(\Lambda)$. Then, we approximate $g_\theta(\Lambda)$ using an expansion in Chebyshev polynomials $T_k(x)$ to the $K^{\text{th}}$ order:
+
+\begin{equation}
+    g_\theta' \approx \sum_{k=0}^K \theta'_k T_k(\tilde{\Lambda}),
+    \label{eq:chebyshev_approximation}
+\end{equation}
+where $\tilde{A} = \frac{2}{\lambda_{\text{max}}}\Lambda - I_N$ is a rescaling of $\Lambda$. $\lambda_{\text{max}}$ is the largest eigenvalue of $L$. $\theta'_k$ is here a vector of Chebyshev coefficients. The Chebyshev polynomials are recursively defined as 
+\begin{equation}
+    T_k(x) = 2xT_{k-1}(x) - T_{k-2}(x), \hspace{10px} T_0(x) = 1, \hspace{5px} T_1(x) = x.
+\end{equation}
+By inserting equation \eqref{eq:chebyshev_approximation} into equation \eqref{eq:graph_convolution} we obtain 
+\begin{equation}
+    g_{\theta'} * x \approx U \left(\sum_{k=0}^K \theta'_k T_k(\tilde{\Lambda})\right)U^Tx = \left(\sum_{k=0}^K \theta'_k U T_k(\tilde{\Lambda}) U^T\right)x,
+\end{equation}
+and after noting that $T_k(x)$ is linear in $\hat{\Lambda}$ and that $L^k = \left( U \Lambda U^T \right)^k = U \Lambda^k U^T$ we arrive at 
+\begin{equation}
+    g_{\theta'} * x \approx \sum_{k=0}^K \theta'_k T_k(\tilde{L})x,
+\end{equation}
+where $\tilde{L} =  \frac{2}{\lambda_{\text{max}}}L - I_N$.
+
+
+
+
 \subsection{Layer-wise propagation rule}
+
+
 \subsection{Message passing as an approximation of spectral theory}
+
+
 
 
 \section{Analysis}
 \subsection{Model analysis/evaluation}
 \subsection{Salience mappings etc.}
 
+\section{Graph theory in neuroscience}
+Ta upp relaterade arbeten och knyt ihop med introduction inför metoden. E.g. Jansson sandström, stankeviciute.
 

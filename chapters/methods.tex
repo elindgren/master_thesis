@@ -1,25 +1,58 @@
 \chapter{Method}
 
 \section{From fMRI scans to graphs}
+The data that constituted the foundation of our work is from the UK biobank \cite{}. This is a extensive data set of over 500 000 subjects which contains information about sex, age, cognitive abilities, diseases, mri-scans, fmri-scans and much more. The fmri-scans are available for about 35 000 subjects and consist of time series of activation's in different brain regions. As a step in the preprocess before we had access to the data these brain regions had been clustered into 21 functional brain networks, which are coupled to certian functionalities in the brain. For example one such network being the default mode network responsible for daydreaming. This clustering is done from the fact that the activation for each of the brain regions inside the networks are highly correlated. The connections between the larger functional networks are calculated as the average correlation between the brain region activation inside one of the networks to the other. With this preprocessing the fmri data for each subject constituets a graph with the 21 functional brain netwroks as nodes and the average correlation between the networks constitutes the connections in the graphs. 
+
 \subsection{How to handle negative values - split}
+Since the connections in the brain graphs was calculated from correlations the possibility of negative connection exists and in fact they occurs very often; about half of all connections are less then zero. This is a problem since the risk of dividing by zero in the normalization procedure \ref{} become eminent and the connections may then be uncontrollably large. There are several ways to handle this problem some alternative is to only regard positive or negative connections alone, another might be to look at the absolute value of the connections. We however decided to split the graphs negative and positive connections and create a multiplex graph \cite{}. A multiplex graph is a graph with fixed set of nodes but their might exists several sets of edges. One example could be when constructing a graph with cities as nodes and different means of transportation constitutes the edges. Edges representing highways and railways makes up two different graphs but they might be combined into a multiplex graph since they have the same nodes. So in our case we make two graphs one with negative connections and one with positive and combine them into a multiplex graph. From a practical point of view this was executed by creating a block diagonal adjacency matrix with the original adjacency matrix with the negative connections removed in the top left corner and the corresponding matrix with positive connections removed in the down right corner. A illustration of this can be seen in figure \ref{fig:block_diagonal_adjacency_matri}.
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:block_diagonal_adjacency_matrix}
+\end{figure}
+
 Snygg figur - blockdiagonal
 Stratification
 
 \section{Graph classification -- subject-wise}
 \subsection{Baseline model}
+To be able to validate how well the different GCN-models performs we first need to construct some kind of baseline model to compare against. In this study the baseline model consists of a regression model where the list of all connections between all of the nodes are considered as a high dimensional data point. The reason we can consider this as a baseline model and  expect sensical results is that the obtained data over the brain graphs is ordered. Generally graphs are node ordering inveriant which would be a big problem but since we can make sure the ordering of the node we can garrantie the the regression model gets connection between the same node in every data point. For schematic view off the model see figure \ref{fig:Graph_class_baseline}, where the output layer has either 2 softmax neurons for sex classification or 1 neuron without activation for age regression. 
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:Graph_class_baseline}
+\end{figure}
+
 \subsection{GCN base}
+The first model, which is refereed to as GCNBase, consists of 3 consecutive graph convolutional layers, with propagation rule seen in \ref{}. The GCN layers will always have the rectified linear unit (RELU) as activation function, ten output features, 0 dropout rate and 0 regularization unless otherwise specified. The activation of each layer will contain information of a larger and larger local neighbourhood of nodes in the graph. Therefor after the GCN layers we concatenate all all actiavtaions in all layers and feed them to a regular dense layer with either two softmax neurons or one without activation as output just as the baseline model. An illustration of this model can be seen in figure \ref{}. And lastly to what so far been glosed over; the input features to the model. For this model the input feature matrix $X$ is chosen to be the identity matrix $I$. This is at all possible because the small size of the graphs since the number of weights for the first GCN layer scales with the number of nodes, this is not the case otherwise.
+
 \subsection{gcn dummy}
+The next model that will be investigated is refereed to GCNDummy which is very similar to GCNBase. They both have three GCN layer followed by a dense layer. The only difference is that while GCNBase has the identity matrix as input features while GCNDumy has a column of ones as input features. This model will thus be equivalent to placing the value of one at each node and then propagate all the ones with message and thus only evaluate how well connected every node is with its immediate surroundings.  
+
 \subsection{gcn features}
-\subsection{node shuffling}
+
+\subsection{Node shuffling}
+Node shuffling
+
 \subsection{Training methodology}
+The training of the models was done using tensorflow keras. All models was trained using the binary crossentropy loss and the optimization algorithm ADAM with a learning rate of 0.003. 
+
 Bild på pipeline från subject graph (eller från fMRI-data) till prediction?
 
 \section{Node classification -- population graphs}
+In the next part of the thesis we investigate how well models involving population graphs perform. In this case since each node in the population graph is a subject the models need to do node predictions instead of graph predictions. 
 % \subsection{Network architectures}
 \subsection{Baseline model}
+As a baseline model for doing predictions on a population graph a model similar to GCNDummy is used. The model takes in the population graph propagates it through five GCN layers. Afterwards instead of concatenating all activation's for all nodes and feed them to a dense layers we concatenate all activations for every node, see figure \ref{} for illustration. Then a kind of convolution is used where all the activation's for a specific node is feed to a dense layer and a prediction made. By doing this for all the nodes using the same dense layer a prediction for all subjects in the population graph can be made. However since all subjects in the data set is incorporated in the population graphs the split into validation and training set must be handled. The solution is given by defining a set of subject that will be the training set and another that will be the validation set, then we constructed the model so it could either do predictions for only the subjects in the training set or validation set. Then the training could be performed while we only did the prediction and training on the training set and vice versa when evaluating.
+
 \subsection{POPToy w. dummy}
 \subsection{POPToy w. features (fmri)}
 \subsection{POPEncoder}
+As a means to incorporate more information about each subject in the population graph a model refereed to as POPEncoder is investigated. In this model features are introduced to the population graph. The features are based on adjacency matrix of each individual subject, but to compress the dimensionallity of the feature space we want to encode these matrices into a lower dimensional space. Their exist many ways of doing this one can for example do it as a preprocessing step by doing a prediction with one of our previous models which will get it to one or two features. In POPEncoder the encoder is however viewed as a trainable part of the model which allows possibly more advantageous embeddings then an initial prediction. POPEncoder can thus be seen as a combination of a model for graphs predictions with a model for node predictions as been hinted before one hope is that the encoder should be able to make a initial prediction and by propagating that prediction through the population graph the model could be able to utilize similarities and structure in the hole population.
+
 \subsection{Training methodology} % pretrained/inline encoder
 Bild på pipeline från subject graph (eller från fMRI-data) till population graph till prediction?
 
