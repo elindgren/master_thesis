@@ -1,7 +1,7 @@
 \chapter{Method}
 
 \section{From fMRI scans to graphs}
-The data that constituted the foundation of our work is from the UK biobank \cite{}. This is a extensive data set of over 500 000 subjects which contains information about sex, age, cognitive abilities, diseases, mri-scans, fmri-scans and much more. The fmri-scans are available for about 35 000 subjects and consist of time series of activation's in different brain regions. As a step in the preprocess before we had access to the data these brain regions had been clustered into 21 functional brain networks, which are coupled to certian functionalities in the brain. For example one such network being the default mode network responsible for daydreaming. This clustering is done from the fact that the activation for each of the brain regions inside the networks are highly correlated. The connections between the larger functional networks are calculated as the average correlation between the brain region activation inside one of the networks to the other. With this preprocessing the fmri data for each subject constituets a graph with the 21 functional brain netwroks as nodes and the average correlation between the networks constitutes the connections in the graphs. 
+The data that constituted the foundation of our work is from the UK biobank \cite{}. This is an extensive data set of over 500 000 subjects which contains information about sex, age, cognitive abilities, diseases, mri-scans, fmri-scans and much more. The fmri-scans are available for about 35 000 subjects and consist of time series of activation's in different brain regions. As a step in the preprocess before we had access to the data these brain regions had been clustered into 21 functional brain networks, which are coupled to certain functionalities in the brain. For example one such network being the default mode network responsible for daydreaming. This clustering is done from the fact that the activation for each of the brain regions inside the networks are highly correlated. The connections between the larger functional networks are calculated as the average correlation between the brain region activation inside one of the networks to the other. With this preprocessing the fmri data for each subject constituets a graph with the 21 functional brain netwroks as nodes and the average correlation between the networks constitutes the connections in the graphs. 
 
 \subsection{How to handle negative values - split}
 Since the connections in the brain graphs was calculated from correlations the possibility of negative connection exists and in fact they occurs very often; about half of all connections are less then zero. This is a problem since the risk of dividing by zero in the normalization procedure \ref{} become eminent and the connections may then be uncontrollably large. There are several ways to handle this problem some alternative is to only regard positive or negative connections alone, another might be to look at the absolute value of the connections. We however decided to split the graphs negative and positive connections and create a multiplex graph \cite{}. A multiplex graph is a graph with fixed set of nodes but their might exists several sets of edges. One example could be when constructing a graph with cities as nodes and different means of transportation constitutes the edges. Edges representing highways and railways makes up two different graphs but they might be combined into a multiplex graph since they have the same nodes. So in our case we make two graphs one with negative connections and one with positive and combine them into a multiplex graph. From a practical point of view this was executed by creating a block diagonal adjacency matrix with the original adjacency matrix with the negative connections removed in the top left corner and the corresponding matrix with positive connections removed in the down right corner. A illustration of this can be seen in figure \ref{fig:block_diagonal_adjacency_matri}.
@@ -56,11 +56,44 @@ As a means to incorporate more information about each subject in the population 
 \subsection{Training methodology} % pretrained/inline encoder
 Bild på pipeline från subject graph (eller från fMRI-data) till population graph till prediction?
 
-\section{Batch population graphs}
+\section{Batches of population graphs}
+Since a population graph is a graph where each node represent a single subject and the number of edges of the graph grows with the number of nodes squared the adjacency matrix for the population graph quickly becomes very larger. This is a big problem since doing prediction and training with such a large matrix becomes very time consuming and and also the memory consumption can become problematic. To resolve this problem and thus in a feasible way be able to train on population graphs that includes all the data a batching method was developed. 
+
+The batching method was based on dividing the population graph into several smaller population graphs. For an illustration on how this can be done see figure \ref{}. For example a population graph with 10 000 subjects would have a adjacency matrix with 1e$^8$ entries which takes about 800 MB to store in memory. However if the same population graph is divided into 100 smaller population graphs with 100 subjects in each graph the total number of entries needed to be stored would be 1e$^6$ corresponding to about 8 Mb of memory. And if the size of the smaller population graphs remains constant the memory and computation times grows linearly when adding more subjects to the data set instead of quadratic.
+
+As seen in figure \ref{} many of the connection between subjects is not utilized if the population graph is divided into several smaller graphs. To solve this the way the subjects are divided into smaller graphs is changed between epochs as seen in figure \ref{}. By always changing which people are combined in the graphs all connections will potentially be used after enough epochs. The advantage of of always changing the subjects that are included in the graphs is that the model can't over fit against a specific graphs structure. The models are thus forced to learn very general patterns to classify all the subjects in the graphs. 
+
+
+
 
 \section{Analysis}
+Since the goal of the thesis is not only to construct models to achieve good performance, but also to determine interesting biomarkers and understand the changes in the brain between both young/old and male/female brains, analyse the model is a important part of the work. The methods for doing this can in crude way be divided into methods that open the black box and methods that do not. The black box referees to the the model since they are generally hard to understand, and opening them up refers to understanding the models by directly investigating them for example by studying weights, activation's and gradients. Below a couple methods we used out of many available methods for analysing models will be presented. 
+
+
 \subsection{Model analysis/evaluation}
-\subsection{Salience mappings etc.}
+\subsection{Node masking}
+A first very simple method to investigate what information is important  for doing predictions is a masking method, which is black box method. This particular masking method is a self-composed method based on simply removing a specific node or connection for every subject in the dataset and then retrain a new model. By masking every connection and node one at a time and then compare each models performance to a baseline where all information is utilized information of how important each node and connection is for the prediction can be extracted. This method is potentially also viable when not retraining the models, i.e. doing prediction on masked data with a model trained on unmasked data. This could however be problematic since the question of how to mask the nodes so worse performance means less importance. This problem arises since the absence of a connection not is the same as an uninformative connection. The model can for example assume some connection which is fairly constant across the dataset, removing this node may leed to significant worse performance even if it's not related to age or sex.
 
+\subsection{Node masking: Zorro}
+Another masking method for analysing GCNs is the Zorro algorithm \cite{}. ZORRO is based on replacing all the entries of the feature matrix by random noise. By then reintroduce features and nodes by demasking them and selecting nodes and features that gives the most similar performance as the original performance 
 
+\subsection{Salience mapping, GRAD-CAM}
+Another method not utilizing different kinds of masking algorithms are the GRAD-CAM method which is a method for opening up the black box. The basic principle of the GRAD-CAM algorithm is to study activations of different graph-nodes in the model when predictions are made. By identifying the nodes where the activations impact the predictions the most important graphs-nodes can be identified. 
 
+The GRAD-CAM algorithm was initially made for convolutional neural network where important pixels in a image was identified \cite{} but was generalized to GCNs in \cite{}. The algorithm calculates the importance score for node $n$ at the GCN layer $l$, for class $c$ by 
+\begin{equation*}
+    L_c[l,n] =  \text{RELU}(\sum_k \alpha^{l, c}_k F_{K,n}^l). 
+\end{equation*}
+Here $F_{K,n}^l$ is the activations of the $k$-th feature of the $l$-th GCN layer at node $n$ and $\alpha^{l, c}_k$ is a set of class specific weights for layers $l$ given by 
+\begin{equation*}
+    \alpha^{l, c}_k = \frac{1}{N}\sum_{i = 1}^N \frac{\partial y^c}{\partial F^l_{k,n}}.
+\end{equation*}
+
+This algorithm depends on the architecture of the model having a GAP layer between the last GCN layer and the fully connected output layer. A GAP layers is average global pooling layer which averages all the features of the last layer over the nodes before passing them to the dens layer. This is a big problem since GCNBase has primarily two significant differences. The first one being that GCNBase does not utilize any GAP layer before the output layer and thus has a specific weight for all nodes and features not only one weight per feature. The second problem is that GCNBase in addition to the activations of the last GCN layer also utilizes the activations of all previous GCN-layers. The solution to these problem is to do some slight alterations to the GRAD-CAM algorithm in the form of 
+\begin{equation*}
+    L_c[l,n] =  \text{RELU}(\sum_k \alpha^{l, c}_{k,n} F_{K,n}^l)
+\end{equation*}
+and
+\begin{equation*}
+    \alpha^{l, c}_k = \frac{\partial y^c}{\partial F^l_{k,n}}.
+\end{equation*}
