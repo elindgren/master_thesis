@@ -1,0 +1,108 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,208); %set diagram left start at 0, and has height of 208
+
+%Straight Lines [id:da08555474507907834] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (144.81,72.72) -- (139.59,141.54) ;
+%Straight Lines [id:da7854957979705237] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (144.81,72.72) -- (170.94,112.87) ;
+%Straight Lines [id:da5355133218247532] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (139.59,141.54) -- (170.94,112.87) ;
+%Straight Lines [id:da7379744038533278] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (197.06,72.72) -- (170.94,112.87) ;
+%Straight Lines [id:da3385355935149281] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (197.06,72.72) -- (259.74,84.19) ;
+%Straight Lines [id:da6697105472921161] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (197.06,72.72) -- (223.18,107.13) ;
+%Straight Lines [id:da44213623412323666] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (249.3,135.81) -- (197.06,147.28) ;
+%Straight Lines [id:da340514368127399] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (223.18,107.13) -- (249.3,135.81) ;
+%Straight Lines [id:da07640316595483987] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (259.74,84.19) -- (249.3,135.81) ;
+%Shape: Trapezoid [id:dp2008857707852969] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (254.52,89.93) -- (257.66,78.46) -- (261.83,78.46) -- (264.97,89.93) -- cycle ;
+%Image [id:dp4810218304838956] 
+\draw (259.74,84.19) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Straight Lines [id:da17683212694460426] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (139.59,141.54) -- (197.06,147.28) ;
+%Shape: Trapezoid [id:dp06527551163848622] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (191.83,153.01) -- (194.97,141.54) -- (199.15,141.54) -- (202.28,153.01) -- cycle ;
+%Image [id:dp24121370862546265] 
+\draw (197.06,147.28) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Shape: Trapezoid [id:dp6568478256577734] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (134.37,147.28) -- (137.5,135.81) -- (141.68,135.81) -- (144.81,147.28) -- cycle ;
+%Image [id:dp6219332582048571] 
+\draw (139.59,141.54) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Straight Lines [id:da3735509406273694] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (170.94,112.87) -- (223.18,107.13) ;
+%Shape: Trapezoid [id:dp8065935750477351] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (217.95,112.87) -- (221.09,101.4) -- (225.27,101.4) -- (228.4,112.87) -- cycle ;
+%Image [id:dp45354658145120497] 
+\draw (223.18,107.13) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Straight Lines [id:da3264902727456349] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (249.3,135.81) -- (170.94,112.87) ;
+%Shape: Trapezoid [id:dp866311010615511] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (244.07,141.54) -- (247.21,130.07) -- (251.39,130.07) -- (254.52,141.54) -- cycle ;
+%Image [id:dp8422386634219512] 
+\draw (249.3,135.81) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Shape: Trapezoid [id:dp8073086406080059] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (165.71,118.6) -- (168.85,107.13) -- (173.02,107.13) -- (176.16,118.6) -- cycle ;
+%Image [id:dp888581341362926] 
+\draw (170.94,112.87) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Straight Lines [id:da4374734471484929] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (144.81,72.72) -- (197.06,72.72) ;
+%Shape: Trapezoid [id:dp17137240691479927] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (191.83,78.46) -- (194.97,66.99) -- (199.15,66.99) -- (202.28,78.46) -- cycle ;
+%Image [id:dp3965566139299834] 
+\draw (197.06,72.72) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+%Shape: Trapezoid [id:dp7022737407670283] 
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (139.59,78.46) -- (142.72,66.99) -- (146.9,66.99) -- (150.04,78.46) -- cycle ;
+%Image [id:dp7793647929632923] 
+\draw (144.81,72.72) node  {\includegraphics[width=15.67pt,height=17.2pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+
+
+%Rounded Rect [id:dp2921184592491468] 
+\draw   (120,74) .. controls (120,60.75) and (130.75,50) .. (144,50) -- (250.11,50) .. controls (263.37,50) and (274.11,60.75) .. (274.11,74) -- (274.11,146) .. controls (274.11,159.25) and (263.37,170) .. (250.11,170) -- (144,170) .. controls (130.75,170) and (120,159.25) .. (120,146) -- cycle ;
+
+%Straight Lines [id:da280482111384722] 
+\draw    (474,110) -- (414,110) ;
+%Rounded Rect [id:dp23949785762119213] 
+\draw   (324.11,92) .. controls (324.11,85.37) and (329.48,80) .. (336.11,80) -- (402.11,80) .. controls (408.74,80) and (414.11,85.37) .. (414.11,92) -- (414.11,128) .. controls (414.11,134.63) and (408.74,140) .. (402.11,140) -- (336.11,140) .. controls (329.48,140) and (324.11,134.63) .. (324.11,128) -- cycle ;
+
+%Straight Lines [id:da18593803425726807] 
+\draw    (324.11,110) -- (274.11,110) ;
+%Rounded Rect [id:dp14732801608712798] 
+\draw   (474,98) .. controls (474,93.58) and (477.58,90) .. (482,90) -- (576,90) .. controls (580.42,90) and (584,93.58) .. (584,98) -- (584,122) .. controls (584,126.42) and (580.42,130) .. (576,130) -- (482,130) .. controls (477.58,130) and (474,126.42) .. (474,122) -- cycle ;
+%Image [id:dp556169067273697] 
+\draw (45.6,68) node  {\includegraphics[width=30pt,height=30pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+%Image [id:dp2790482390271307] 
+\draw (45.6,108) node  {\includegraphics[width=30pt,height=30pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+%Image [id:dp9089881134245916] 
+\draw (45.6,148) node  {\includegraphics[width=30pt,height=30pt]{ClbFhBFF8L-person-blue-36dp-filled.svg}};
+%Rounded Rect [id:dp06427479999848584] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}] (12,61.6) .. controls (12,54.09) and (18.09,48) .. (25.6,48) -- (66.4,48) .. controls (73.91,48) and (80,54.09) .. (80,61.6) -- (80,156.4) .. controls (80,163.91) and (73.91,170) .. (66.4,170) -- (25.6,170) .. controls (18.09,170) and (12,163.91) .. (12,156.4) -- cycle ;
+%Straight Lines [id:da8499548057058206] 
+\draw    (120,110) -- (80,110) ;
+
+% Text Node
+\draw (340.11,96) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\Large Model}};
+% Text Node
+\draw (439,89.4) node [anchor=north west][inner sep=0.75pt]    {$y$};
+% Text Node
+\draw (295.11,90.4) node [anchor=north west][inner sep=0.75pt]    {$X$};
+% Text Node
+\draw (483,99) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\large Predictions}};
+
+
+\end{tikzpicture}

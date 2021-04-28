@@ -1,0 +1,69 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,288); %set diagram left start at 0, and has height of 288
+
+%Straight Lines [id:da6866115502712014] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (221.43,145.45) -- (200,40.91) ;
+%Straight Lines [id:da5449428896323822] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.4 ][line width=1.5]    (114.29,229.09) -- (200,40.91) ;
+%Straight Lines [id:da20108057150844827] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.4 ][line width=1.5]    (71.43,103.64) -- (114.29,229.09) ;
+%Straight Lines [id:da23552602747866835] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (221.43,145.45) -- (328.57,82.73) ;
+%Straight Lines [id:da15677322776746627] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.4 ][fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=0.5 ][line width=1.5]    (71.43,103.64) -- (200,40.91) ;
+%Straight Lines [id:da6705671249717824] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (221.43,145.45) -- (114.29,229.09) ;
+%Straight Lines [id:da9171484006846955] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (221.43,145.45) -- (307.14,208.18) ;
+%Shape: Ellipse [id:dp9105341026890303] 
+\draw  [color={rgb, 255:red, 167; green, 207; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 167; green, 207; blue, 255 }  ,fill opacity=1 ] (50,103.64) .. controls (50,92.09) and (59.59,82.73) .. (71.43,82.73) .. controls (83.26,82.73) and (92.86,92.09) .. (92.86,103.64) .. controls (92.86,115.18) and (83.26,124.55) .. (71.43,124.55) .. controls (59.59,124.55) and (50,115.18) .. (50,103.64) -- cycle ;
+%Shape: Ellipse [id:dp041516904461134985] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (92.86,229.09) .. controls (92.86,217.54) and (102.45,208.18) .. (114.29,208.18) .. controls (126.12,208.18) and (135.71,217.54) .. (135.71,229.09) .. controls (135.71,240.64) and (126.12,250) .. (114.29,250) .. controls (102.45,250) and (92.86,240.64) .. (92.86,229.09) -- cycle ;
+%Shape: Ellipse [id:dp5295547713331978] 
+\draw  [color={rgb, 255:red, 245; green, 166; blue, 35 }  ,draw opacity=1 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ] (200,145.45) .. controls (200,133.91) and (209.59,124.55) .. (221.43,124.55) .. controls (233.26,124.55) and (242.86,133.91) .. (242.86,145.45) .. controls (242.86,157) and (233.26,166.36) .. (221.43,166.36) .. controls (209.59,166.36) and (200,157) .. (200,145.45) -- cycle ;
+%Shape: Ellipse [id:dp7116787708381342] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (285.71,208.18) .. controls (285.71,196.63) and (295.31,187.27) .. (307.14,187.27) .. controls (318.98,187.27) and (328.57,196.63) .. (328.57,208.18) .. controls (328.57,219.73) and (318.98,229.09) .. (307.14,229.09) .. controls (295.31,229.09) and (285.71,219.73) .. (285.71,208.18) -- cycle ;
+%Shape: Ellipse [id:dp04233982947813919] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (178.57,40.91) .. controls (178.57,29.36) and (188.17,20) .. (200,20) .. controls (211.83,20) and (221.43,29.36) .. (221.43,40.91) .. controls (221.43,52.46) and (211.83,61.82) .. (200,61.82) .. controls (188.17,61.82) and (178.57,52.46) .. (178.57,40.91) -- cycle ;
+%Shape: Ellipse [id:dp21902531616076337] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (307.14,82.73) .. controls (307.14,71.18) and (316.74,61.82) .. (328.57,61.82) .. controls (340.41,61.82) and (350,71.18) .. (350,82.73) .. controls (350,94.28) and (340.41,103.64) .. (328.57,103.64) .. controls (316.74,103.64) and (307.14,94.28) .. (307.14,82.73) -- cycle ;
+
+%Straight Lines [id:da5160892883228043] 
+\draw [color={rgb, 255:red, 75; green, 75; blue, 75 }  ,draw opacity=1 ]   (328.57,82.73) -- (234.21,137.97) -- (224.02,143.94) ;
+\draw [shift={(221.43,145.45)}, rotate = 329.65] [fill={rgb, 255:red, 75; green, 75; blue, 75 }  ,fill opacity=1 ][line width=0.08]  [draw opacity=0] (14.29,-6.86) -- (0,0) -- (14.29,6.86) -- cycle    ;
+%Straight Lines [id:da5604956029791546] 
+\draw [color={rgb, 255:red, 75; green, 75; blue, 75 }  ,draw opacity=1 ]   (307.14,208.18) -- (223.85,147.23) ;
+\draw [shift={(221.43,145.45)}, rotate = 396.2] [fill={rgb, 255:red, 75; green, 75; blue, 75 }  ,fill opacity=1 ][line width=0.08]  [draw opacity=0] (14.29,-6.86) -- (0,0) -- (14.29,6.86) -- cycle    ;
+%Straight Lines [id:da544764735859607] 
+\draw [color={rgb, 255:red, 75; green, 75; blue, 75 }  ,draw opacity=1 ]   (114.29,229.09) -- (219.06,147.3) ;
+\draw [shift={(221.43,145.45)}, rotate = 502.02] [fill={rgb, 255:red, 75; green, 75; blue, 75 }  ,fill opacity=1 ][line width=0.08]  [draw opacity=0] (14.29,-6.86) -- (0,0) -- (14.29,6.86) -- cycle    ;
+%Straight Lines [id:da7816135367512935] 
+\draw [color={rgb, 255:red, 75; green, 75; blue, 75 }  ,draw opacity=1 ]   (200,37.69) -- (220.84,142.51) ;
+\draw [shift={(221.43,145.45)}, rotate = 258.75] [fill={rgb, 255:red, 75; green, 75; blue, 75 }  ,fill opacity=1 ][line width=0.08]  [draw opacity=0] (14.29,-6.86) -- (0,0) -- (14.29,6.86) -- cycle    ;
+%Image [id:dp824193123090766] 
+\draw (168.05,178.02) node [rotate=-322.19,xslant=-0.06] {\includegraphics[width=13.75pt,height=13.57pt]{outline_email_black_18dp.png}};
+%Image [id:dp5873633185373655] 
+\draw (269.45,109.67) node [rotate=-329.29,xslant=-0.05] {\includegraphics[width=13.84pt,height=13.48pt]{outline_email_black_18dp.png}};
+%Image [id:dp2777048388356631] 
+\draw (276.39,173.98) node [rotate=-37.38,xslant=0.06] {\includegraphics[width=13.75pt,height=13.57pt]{outline_email_black_18dp.png}};
+%Image [id:dp9370755734183434] 
+\draw (217.79,82.6) node [rotate=-76.5,xslant=0.03] {\includegraphics[width=13.31pt,height=14.02pt]{outline_email_black_18dp.png}};
+%Curve Lines [id:da10205436373567633] 
+\draw [color={rgb, 255:red, 75; green, 75; blue, 75 }  ,draw opacity=1 ]   (221.43,145.45) .. controls (207,71.65) and (145.25,116.28) .. (219.15,144.6) ;
+\draw [shift={(221.43,145.45)}, rotate = 200.05] [fill={rgb, 255:red, 75; green, 75; blue, 75 }  ,fill opacity=1 ][line width=0.08]  [draw opacity=0] (14.29,-6.86) -- (0,0) -- (14.29,6.86) -- cycle    ;
+
+% Text Node
+\draw (217,172.4) node [anchor=north west][inner sep=0.75pt]  [font=\Large]  {$i$};
+% Text Node
+\draw (279,142.4) node [anchor=north west][inner sep=0.75pt]  [font=\Large]  {$x_{jk}$};
+% Text Node
+\draw (301,232.4) node [anchor=north west][inner sep=0.75pt]  [font=\Large]  {$j$};
+% Text Node
+\draw (241.03,172.78) node [anchor=north west][inner sep=0.75pt]  [font=\Large,rotate=-359.36]  {$\hat{A}_{ij}$};
+
+
+\end{tikzpicture}

@@ -1,0 +1,38 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,140); %set diagram left start at 0, and has height of 140
+
+%Straight Lines [id:da9529519883756523] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (90,70) -- (80,20) ;
+%Straight Lines [id:da3936138198150927] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (40,110) -- (80,20) ;
+%Straight Lines [id:da5548481843497526] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (20,50) -- (40,110) ;
+%Straight Lines [id:da5819939155390126] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (90,70) -- (140,40) ;
+%Straight Lines [id:da6057490474086391] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (20,50) -- (80,20) ;
+%Straight Lines [id:da9589484835549189] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (90,70) -- (40,110) ;
+%Straight Lines [id:da9003996251715192] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][line width=1.5]    (90,70) -- (130,100) ;
+%Shape: Circle [id:dp16002964648747287] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (10,50) .. controls (10,44.48) and (14.48,40) .. (20,40) .. controls (25.52,40) and (30,44.48) .. (30,50) .. controls (30,55.52) and (25.52,60) .. (20,60) .. controls (14.48,60) and (10,55.52) .. (10,50) -- cycle ;
+%Shape: Circle [id:dp6860897081767219] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (30,110) .. controls (30,104.48) and (34.48,100) .. (40,100) .. controls (45.52,100) and (50,104.48) .. (50,110) .. controls (50,115.52) and (45.52,120) .. (40,120) .. controls (34.48,120) and (30,115.52) .. (30,110) -- cycle ;
+%Shape: Circle [id:dp6864628521101095] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (80,70) .. controls (80,64.48) and (84.48,60) .. (90,60) .. controls (95.52,60) and (100,64.48) .. (100,70) .. controls (100,75.52) and (95.52,80) .. (90,80) .. controls (84.48,80) and (80,75.52) .. (80,70) -- cycle ;
+%Shape: Circle [id:dp3274470105344238] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (120,100) .. controls (120,94.48) and (124.48,90) .. (130,90) .. controls (135.52,90) and (140,94.48) .. (140,100) .. controls (140,105.52) and (135.52,110) .. (130,110) .. controls (124.48,110) and (120,105.52) .. (120,100) -- cycle ;
+%Shape: Circle [id:dp6718592584089527] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (70,20) .. controls (70,14.48) and (74.48,10) .. (80,10) .. controls (85.52,10) and (90,14.48) .. (90,20) .. controls (90,25.52) and (85.52,30) .. (80,30) .. controls (74.48,30) and (70,25.52) .. (70,20) -- cycle ;
+%Shape: Circle [id:dp3995705243055563] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (130,40) .. controls (130,34.48) and (134.48,30) .. (140,30) .. controls (145.52,30) and (150,34.48) .. (150,40) .. controls (150,45.52) and (145.52,50) .. (140,50) .. controls (134.48,50) and (130,45.52) .. (130,40) -- cycle ;
+
+
+
+
+\end{tikzpicture}

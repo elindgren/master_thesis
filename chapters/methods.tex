@@ -1,7 +1,7 @@
 \chapter{Method}
 
-\section{From fMRI scans to graphs}
-The data that constituted the foundation of our work is from the UK biobank \cite{}. This is an extensive data bank that contains genetic and biomedical information for over 500 000 subjects in the UK. Examples of types of data that is included in the biobank is subject sex, age, cognitive abilities, disease history, but also more specific information such as brain scans. 
+\section{From fMRI scans to graphs}\label{sec:fmri_to_graphs}
+The data that constituted the foundation of our work is from the UK biobank \cite{ukbiobank}. This is an extensive data bank that contains genetic and biomedical information for over 500 000 subjects in the UK. Examples of types of data that is included in the biobank are subject sex, age, cognitive abilities, disease history, but also more specific information such as brain scans. 
 
 \begin{figure}[H]
     \centering
@@ -13,12 +13,12 @@ The data that constituted the foundation of our work is from the UK biobank \cit
 For the purpose of our project, we are specifically focusing on functional MRI brain scans, which is available for roughly 35 000 subjects varying between 45 and 80 years of age. Functional MRI (fMRI) is a technique for measuring the activation of the human brain. In a measurement, the activation of various parts of the subject brain is measured as time series. These time series can be correlated, with highly correlated regions being formed into networks. The regions that make up these network does not necessarily have to be physically close together. These networks are often associated with certain functionalities of the brain. Example of such functional networks are the vision network, responsible for processing visual stimuli, and the Defualt Mode Network (DMN), which handles memory processing and daydreaming. Multiple networks may be associated with the same functionality. In our case, groups of these networks that are related to the same functional network have been clustered together to form a 21 node \textit{network of networks}, which we represent as a graph. Each node in our fMRI-graphs thus corresponds to one functional network in the human brain (such as the DMN etc.). The weight of the edges between each of the nodes is calculated as the average correlation between the networks that make up the two nodes. A visualization of such an fMRI graph is given in figure \ref{fig:fmri_network}, in which the various nodes and the functional networks they represent form the outer circle, with the coloured lines connecting the nodes being the edges in the graph. The lines are coloured according to edge weight, with blue and red lines having negative and positive weight respectively.
 
 \subsection{How to handle negative values - split}
-Since the connections in the brain graphs was calculated from correlations the possibility of negative connection exists and in fact they occurs very often; about half of all connections are less then zero. This is a problem since the risk of dividing by zero in the normalization procedure \ref{} become eminent and the connections may then be uncontrollably large. There are several ways to handle this problem some alternative is to only regard positive or negative connections alone, another might be to look at the absolute value of the connections. We however decided to split the graphs negative and positive connections and create a multiplex graph \cite{}. A multiplex graph is a graph with a fixed set of nodes but with several sets of edges. One example could be when constructing a graph with cities as nodes and different means of transportation constitutes the edges. Edges representing highways and railways makes up two different graphs but they might be combined into a multiplex graph since they have the same nodes. So in our case we make two graphs one with negative connections and one with positive and combine them into a multiplex graph. From a practical point of view this was executed by creating a block diagonal adjacency matrix with the original adjacency matrix with the negative connections removed in the top left corner and the corresponding matrix with positive connections removed in the down right corner. A illustration of this can be seen in figure \ref{fig:block_diagonal_adjacency_matri}.
+Since the connections in the brain graphs was calculated from correlations the possibility of negative connection exists and in fact they occurs very often; about half of all connections are less then zero. This is a problem since the risk of dividing by zero in the normalization procedure in equation \eqref{eq:renormalization_trick} become eminent and the connections may then be uncontrollably large. There are several ways to handle this problem some alternative is to only regard positive or negative connections alone, another might be to look at the absolute value of the connections. We however decided to split the graphs negative and positive connections and create a multiplex graph \cite{}. A multiplex graph is a graph with a fixed set of nodes but with several sets of edges. One example could be when constructing a graph with cities as nodes and different means of transportation constitutes the edges. Edges representing highways and railways makes up two different graphs but they might be combined into a multiplex graph since they have the same nodes. So in our case we make two graphs one with negative connections and one with positive and combine them into a multiplex graph. From a practical point of view this was executed by creating a block diagonal adjacency matrix with the original adjacency matrix with the negative connections removed in the top left corner and the corresponding matrix with positive connections removed in the down right corner. A illustration of this can be seen in figure \ref{fig:block_diagonal_adjacency_matrix}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics{}
-    \caption{Caption}
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/split.png}
+    \caption{TEMP}
     \label{fig:block_diagonal_adjacency_matrix}
 \end{figure}
 
@@ -30,19 +30,37 @@ In this section all models performing graph predictions for individual subjects 
 
 \subsection{Baseline model}
 To be able to validate how well all different GCN-models performs we first need to construct some kind of baseline model to compare against. In this study the baseline model consists of a regression model where the list of all connections between all of the nodes are considered as a high dimensional data point. The reason we can consider this as a baseline model and  expect sensical results is that the obtained data over the brain graphs is ordered. Generally graphs are node ordering invariant which would be a big problem but since we can make sure the ordering of the node we can garrantie the the regression model gets connection between the same node in every data point. For schematic view off the model see figure \ref{fig:Graph_class_baseline}, where the output layer has either 2 softmax neurons for sex classification or 1 neuron without activation for age regression. 
-\begin{figure}
-    \centering
-    \includegraphics{}
-    \caption{Caption}
+
+% \begin{center}
+%     \resizebox {0.9\linewidth} {!} {
+%         \input{chapters/images_methods/baseline_ffnn.tikz}
+%     }
+% \end{center}
+
+\begin{figure}[H]
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/ffnn.png}
+    \caption{TEMP}
     \label{fig:Graph_class_baseline}
 \end{figure}
 
 \subsection{GCN base}
-The first model, which is refereed to as GCNBase, consists of 3 consecutive graph convolutional layers, with propagation rule seen in \ref{}, and a fully connected output layer. The GCN layers will always have the rectified linear unit (RELU) as activation function and ten output features, unless otherwise specified. The input to the fully connected output layer consisted of all the activation's after all three GCN layers, i.e. the activation for all feature maps in all layers. As described in the section \ref{} the activation of layers $i$ will contain information about the $i$-order neighbourhood of each node. The inclusion of activation's after each layer thus aims to utilize information of how each node is embedded in a larger and larger neighbourhood, which could be important for the prediction.
+The first model, which is refereed to as GCNBase, consists of 3 consecutive graph convolutional layers, with propagation rule seen in \eqref{eq:propagation_rule}, and a fully connected output layer. The GCN layers will always have the rectified linear unit (RELU) as activation function and ten output features, unless otherwise specified. The input to the fully connected output layer consisted of all the activation's after all three GCN layers, i.e. the activation for all feature maps in all layers. As described in the section \ref{sec:gcn} the activation of layers $i$ will contain information about the $i$-order neighbourhood of each node. The inclusion of activation's after each layer thus aims to utilize information of how each node is embedded in a larger and larger neighbourhood, which could be important for the prediction.
 
 %The activation of each layer will contain information of a larger and larger local neighbourhood of nodes in the graph. Therefor after the GCN layers we concatenate all activation's in all layers and feed them to a regular dense layer with either two softmax neurons or one without activation as output just as the baseline model.
 
-An illustration of this model can be seen in figure \ref{}. And lastly to what so far been glosed over; the input features to the model. For this model the input feature matrix $X$ is chosen to be the identity matrix $I$. This is at all possible because the small size of the graphs since the number of weights for the first GCN layer scales with the number of nodes, this is not the case otherwise.
+% \begin{center}
+%     \resizebox {0.9\linewidth} {!} {
+%         \input{chapters/images_methods/gcn.tikz}
+%     }
+% \end{center}
+
+\begin{figure}[H]
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/gcn.png}
+    \caption{TEMP}
+    \label{fig:gcn_base}
+\end{figure}
+
+An illustration of this model can be seen in figure \ref{fig:gcn_base}. And lastly to what so far been glosed over; the input features to the model. For this model the input feature matrix $X$ is chosen to be the identity matrix $I$. This is at all possible because the small size of the graphs since the number of weights for the first GCN layer scales with the number of nodes, this is not the case otherwise.
 
 %\subsection{gcn dummy}
 %The next model that will be investigated is refereed to GCNDummy which is very similar to GCNBase. They both have three GCN layer followed by a dense layer. The only difference is that while GCNBase has the identity matrix as input features while GCNDumy has a column of ones as input features. This model will thus be equivalent to placing the value of one at each node and then propagate all the ones with message and thus only evaluate how well connected every node is with its immediate surroundings.  
@@ -55,13 +73,13 @@ In the next part of the thesis we investigate how well models involving populati
 
 \subsection{Forming population graphs}
 
-As discussed in section \ref{sec:theory_ml_on_graphs}, population graphs are a special type of graph in which each node corresponds to a subject, with the edges of the graph connecting the subjects being calculated using a similarity measure. The design of this similarity measure is an important decision, which should be done with the given application in mind. In our case, we want subjects that have similar fMRI data to be connected with edges that have a large weight, with the idea that our models will be able to draw upon this information on similarity to yield a better inference. Given two subjects and their adjacency matrices $A_1$ and $A_2$, we define the similarity measure $\sigma\left(A_1, A_2, l\right)$ as
+As discussed in section \ref{sec:ml_on_graphs}, population graphs are a special type of graph in which each node corresponds to a subject, with the edges of the graph connecting the subjects being calculated using a similarity measure. The design of this similarity measure is an important decision, which should be done with the given application in mind. In our case, we want subjects that have similar fMRI data to be connected with edges that have a large weight, with the idea that our models will be able to draw upon this information on similarity to yield a better inference. Given two subjects and their adjacency matrices $A_1$ and $A_2$, we define the similarity measure $\sigma\left(A_1, A_2, l\right)$ as
 
 \begin{equation}
     \sigma\left(A_1, A_2, l\right) = \exp{\left(- \frac{||A_1 - A_2||_F}{l ||A_1||_F ||A_2||_F} \right)},
     \label{eq:similarity_measure}
 \end{equation}
-where $||A_1 - A_2 ||_F$ is the matrix Frobenius norm of the difference between $A_1$ and $A_2$. The Frobenius norm is defined as $||A||_F = \left( \sum_i \sum_j |A_{ij}|^2 \right)^{1/2}$. The norm of the difference is weighted with a hyperparameter $l$ and the norms of $A_1$ and $A_2$, and then fed into an exponential kernel. The exponential kernel ensures that larger differences between $A_1$ and $A_2$ yields smaller similarity scores $\sigma\left(A_1, A_2, l\right)$, and also that  $\sigma\left(A_1, A_2, l\right) \in \left[0, 1\right]$. As desired, subjects that have similar fMRI data, and thus a smaller difference between their adjacency matrices, will with equation \eqref{eq:similarity_measure} obtain a larger similarity score $\sigma\left(A_1, A_2, l\right)$, and vice versa. 
+where $||A_1 - A_2 ||_F$ is the matrix Frobenius norm of the difference between $A_1$ and $A_2$. The Frobenius norm is defined as $||A||_F = \left( \sum_i \sum_j |A_{ij}|^2 \right)^{1/2}$. The norm of the difference is weighted with a hyperparameter $l$ and the norms of $A_1$ and $A_2$, and then fed into an exponential kernel. The exponential kernel ensures that larger differences between $A_1$ and $A_2$ yields smaller similarity scores $\sigma\left(A_1, A_2, l\right)$, and also that  $\sigma\left(A_1, A_2, l\right) \in \left[0, 1\right]$. As desired, subjects that have similar fMRI data, and thus a smaller difference between their adjacency matrices, will with equation \eqref{eq:similarity_measure} obtain a larger similarity score and vice versa. 
 
 Note that our similarity measure in equation \eqref{eq:similarity_measure} only draws use of the fMRI data for each subject. One could imagine a similarity measure that uses other types of data that is related to our tasks of predicting age/sex, such as eventual brain-health related diagnosis \cite{stankeviciute}. We decided to limit ourselves to only using fMRI data for two reasons; partly because using other data sources requires extensive domain knowledge, and partly because we are specifically interest in the predictive power of fMRI data, without introducing other confounding variables. 
 
@@ -69,7 +87,15 @@ Note that our similarity measure in equation \eqref{eq:similarity_measure} only 
 % \subsection{Network architectures}
 \subsection{Baseline model}
 As a baseline model for doing predictions on a population graph a model similar to GCNBase is used. The model takes in the population graph propagates it through five GCN layers. 
-Afterwards instead of feeding all activation's to a dense layer all activation's for every feature in all layers for a specific node is feed to a dense layer. This dense layer gives a prediction for the specific nodes. This is then repeated for all the nodes with the same dense layers which then gives a prediction for all nodes in the graph, see figure \ref{} for an illustration of the model. 
+Afterwards instead of feeding all activation's to a dense layer all activation's for every feature in all layers for a specific node is feed to a dense layer. This dense layer gives a prediction for the specific nodes. This is then repeated for all the nodes with the same dense layers which then gives a prediction for all nodes in the graph, see figure \ref{fig:poptoy} for an illustration of the model. 
+
+\begin{figure}[H]
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/poptoy.png}
+    \caption{TEMP}
+    \label{fig:poptoy}
+\end{figure}
+
+
 %Afterwards instead of concatenating all activation's for all nodes and feed them to a dense layers we concatenate all activations for every node, see figure \ref{} for illustration. Then a kind of convolution is used where all the activation's for a specific node is feed to a dense layer and a prediction made.
 Since all subjects in the data set is incorporated in the population graphs the split into validation and training set must be handled. The solution is given by defining a set of subject that will be the training set and another that will be the validation set, and the population graph thus have one set of nodes considered to be training nodes and one set to be validation nodes. The model was then constructed so it could either do predictions for only the nodes in the training set or validation set. Then the training could be performed while we only did the prediction and training on the training set and vice versa when evaluating.
 
@@ -83,9 +109,16 @@ As a means to incorporate more information about each subject in the population 
 \section{Batches of population graphs}
 Since a population graph is a graph where each node represent a single subject and the number of edges of the graph grows with the number of nodes squared the adjacency matrix for the population graph quickly becomes very larger. This is a big problem since doing prediction and training with such a large matrix becomes very time consuming and also memory consumption can become problematic. To resolve this problem and thus in a feasible way be able to train on population graphs that includes all the data a batching method was developed. 
 
-The batching method was based on dividing the population graph into several smaller population graphs. For an illustration on how this can be done see figure \ref{}. For example a population graph with 10 000 subjects would have an adjacency matrix with 1e$^8$ entries which takes about 800 MB to store in memory. However if the same population graph is divided into 100 smaller population graphs with 100 subjects in each graph the total number of entries needed to be stored would be 1e$^6$ corresponding to about 8 Mb of memory. And if the size of the smaller population graphs remains constant the memory and computation times grows linearly when adding more subjects to the data set instead of quadratic.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/batches.png}
+    \caption{TEMP}
+    \label{fig:batches}
+\end{figure}
 
-As seen in figure \ref{} many of the connection between subjects is not utilized if the population graph is divided into several smaller graphs. To solve this the way the subjects are divided into smaller graphs is changed between epochs as seen in figure \ref{}. By always changing which people are combined in the graphs all connections will potentially be used after enough epochs. The advantage of of always changing the subjects that are included in the graphs is that the model can't over fit against a specific graphs structure. The models are thus forced to learn very general patterns to classify all the subjects in the graphs. 
+The batching method was based on dividing the population graph into several smaller population graphs. For an illustration on how this can be done see figure \ref{fig:batches}. For example a population graph with 10 000 subjects would have an adjacency matrix with 1e$^8$ entries which takes about 800 MB to store in memory. However if the same population graph is divided into 100 smaller population graphs with 100 subjects in each graph the total number of entries needed to be stored would be 1e$^6$ corresponding to about 8 Mb of memory. And if the size of the smaller population graphs remains constant the memory and computation times grows linearly when adding more subjects to the data set instead of quadratic.
+
+As seen in figure \ref{fig:batches} many of the connection between subjects is not utilized if the population graph is divided into several smaller graphs. To solve this the way the subjects are divided into smaller graphs is changed between epochs as seen in figure \ref{fig:batches}. By always changing which people are combined in the graphs all connections will potentially be used after enough epochs. The advantage of of always changing the subjects that are included in the graphs is that the model can't over fit against a specific graphs structure. The models are thus forced to learn very general patterns to classify all the subjects in the graphs. 
 
 
 

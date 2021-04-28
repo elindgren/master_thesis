@@ -36,24 +36,28 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TIKZ
-% \usepackage{tikz}                   % Tikz figures
+\usepackage{tikz}                   % Tikz figures
 % \usepackage[RPvoltages]{circuitikz} % CircuiTikz
-% \usepackage{pgf,pgfplots}           % Pgfplots
+\usepackage{pgf,pgfplots}           % Pgfplots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PGFPLOT
-% \usetikzlibrary{patterns, arrows.meta ,fit, positioning, shapes}
+\usetikzlibrary{patterns, arrows.meta ,fit, positioning, shapes}
 
-% \pgfplotsset{compat=1.14}
+\pgfplotsset{compat=1.14}
 
-% \pgfplotsset{every axis/.append style={
-%     scaled y ticks = false,
-%     scaled x ticks = false,
-%     y tick label style={/pgf/number format/.cd, fixed, fixed zerofill,
-%                         int detect,1000 sep={\;},precision=3},
-%     x tick label style={/pgf/number format/.cd, fixed, fixed zerofill,
-%                         int detect, 1000 sep={},precision=3}
-% }
-% }
+\pgfplotsset{every axis/.append style={
+    scaled y ticks = false,
+    scaled x ticks = false,
+    y tick label style={/pgf/number format/.cd, fixed, fixed zerofill,
+                        int detect,1000 sep={\;},precision=3},
+    x tick label style={/pgf/number format/.cd, fixed, fixed zerofill,
+                        int detect, 1000 sep={},precision=3}
+}
+}
+
+% \usepackage{fontspec}  % optional
+\usepgfplotslibrary{groupplots}
+\usepgfplotslibrary{dateplot}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CODE
