@@ -1,8 +1,8 @@
 \chapter{Theory}
 
-\section{General graph theory}
+\section{General graph theory}\label{sec:general_graph_theory}
 
-A graph $\mathcal{G} = \{V, E \} $ is defined by the set of its nodes $V$ and edges $E$. The edges forms the connections between nodes, and fora pair of nodes $(i,j)$ the corresponding edge may be denoted $e_{ij}$. We may define the neighbours to a certain node $v \in V$ as $N(v)$, which thus are the nodes $u \in V$ that are connected to $v$, $e_{vu} \neq 0$. Each node $v$ may also be associated with \textit{node features}, $x_v$. $x_v$ could be a vector, and can be seen as the properties of a node.
+A graph $\mathcal{G} = \{V, E \} $ is defined by the set of its nodes $V$ and edges $E$. The edges forms the connections between nodes, and for a pair of nodes $(i,j)$ the corresponding edge may be denoted $e_{ij}$. We may define the neighbours to a certain node $v \in V$ as $N(v)$, which thus are the nodes $u \in V$ that are connected to $v$, $e_{vu} \neq 0$. Each node $v$ may also be associated with \textit{node features}, $x_v$. $x_v$ could be a vector, and can be seen as the properties of a node.
 
 A graph is considered to be \textit{undirected} if the edges are undirected, $e_{ij} \equiv e_{ji}$, and \textit{directed} if the edges are directed, $e_{ij} \not\equiv e_{ji}$. Furthermore, a graph can either be \textit{binary} or \textit{weighted}. In a binary graph, edges are either present or not, whilst in a weighted graph each edge $e_{ij}$ is associated with a weight $w_{ij}$. \cite{source} Weights in a weighted graph may be interpreted differently depending on the application. They can be seen as the connection strength between devices in a cellular network, the flow of goods in a logistics setting, a distance metric etc.
 
@@ -12,9 +12,9 @@ The edges in a graph may be succinctly summarised in an \textit{adjacency matrix
     A_{ij} = \begin{cases} \mbox{1,} & \mbox{if } e_{ij} \in E \\ \mbox{0,} & \mbox{otherwise} \end{cases}
     \label{eq:adjacencydefinition}
 \end{equation}
-In the case of a weighted graph, $A_{ij} = w_{ij}$. From definition \eqref{eq:adjacencydefinition} follows that undirected graphs have a symmetric adjacency matrix, $A_{ij} = A_{ji}$. In this work we mainly focus on the edges rather than the nodes of the brain networks, and thus adjacency matrices will be our primary way of representing graphs.
+In the case of a weighted graph, $A_{ij} = w_{ij}$. From definition \eqref{eq:adjacencydefinition} it follows that undirected graphs have a symmetric adjacency matrix, $A_{ij} = A_{ji}$. In this work we mainly focus on the edges rather than the nodes of the brain networks, and thus adjacency matrices will be our primary way of representing graphs.
 
-
+Another kind of graph which will be utilized in the thesis is multiplex graphs. A multiplex graph is a graph with a fixed set of nodes but with several sets of edges. One example of a multiplex graph is a graph with cities as nodes and different means of transportation as edges. Edges representing highways and railways makes up two different graphs but they might be combined into a multiplex graph since they have the same nodes.
 
 % \subsection{Graph classification}
 % \subsection{Node classification}
@@ -48,7 +48,7 @@ Graph Convolutional Neural Networks (GCNs) are a class of neural networks that g
     \label{fig:grid_graph_data}
 \end{figure}
 
-We begin by first discussing the concept of convolutions in the graph domain, and how they can implemented in a computationally efficient manner. We then present a layer-wise propagation rule for a graph convolutional layer based on this implementation of convolutions. Finally, we discuss graph convolutional layers from the viewpoint of a heuristic interpretation known as \textit{message passing}.
+We begin this section by first discussing the concept of convolutions in the graph domain, and how they can implemented in a computationally efficient manner. We then present a layer-wise propagation rule for a graph convolutional layer based on this implementation of convolutions. Finally, we discuss graph convolutional layers from the viewpoint of a heuristic interpretation known as \textit{message passing}.
 
 \subsection{Convolutions in the graph domain}
 
@@ -130,12 +130,12 @@ As discussed in the previous section, a graph convolutional layer aggregates the
     z_i = \sum_k \theta_k \left(\hat{A}_{ii} x_{ik} + \sum_{j \neq i} \hat{A}_{ij} x_{jk} \right)
 \end{equation}
 where $z_i$ is the activation for node $i$, $x_{ik}$ corresponds to feature $k$ for node $i$, $\theta_k$ is the trainable weight for feature $k$ and $\hat{A} = \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}$. $\hat{A}_{ij}$ is only non-zero for the nodes $j$ which are directly connected to node $i$, and thus only the nodes that are first-order neighbours to node $i$ will contribute to the sum $\sum_{j \neq i} \hat{A}_{ij} x_{jk}$. $\hat{A}_{ii}$ is a self-connection, since the $i$:th node is a zero-order neighbour to itself.
-By interpreting the features $x_{ik}$ as a form of \textit{message}, the expression $\hat{A}_{ii} x_{ik} + \sum_{j \neq i} \hat{A}_{ij} x_{jk}$ can be seen as an aggregation of messages between a node's current state $x_{ik}$ and those of its neighbours $x_{jk}\left.\right\rvert_{j\neq i}$. Furthermore, in a weighted graph $\hat{A}_{ij}$ may be interpreted as the connection strength between nodes, and thus the contribution of each node can be seen as weighted by that strength. Finally, these contributions are summed up for all features $k$ with their corresponding trainable weight $\theta_k$ to yield the node's activation $z_i$. In this manner information can flow through the graph, and by stacking multiple GCN layers the information can spread over successively larger neighbourhoods. See figure \ref{fig:message_passing} for a visual representation of how the ``messages'' are passed to node $i$ from it's neighbours.
+By interpreting the features $x_{ik}$ as a form of \textit{message}, the expression $\hat{A}_{ii} x_{ik} + \sum_{j \neq i} \hat{A}_{ij} x_{jk}$ can be seen as an aggregation of messages between a node's current state $x_{ik}$ and those of its neighbours $x_{jk}\left.\right\rvert_{j\neq i}$. Furthermore, in a weighted graph $\hat{A}_{ij}$ may be interpreted as the connection strength between nodes, and thus the contribution of each node can be seen as weighted by that strength. Finally, these contributions are summed up for all features $k$ with their corresponding trainable weight $\theta_k$ to yield the node's activation $z_i$. In this manner information can flow through the graph, and by stacking multiple graph convolutional layers the information can spread over successively larger neighbourhoods. See figure \ref{fig:message_passing} for a visual representation of how the ``messages'' are passed to node $i$ from it's neighbours.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{chapters/images_theory/message_passing.png}
-    \caption{A schematic representation of the message passing interpretation of a GCN layer. The messages $x_{jk}$ are weighted by the connection strength $\hat{A}_{ij}$ when sent from node $j$ to node $i$. All contribtions from node $i$'s neighbours are aggregated in this manner, and then multiplied by the weight $\theta_k$.}
+    \caption{A schematic representation of the message passing interpretation of a graph convolutional layer. The messages $x_{jk}$ are weighted by the connection strength $\hat{A}_{ij}$ when sent from node $j$ to node $i$. All contribtions from node $i$'s neighbours are aggregated in this manner, and then multiplied by the weight $\theta_k$.}
     \label{fig:message_passing}
 \end{figure}
 
@@ -146,7 +146,7 @@ By interpreting the features $x_{ik}$ as a form of \textit{message}, the express
 \section{Machine learning on graphs}
 \label{sec:ml_on_graphs}
 
-Graphs are very versatile in storing data, and are thus abundant in many areas of science. It is thus interesting how one incorporates them into the framework of machine learning. Specifically, how does one formulate a problem to suitably be solved using machine learning on graphs? 
+Graphs are very versatile in storing data, and are abundant in many areas of science. It is thus interesting how one incorporates them into the framework of machine learning. Specifically, how does one formulate a problem to suitably be solved using machine learning on graphs? 
 
 %% TODO TIKZ
 % \begin{center}
@@ -173,31 +173,55 @@ Graphs are very versatile in storing data, and are thus abundant in many areas o
     \label{fig:graph_and_node_class}
 \end{figure}
 
-One common class of problems is \textit{graph classification}. As the name implies, given a graph $\mathcal{G}$ the task is to classify it as belonging to one of several classes. Another class of problem is \textit{node classification}. The task here is to classify each node in the set of nodes $V$ belonging to the graph $\mathcal{G} = \{V, E \}$. The schematics of graph classification and node classification can be seen in figures \ref{fig:graph_classification} and \ref{fig:node_classification} respectively. Graph and node classification can be generalised to graph and node \textit{regression}, in which a continuous value is predicted for each graph or node, respectively. We will in the following refer to graph and node classification/regression as graph or node \textit{inference}.
+One common class of problems is \textit{graph classification}. As the name implies, given a graph $\mathcal{G}$ the task is to classify it as belonging to one of several classes. Another class of problem is \textit{node classification}. The task here is to classify each node in the set of nodes $\mathcal{V}$ belonging to the graph $\mathcal{G} = \left(\mathcal{V}, \mathcal{E} \right)$. The schematics of graph classification and node classification can be seen in figures \ref{fig:graph_classification} and \ref{fig:node_classification} respectively. Graph and node classification can be generalised to graph and node \textit{regression}, in which a continuous value is predicted for each graph or node, respectively. We will in the remainder of the thesis refer to graph and node classification/regression as graph and node prediction tasks.
 
-In the context of neuroscience, graph inference can be important when you have one graph per subject. These subject-specific graphs could for instance represent the brain structure of the subject. The task is then to predict some property for each subject given their graph. Node inference could be be important both on a subject level and a population level. For subject level graphs, one could infer node level properties, such as the properties of a part of a subject's brain. On a population level, one may represent the entire population as a single \textit{population graph}, in which each node corresponds to an individual. The set of nodes $V$ thus corresponds to the population, and the edges $E$ relate all individuals to each other. The idea behind this construction is that the nodes contain features related to each subject, whilst the edges contain information on how they relate to one another \cite{stankeviciute}. The set of edges $E$ can be calculated from a similarity measure, which thus encodes information on the similarity between subjects. The similarity measure greatly shapes the resulting population graph, and should be chosen with the specific application in mind. Common machine learning tasks on a population graph include predicting properties for each subject in the graph, i.e. a node inference problem. In neuroscience, these properties could be the age or sex of each subject.  
+In the context of neuroscience, graph prediction can be important when you have one graph per subject. These subject-specific graphs could for instance represent the brain structure of the subject. The task is then to predict some property for each subject given their graph. Node prediction could be important both on a subject level and on a population level. For subject level graphs, one could infer node level properties, such as the properties of a part of a subject's brain. On a population level, one may represent the entire population as a single \textit{population graph}, in which each node corresponds to an individual. Common machine learning tasks on population graphs includes predicting properties for each subject in the graph. In neuroscience, these properties could be the age or sex of each subject. 
 
-\section{Graph theory in neuroscience}
-Ta upp relaterade arbeten och knyt ihop med introduction inför metoden. E.g. Jansson sandström, stankeviciute.
+In a population graph, the set of nodes $\mathcal{V}$ thus corresponds to the population, and the edges $\mathcal{E}$ relate all individuals to each other. The idea behind this construction is that the nodes contain features related to each subject, whilst the edges contain information on how the subjects relate to one another \cite{stankeviciute}. The set of edges $\mathcal{E}$ can be calculated from a similarity measure, which thus encodes information on the similarity between subjects. The similarity measure greatly shapes the resulting population graph, and should be chosen with the specific application in mind. Generally, a similarity measure $\sigma$ is often based on some inverse of a distance metric $D$. For instance, a general similarity measure between two data points $x_1$ and $x_2$ with a distance metric $D$ inverted by a kernel $K$ may be written as
+
+\begin{equation}
+    \sigma(x_1,x_2, l) = K \left(\frac{D\left(x_1, x_2\right)}{l} \right),
+    \label{eq:similarity_measure}
+\end{equation}
+where $l$ is a hyper parameter for scaling the distance metric. With this construction, data points that are close will obtain a large similarity, and vice versa. In the context of population graphs, and assuming that subjects that are similar have similar data, similar subjects will yield a large similarity measure and thus a strong edge weight in the graph. 
 
 
 \section{Analysis}
-\subsection{Model analysis/evaluation}
-\subsection{Zorro}
-The Zorro algorithm is an algorithm for determine which nodes and features are important for a model performing semi-supervised node classification. This means that the dataset consists of one big graph with one adjacency matrix and one feature matrix.
+% \subsection{Model analysis/evaluation}
+\subsection{Zorro}\label{sec:zorro}
+
+The Zorro algorithm is an algorithm for determining which nodes and features are important for a model performing semi-supervised node classification. This means that the dataset consists of one big graph with one adjacency matrix $A$ and one feature matrix $X$.
 
 %This algorithm is by the writers introduced for analysing models performing semi-supervised node classification. This means that the dataset consists of one big graph with one adjacency matrix and one feature matrix. Since we are doing graphs classification where each subject has a unique adjacency matrix some alterations must be done to the algorithm. First we, in a big picture, describe how the Zorro algorithm works and then what alterations have been made by us.
 
-To describe the Zorro algorithm a model $\Phi_n(X,A)$ is introduced which takes as input an adjacency $A$ matrix and a feature matrix $X$ and gives a prediction for each node $n$. The general idea is to replace the feature matrix $X$ by noise and then reintroduce nodes and features which makes the model prediction similar to the original. The way the noise is introduced is by 
+To describe the Zorro algorithm a model $\Phi_n(X,A)$ is introduced which takes as input $A$ and $X$, and gives a prediction for each node $n$ in the graph. The general idea is to replace the feature matrix $X$ by noise and then reintroduce nodes and features which makes the model prediction similar to the original. The way the noise is introduced is by 
 \begin{equation*}
     Y_s = X \odot S + Z \odot (1- S), \quad Z \sim \mathcal{N}, 
 \end{equation*}
-where $S = \{V, F\}$ is refereed to as a explanation where the nodes $V$ and features $F$ is unmasked. The noise $\mathcal{N}$ is proposed by the authors of \cite{} to be set to the distribution of the dataset. The prediction of the model $\Phi$ on the masked data is then $\Phi_n(Y_s, A)$. To evaluate an explanation $S$ i.e. if a node and feature is important for the prediction of a specific node the fidelity of the explanation is calculated by
-\begin{equation*}
+where $S = \{V, F\}$ is refereed to as an explanation where the nodes $V$ and features $F$ is unmasked. The noise $\mathcal{N}$ is proposed by the authors of \cite{} to be set to the distribution of the data set. The prediction of the model $\Phi$ on the masked data is then $\Phi_n(Y_s, A)$. To evaluate an explanation $S$ i.e. if a node and feature is important for the prediction of a specific node the fidelity of the explanation is calculated by
+\begin{equation}\label{eq:Ys}
     \mathcal{F}(S) = \mathbb{E}_{Y_s|Z\sim\mathcal{N}}[1_{\Phi_n(X,A) = \Phi_n(Y_s,A)}].
-\end{equation*}
-The fidelity of an explanation is a measure of how likely it is for a model with a masked dataset to give the same prediction as model with the original dataset. The algorithm then consists by iterative add the node or feature that increases the fidelity the most until the fidelity of an explanation is higher then a hyper parameter $\tau$. 
+\end{equation}
+The fidelity of an explanation is a measure of how likely it is for a model with a masked dataset to give the same prediction as a model with the original dataset.
 
-\subsection{Saliency mappings etc.}
 
+The final algorithm then starts, for node $n$, with an empty explanation $S_n = \{\emptyset, \emptyset\}$, and thus $\Phi_n(Y_s, A)$ will have a completely random input according to equation \ref{eq:Ys}. Then the node or feature that increases the fidelity of the explanation the most is added to the explanation. More and more nodes and features are iterativelly added until the fidelity of the explanation gets higher then a hyper parameter $\tau$. Then the algorithm is finished and the resulting explanation indicates which nodes and features where important to make the prediction of specific node in the graph. This can then be repeated for all the nodes in the graph.
+
+
+% \subsection{Saliency mappings etc.}
+
+
+\section{Similar works: the intersection of GCNs and neuroscience}
+
+% Ta upp relaterade arbeten och knyt ihop med introduction inför metoden. E.g. Jansson sandström, stankeviciute.
+
+There have been numerous papers published in the last few years applying graph neural networks in neuroscience, both GCNs and other kinds of GNNs. One example of such a paper is the Master Thesis by Jansson and Sandström \cite{jansson_sandstrom}, in which the applications of GCNs in neuroscience where explored and applied on the problem of classifying Alzheimer's Disease based on MRI data. The thesis by Jansson and Sandström is actually the precursor to this very thesis, and it's their interesting findings that motivated this master thesis project. 
+
+There have also been a fair few papers focusing on similar problems as the aim of our thesis; to develop and analyze accurate classifiers for sex and brain age prediction. For sex prediction one can note Arslan et al. \cite{arslan}, in which GCNs are applied on fMRI-data yielding a classification accuracy of $88.06\pm1.57\%$. Another example is the work by Kim and Ye \cite{understanding_gnn}, which uses a variant of GNN known as a Graph Isomorphism Network (GIN), to yield similar classification accuracies of $84.61\pm2.9\%$. When it comes to age prediction, notable works include Stankevicuete et al. \cite{stankeviciute} and Amoroso et al. \cite{multiplex}. Stankevicuete et al. applies GCNs to a population graph of subjects, where the node features consists of the MRI data for each subject. With this approach, they obtain a mean absolute error (MAE) of $28.045\pm0.595$ years and a Pearson's correlation coefficient of $r=0.675\pm0.008$. Amoroso et al. uses fully connected artificial neural networks on MRI data to predict age, and reaches a MAE of $4.7\pm0.1$ and a correlation of $r=0.95\pm0.02$.
+
+A fair few of these related works also try to tackle the second part of the aim, the analyzation of the models to gain insight into the functioning of the human brain. For instance, Arslan et al. and Kim and Ye studies the gradients inside the neural network, using which they can estimate the importance of each node in the fMRI data. This approach is thus centered around opening up the neural network to understand it's inner workings, which makes the techniques inherently specific to GCNs and similar network types. 
+
+What sets our thesis apart from these other works are twofold: Firstly, we develop models for both sex and age prediction that share common architectures, which simplifies comparison between the two tasks. Secondly, we analyze these models using black box methods to find functional brain networks that are linked to sex and age. The use of black box methods enables us to perform the analysis for models other than GCNs, validating the results over different methods and models.
+
+One thing to keep in mind when comparing studies is that most often they are based on different data, which makes direct comparison of results tricky. Interestingly in our case, Arslan et al. and Stankevicuete et al. actually uses data from the same source, the UK Biobank \cite{ukbiobank},  that we use, but with some slight differences. Arslan et al. uses more highly resolved fMRI data, and Stankevicuete et al. focuses on MRI data. Even though this does not enable direct comparison, the data is a bit more similar and hence one could perhaps draw some conclusions on possible differences in results. 
 

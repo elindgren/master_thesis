@@ -1,7 +1,9 @@
 \chapter{Method}
 
+In this chapter we present our methodology for fulfilling the aim of developing accurate models for predicting age and sex, and how they can be analysed in order to gain insight into what functional networks are related to age and sex differences in the human brain. The chapter can be summarised as follows: First, we present the preprocessing of the fMRI data into graphs suitable for neural networks. Secondly, models for graph and node prediction are presented. Finally, methods for analysing the models are presented.
+
 \section{From fMRI scans to graphs}\label{sec:fmri_to_graphs}
-The data that constituted the foundation of our work is from the UK biobank \cite{ukbiobank}. This is an extensive data bank that contains genetic and biomedical information for over 500 000 subjects in the UK. Examples of types of data that is included in the biobank are subject sex, age, cognitive abilities, disease history, but also more specific information such as brain scans. 
+The data that makes up the foundation of this master thesis is from the UK Biobank \cite{ukbiobank}. The UK Biobank is an extensive data bank that contains genetic and biomedical information for over 500 000 individuals in the UK. Examples of types of data that are included in the biobank are subject sex, age, cognitive abilities, disease history, but also more specific information such as MRI and fMRI brain scans. \todo{Återskapa figuren själva}
 
 \begin{figure}[H]
     \centering
@@ -10,10 +12,13 @@ The data that constituted the foundation of our work is from the UK biobank \cit
     \label{fig:fmri_network}
 \end{figure}
 
-For the purpose of our project, we are specifically focusing on functional MRI brain scans, which is available for roughly 35 000 subjects varying between 45 and 80 years of age. Functional MRI (fMRI) is a technique for measuring the activation of the human brain. In a measurement, the activation of various parts of the subject brain is measured as time series. These time series can be correlated, with highly correlated regions being formed into networks. The regions that make up these network does not necessarily have to be physically close together. These networks are often associated with certain functionalities of the brain. Example of such functional networks are the vision network, responsible for processing visual stimuli, and the Defualt Mode Network (DMN), which handles memory processing and daydreaming. Multiple networks may be associated with the same functionality. In our case, groups of these networks that are related to the same functional network have been clustered together to form a 21 node \textit{network of networks}, which we represent as a graph. Each node in our fMRI-graphs thus corresponds to one functional network in the human brain (such as the DMN etc.). The weight of the edges between each of the nodes is calculated as the average correlation between the networks that make up the two nodes. A visualization of such an fMRI graph is given in figure \ref{fig:fmri_network}, in which the various nodes and the functional networks they represent form the outer circle, with the coloured lines connecting the nodes being the edges in the graph. The lines are coloured according to edge weight, with blue and red lines having negative and positive weight respectively.
+In the UK Biobank, fMRI brain scans, which are the focus of this project, are available for roughly 35 000 subjects varying between 45 and 80 years of age. Functional MRI (fMRI) is a technique for measuring the activation of the human brain \cite{sporns}. In a measurement, the activation of various parts of the subject brain is measured as time series. The correlation between these time series can then be calculated, and highly correlated regions can be formed into networks. The regions that make up these network does not necessarily have to be physically close together. The obtained fMRI brain networks are often associated with certain functionalities of the brain. One example of such a functional brain network is the Default Mode Network (DMN), which handles memory processing and mind wandering \cite{alves_dmn}. 
+
+The fMRI data available from the UK Biobank for this project has also been further preprocessed. fMRI networks that are related to the same functional brain network have been clustered together to form a 21 node \textit{network of networks}, which is represent as a graph. Each node in the brain graphs thus corresponds to one functional network in the human brain (such as the DMN etc.). The weight of the edges between each of the nodes is calculated as the average correlation between the networks that make up the two nodes. Thus, weights can both be positive and negative, depending on the correlation. A visualization of such a brain graph is given in figure \ref{fig:fmri_network}, in which the various nodes and the functional brain networks they represent form the outer circle, with the coloured lines connecting the nodes being the edges in the graph. The lines are coloured according to edge weight, with blue and red lines having negative and positive weight respectively.
 
 \subsection{How to handle negative values - split}
-Since the connections in the brain graphs was calculated from correlations the possibility of negative connection exists and in fact they occurs very often; about half of all connections are less then zero. This is a problem since the risk of dividing by zero in the normalization procedure in equation \eqref{eq:renormalization_trick} become eminent and the connections may then be uncontrollably large. There are several ways to handle this problem some alternative is to only regard positive or negative connections alone, another might be to look at the absolute value of the connections. We however decided to split the graphs negative and positive connections and create a multiplex graph \cite{}. A multiplex graph is a graph with a fixed set of nodes but with several sets of edges. One example could be when constructing a graph with cities as nodes and different means of transportation constitutes the edges. Edges representing highways and railways makes up two different graphs but they might be combined into a multiplex graph since they have the same nodes. So in our case we make two graphs one with negative connections and one with positive and combine them into a multiplex graph. From a practical point of view this was executed by creating a block diagonal adjacency matrix with the original adjacency matrix with the negative connections removed in the top left corner and the corresponding matrix with positive connections removed in the down right corner. A illustration of this can be seen in figure \ref{fig:block_diagonal_adjacency_matrix}.
+
+A brain graph with both positive and negative weights may however be problematic. Specifically, when normalizing the adjacency matrices according to equation \eqref{eq:renormalization_trick}, the risk of dividing by zero becomes imminent. There are several ways to handle this problem. One alternative is to only study all positive or all negative connections, and another might be to take the absolute value of all connections. We however decided to split the negative and positive connections into two separate graphs and thus form a multiplex graph. From a practical point of view this was implemented by creating a block diagonal adjacency matrix $A_{split}$ with all positive connections in the upper block and all negative connections in the lower block, see figure \ref{fig:block_diagonal_adjacency_matrix}. The connections in the positive block that were negative in the original adjacency matrix $A$ were replaced with zeros, and vice versa in the negative block.
 
 \begin{figure}[H]
     \centering
@@ -22,14 +27,14 @@ Since the connections in the brain graphs was calculated from correlations the p
     \label{fig:block_diagonal_adjacency_matrix}
 \end{figure}
 
-Snygg figur - blockdiagonal
-Stratification
-
 \section{Graph classification -- subject-wise}
-In this section all models performing graph predictions for individual subjects are introduced.
+
+Having described the preprocessing of the brain graphs, we now turn to the models used to perform graph prediction for individual subjects. Two models will be presented, a baseline regression model and a GCN-based model, for the tasks of predicting subject age and sex.
 
 \subsection{Baseline model}
-To be able to validate how well all different GCN-models performs we first need to construct some kind of baseline model to compare against. In this study the baseline model consists of a regression model where the list of all connections between all of the nodes are considered as a high dimensional data point. The reason we can consider this as a baseline model and  expect sensical results is that the obtained data over the brain graphs is ordered. Generally graphs are node ordering invariant which would be a big problem but since we can make sure the ordering of the node we can garrantie the the regression model gets connection between the same node in every data point. For schematic view off the model see figure \ref{fig:Graph_class_baseline}, where the output layer has either 2 softmax neurons for sex classification or 1 neuron without activation for age regression. 
+To be able to validate how well the different GCN-models performs a baseline model must be introduced for comparison. In this study the baseline model consisted of a regression model where the connections between all of the nodes were regarded as separate input features. The adjacency matrix for an individual subject could then be viewed as a high dimensional data point and the model thus aimed to fit a hyper plane to either separate the classes or predict a continues variable. For a schematic view of the model see figure \ref{fig:Graph_class_baseline}. Note specifically that the output layer has either two softmax-activated neurons in the case of sex classification or one neuron without activation in the case of age regression. 
+
+As described in \ref{sec:general_graph_the} graphs are completely node invariant, and several different ways of listing the connections results in the same graph. This might generally impose a problem since the regression model depend on its input being ordered. The reason a regression model is possible as a baseline in this case, is because the brain graphs from the UK Biobank follows a consistent node ordering, and each input feature of the model is thus always the same connection. Another reason this baseline model is possible is because the brain graphs are relative small (21 nodes) compared to many other graphs (citetion networks for example). For larger graphs, models with one learnable parameter per connection would result in huge models. In that case models that do not scale with the number of connections must be used, such as GCN-based models. 
 
 % \begin{center}
 %     \resizebox {0.9\linewidth} {!} {
@@ -38,15 +43,17 @@ To be able to validate how well all different GCN-models performs we first need 
 % \end{center}
 
 \begin{figure}[H]
-    \includegraphics[width=0.9\textwidth]{chapters/images_methods/ffnn.png}
+    \centering
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/ffnn_v2.png}
     \caption{TEMP}
     \label{fig:Graph_class_baseline}
 \end{figure}
 
-\subsection{GCN base}
-The first model, which is refereed to as GCNBase, consists of 3 consecutive graph convolutional layers, with propagation rule seen in \eqref{eq:propagation_rule}, and a fully connected output layer. The GCN layers will always have the rectified linear unit (RELU) as activation function and ten output features, unless otherwise specified. The input to the fully connected output layer consisted of all the activation's after all three GCN layers, i.e. the activation for all feature maps in all layers. As described in the section \ref{sec:gcn} the activation of layers $i$ will contain information about the $i$-order neighbourhood of each node. The inclusion of activation's after each layer thus aims to utilize information of how each node is embedded in a larger and larger neighbourhood, which could be important for the prediction.
+\subsection{GCNBase}
 
-%The activation of each layer will contain information of a larger and larger local neighbourhood of nodes in the graph. Therefor after the GCN layers we concatenate all activation's in all layers and feed them to a regular dense layer with either two softmax neurons or one without activation as output just as the baseline model.
+The motivation behind using GCN-based models is that they hopefully will be able to extract information from the topological structure of the graph, rather than simply studying the individual connections as, for instance, in the case of the baseline model. To explore this possibility, a GCN-based model, referred to as GCNBase, was developed. An illustration of the GCNBase model can be seen in figure \ref{fig:gcn_base}. GCNBase consisted of three consecutive graph convolutional layers, with propagation rule as defined in equation \eqref{eq:propagation_rule}, followed by a fully connected output layer. The GCN layers had a rectified linear unit (RELU) activation function and ten output features. This will be the case for all GCN layers mentioned in the remainder of the thesis, unless otherwise specified. The input to the fully connected output layer consisted of the activations for all three GCN layers, i.e. the activation for all feature maps in all layers, concatenated together. As described in section \ref{sec:gcn} the activation of layer $i$ contains information about the $i$:th-order neighbourhood of each node. The inclusion of the activations after each layer in the classifier thus aims to utilize information of how each node is embedded in a successively larger neighbourhood, which could be beneficial for the prediction.
+
+As described in section \ref{sec:gcn}, the inputs to a GCN-based model consists of an adjacency matrix $A$ and a node feature matrix $X$. In the case of GCNBase however, a \textit{featureless} approach was used, in which the feature matrix was taken to be the identity matrix, $X=I$, since the fMRI graph is already represented by the adjacency matrix $A$. Other data modalites than fMRI data could be included through the feature matrix $X$, but we opted for the featureless approach due to the focus in this thesis on fMRI data specifically.
 
 % \begin{center}
 %     \resizebox {0.9\linewidth} {!} {
@@ -55,59 +62,60 @@ The first model, which is refereed to as GCNBase, consists of 3 consecutive grap
 % \end{center}
 
 \begin{figure}[H]
-    \includegraphics[width=0.9\textwidth]{chapters/images_methods/gcn.png}
-    \caption{TEMP}
+    \centering
+    \includegraphics[width=\textwidth]{chapters/images_methods/base_v2.png}
+    \caption{TODO remove X and y from figure}
     \label{fig:gcn_base}
 \end{figure}
 
-An illustration of this model can be seen in figure \ref{fig:gcn_base}. And lastly to what so far been glosed over; the input features to the model. For this model the input feature matrix $X$ is chosen to be the identity matrix $I$. This is at all possible because the small size of the graphs since the number of weights for the first GCN layer scales with the number of nodes, this is not the case otherwise.
-
-%\subsection{gcn dummy}
-%The next model that will be investigated is refereed to GCNDummy which is very similar to GCNBase. They both have three GCN layer followed by a dense layer. The only difference is that while GCNBase has the identity matrix as input features while GCNDumy has a column of ones as input features. This model will thus be equivalent to placing the value of one at each node and then propagate all the ones with message and thus only evaluate how well connected every node is with its immediate surroundings.  
-%\subsection{gcn features}
-%\subsection{Node shuffling}
-%Node shuffling
 
 \section{Node classification -- population graphs}
 In the next part of the thesis we investigate how well models involving population graphs perform. In this case since each node in the population graph is a subject the models need to do node predictions instead of graph predictions. 
 
 \subsection{Forming population graphs}
 
-As discussed in section \ref{sec:ml_on_graphs}, population graphs are a special type of graph in which each node corresponds to a subject, with the edges of the graph connecting the subjects being calculated using a similarity measure. The design of this similarity measure is an important decision, which should be done with the given application in mind. In our case, we want subjects that have similar fMRI data to be connected with edges that have a large weight, with the idea that our models will be able to draw upon this information on similarity to yield a better inference. Given two subjects and their adjacency matrices $A_1$ and $A_2$, we define the similarity measure $\sigma\left(A_1, A_2, l\right)$ as
+As discussed in section \ref{sec:ml_on_graphs}, the design of the similarity measure is an important decision and should be done with the given application in mind. For our specific application, it's desirable that subjects that have similar fMRI data are connected with edges that have large weights, with the idea that the models will be able to draw upon this information of similarity to yield a better inference. A general construction that fulfils this requirement is the use of a distance metric inverted by a kernel as described in equation \eqref{eq:similarity_measure}. Following this approach, and given two subjects and their adjacency matrices $A_1$ and $A_2$, we define the similarity measure $\sigma\left(A_1, A_2, l\right)$ as
 
 \begin{equation}
-    \sigma\left(A_1, A_2, l\right) = \exp{\left(- \frac{||A_1 - A_2||_F}{l ||A_1||_F ||A_2||_F} \right)},
+    \sigma\left(A_1, A_2, l\right) = \exp{\left(- \frac{||A_1 - A_2||_F^2}{l||A_1||_F ||A_2||_F} \right)}\biggr\rvert_{l=0.5},
     \label{eq:similarity_measure}
 \end{equation}
-where $||A_1 - A_2 ||_F$ is the matrix Frobenius norm of the difference between $A_1$ and $A_2$. The Frobenius norm is defined as $||A||_F = \left( \sum_i \sum_j |A_{ij}|^2 \right)^{1/2}$. The norm of the difference is weighted with a hyperparameter $l$ and the norms of $A_1$ and $A_2$, and then fed into an exponential kernel. The exponential kernel ensures that larger differences between $A_1$ and $A_2$ yields smaller similarity scores $\sigma\left(A_1, A_2, l\right)$, and also that  $\sigma\left(A_1, A_2, l\right) \in \left[0, 1\right]$. As desired, subjects that have similar fMRI data, and thus a smaller difference between their adjacency matrices, will with equation \eqref{eq:similarity_measure} obtain a larger similarity score and vice versa. 
+where $||A_1 - A_2 ||_F$ is the matrix Frobenius norm of the difference between $A_1$ and $A_2$. The Frobenius norm is defined as $||A||_F = \left( \sum_i \sum_j |A_{ij}|^2 \right)^{1/2}$. The norm of the difference is weighted with a hyperparameter $l=0.5$ and the norms of $A_1$ and $A_2$, and then fed into an exponential kernel. The exponential kernel ensures that larger differences between $A_1$ and $A_2$ yields smaller similarity scores $\sigma\left(A_1, A_2, l\right)$, and also that  $\sigma\left(A_1, A_2, l\right) \in \left[0, 1\right]$. As desired, subjects that have similar fMRI data, and thus a smaller difference between their adjacency matrices, will with equation \eqref{eq:similarity_measure} obtain a larger similarity score and vice versa. 
 
-Note that our similarity measure in equation \eqref{eq:similarity_measure} only draws use of the fMRI data for each subject. One could imagine a similarity measure that uses other types of data that is related to our tasks of predicting age/sex, such as eventual brain-health related diagnosis \cite{stankeviciute}. We decided to limit ourselves to only using fMRI data for two reasons; partly because using other data sources requires extensive domain knowledge, and partly because we are specifically interest in the predictive power of fMRI data, without introducing other confounding variables. 
+Note that the similarity measure in equation \eqref{eq:similarity_measure} only draws use of the fMRI data for each subject. One could imagine a similarity measure that uses other types of data that is related to the tasks of predicting age/sex, such as eventual brain-health related diagnosis \cite{stankeviciute}. The choice of only using fMRI data was motivated by two reasons; partly because using other data sources requires extensive domain knowledge, and partly because we are specifically interested in the predictive power of fMRI data, without introducing other confounding variables.
 
+\subsection{Poptoy model}
+As a first model for doing predictions on a population graph the Poptoy model is introduced. Poptoy takes in a population graph and propagates it through five GCN layers, similar to GCNBase, but the output layer differs since Poptoy shall do node prediction instead of graph predictions. The output layer of Poptoy is still a fully connected layer with one or two softmax output neurons, but the input to the fully connected layer consists of the activations of all layers and all features for a specific node. This in contrast to GCNBase output layer which takes the activations for all layers and all features for all nodes as input. By then using the same fully connected output layer for each node repeatedly (same weights) a prediction for each node, and thus each subject, can be made and the number of weights kept low as the number of nodes grows. An illustration of the Poptoy model can be seen in figure \ref{fig:poptoy}.
 
-% \subsection{Network architectures}
-\subsection{Baseline model}
-As a baseline model for doing predictions on a population graph a model similar to GCNBase is used. The model takes in the population graph propagates it through five GCN layers. 
-Afterwards instead of feeding all activation's to a dense layer all activation's for every feature in all layers for a specific node is feed to a dense layer. This dense layer gives a prediction for the specific nodes. This is then repeated for all the nodes with the same dense layers which then gives a prediction for all nodes in the graph, see figure \ref{fig:poptoy} for an illustration of the model. 
+The reason the Poptoy model consisted of five GCN layers instead of three, which GCNBase had, was that the population graphs became much larger then the individual brain graphs. The individual brain graphs consisted of 21 nodes which where all more or less connected and since each GCN layer takes account to one higher order of neighbours the need for more GCN layers quickly diminishes, since all nodes to some extent are included in the first order neighbourhood. For population graphs the need for considering neighbours further away in the graph might thus be much larger and hence Poptoy utilizes more GCN layers then GCNBase. 
 
 \begin{figure}[H]
-    \includegraphics[width=0.9\textwidth]{chapters/images_methods/poptoy.png}
+    \centering
+    \includegraphics[width=\textwidth]{chapters/images_methods/poptoy_v2.png}
     \caption{TEMP}
     \label{fig:poptoy}
 \end{figure}
 
-
-%Afterwards instead of concatenating all activation's for all nodes and feed them to a dense layers we concatenate all activations for every node, see figure \ref{} for illustration. Then a kind of convolution is used where all the activation's for a specific node is feed to a dense layer and a prediction made.
-Since all subjects in the data set is incorporated in the population graphs the split into validation and training set must be handled. The solution is given by defining a set of subject that will be the training set and another that will be the validation set, and the population graph thus have one set of nodes considered to be training nodes and one set to be validation nodes. The model was then constructed so it could either do predictions for only the nodes in the training set or validation set. Then the training could be performed while we only did the prediction and training on the training set and vice versa when evaluating.
+Since all subjects in the data set are incorporated in the population graphs the split into validation and training set must be handled. The solution is given by defining a set of subjects that will be the training set and another that will be the validation set, and the population graph thus has one set of nodes considered to be training nodes and one set of validation nodes. The model was then constructed so it could either do predictions for only the nodes in the training set or validation set. Then the training could be performed while only doing predictions on the training set and vice versa when evaluating.
 
 %\subsection{POPToy w. dummy}
 %\subsection{POPToy w. features (fmri)}
 \subsection{POPEncoder}
-As a means to incorporate more information about each subject in the population graph a model refereed to as POPEncoder is investigated. In this model features are introduced to the population graph. The features are based on adjacency matrix of each individual subject, but to compress the dimensionallity of the feature space we want to encode these matrices into a lower dimensional space. An heuristic explanation of how this would help is that the encoder can make an initial prediction of the age or sex of each individual subject. And then by propagating this information through the population graph the information of similarities to other subjects in the dataset possibly can improve on the predictions. Their exist many ways of performing the encoding, for example it can be done as a preprocessing step by performing predictions with one of our previous models which will get it to one or two features. In POPEncoder the encoder is however viewed as a trainable part of the model which allows possibly more advantageous embeddings then an initial prediction. 
+As a means to incorporate more information about each subject in the population graph a model referred to as POPEncoder was designed. The Popencoder model is identical to Poptoy in the sense that it propagates the population graph through five GCN layers and then makes a prediction for each node with a fully connected layer. The difference is that in Popencoder features for each node are introduced. The features are based on the adjacency matrices of each individual subject, but to compress the dimensionallity of the feature space these matrices was encoded into a lower dimensional space. The encoder consisted of two GCN layers with ten features each followed by a fully connected layers with two output neurons with a linear activation function. For an illustrations see figure \ref{fig:popencoder}.
 
-%POPEncoder can be seen as a combination of a model for graph predictions with a model for node predictions as been hinted before one hope is that the encoder should be able to make an initial prediction and by propagating that prediction through the population graph the model could be able to utilize similarities and structure in the hole population.
+A heuristic explanation of why the features introduced to the population graph would help, is that the encoder can make an initial prediction of the age or sex of each individual subject. Then by propagating this information through the population graph the information of similarities to other subjects in the data set possibly can improve on the predictions. One could argue that in that case the case that the initial prediction might be done as a preprocessing step, for example via a prediction with another model. The encoding is however viewed as a trainable part of the model and has has two output features to allow for more abstract and advantageous embeddings. 
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{chapters/images_methods/popencoder_v2.png}
+    \caption{TEMP}
+    \label{fig:popencoder}
+\end{figure}
 
 \section{Batches of population graphs}
-Since a population graph is a graph where each node represent a single subject and the number of edges of the graph grows with the number of nodes squared the adjacency matrix for the population graph quickly becomes very larger. This is a big problem since doing prediction and training with such a large matrix becomes very time consuming and also memory consumption can become problematic. To resolve this problem and thus in a feasible way be able to train on population graphs that includes all the data a batching method was developed. 
+Since a population graph is a graph where each node represent a single subject and the number of edges of the graph grows with the number of nodes squared the adjacency matrix for the population graph quickly becomes very large. For example, a population graph with 30 000 nodes requires approximately 7 GB of memory to store. This is a problem since doing prediction and training with such a large matrix becomes time consuming and the memory consumption can also become problematic. To resolve this problem and thus in a feasible way be able to train models on population graphs that includes all the data a batching method was developed. 
 
 \begin{figure}[H]
     \centering
@@ -116,62 +124,51 @@ Since a population graph is a graph where each node represent a single subject a
     \label{fig:batches}
 \end{figure}
 
-The batching method was based on dividing the population graph into several smaller population graphs. For an illustration on how this can be done see figure \ref{fig:batches}. For example a population graph with 10 000 subjects would have an adjacency matrix with 1e$^8$ entries which takes about 800 MB to store in memory. However if the same population graph is divided into 100 smaller population graphs with 100 subjects in each graph the total number of entries needed to be stored would be 1e$^6$ corresponding to about 8 Mb of memory. And if the size of the smaller population graphs remains constant the memory and computation times grows linearly when adding more subjects to the data set instead of quadratic.
+The batching method was based on dividing the population graph into several smaller population graphs. This was done by splitting the data set into several smaller data sets of 100 subjects each and constructing one population graph for each data set. Practically this was done by extracting all connections between the 100 subjects from the larger population graph. For an illustration on how this was done see figure \ref{fig:batches}. With this batching approach, dividing a population graph of 30 000 subjects into 300 smaller graphs with 100 nodes each would require 24 MB of memory, as compared to 7 GB before batching. This is a difference of roughly two orders of magnitude.
 
-As seen in figure \ref{fig:batches} many of the connection between subjects is not utilized if the population graph is divided into several smaller graphs. To solve this the way the subjects are divided into smaller graphs is changed between epochs as seen in figure \ref{fig:batches}. By always changing which people are combined in the graphs all connections will potentially be used after enough epochs. The advantage of of always changing the subjects that are included in the graphs is that the model can't over fit against a specific graphs structure. The models are thus forced to learn very general patterns to classify all the subjects in the graphs. 
-
-
+As seen in figure \ref{fig:batches} many of the connection between subjects are not utilized if the population graph is divided into several smaller graphs. To solve this the way the subjects are divided into smaller graphs is changed between epochs as seen in figure \ref{fig:batches}. By always changing which people are combined in the graphs all connections will eventually be used after enough epochs. The advantage of always changing the subjects that are included in the graphs is that the model can't overfit against a specific graph structure. The models are thus forced to learn very general patterns to make predictions for all subjects in the graphs. However, this generalization might also become a disadvantage since overfitting on the graph structure may yield higher validation performance as long as the graph structure remains fixed. 
 
 
-\section{Analysis}
-Since the goal of the thesis is not only to construct models to achieve good performance, but also to determine interesting biomarkers and understand the changes in the brain between both young/old and male/female brains, analyse the model is a important part of the work. The methods for doing this can in crude way be divided into methods that open the black box and methods that do not. The black box referees to the the model since they are generally hard to understand, and opening them up refers to understanding the models by directly investigating them for example by studying weights, activation's and gradients. Below a couple methods we used out of many available methods for analysing models will be presented. 
+\section{Node importance analysis}
+Since the goal of the thesis is not only to construct models to achieve good performance, but also to determine what functional networks in the brain are related to sex and age, analysing the models is an essential part of the work. Specifically, analysing which nodes in the brain graph are important for making predictions will by extension give information on what functional networks are important, due to each node representing a functional network. 
 
+Two black box methods for model analysis will be used: a naive approach based on node removal, and a more sophisticated method for node masking based on the Zorro algorithm described in section \ref{sec:zorro}. Black box methods are beneficial in this case, since they pose no assumptions on the model architecture, only on in- and output, and thus the analysis may be performed for different models in order to validate and compare the results. 
 
-\subsection{Model analysis/evaluation}
-\subsection{Node masking}
-A first very simple method to investigate what information is important  for doing predictions is a masking method, which is black box method. This particular masking method is a self-composed method based on simply removing a specific node or connection for every subject in the dataset and then retrain a new model. By masking every connection and node one at a time and then compare each models performance to a baseline where all information is utilized information of how important each node and connection is for the prediction can be extracted. This method is potentially also viable when not retraining the models, i.e. doing prediction on masked data with a model trained on unmasked data. This could however be problematic since the question of how to mask the nodes so worse performance means less importance. This problem arises since the absence of a connection not is the same as an uninformative connection. The model can for example assume some connection which is fairly constant across the dataset, removing this node may leed to significant worse performance even if it's not related to age or sex.
+\subsection{Naive approach - Impact of node removal on performance}
+A simple method to investigate which nodes are important for doing predictions is a node removal method. This particular method is self-composed, and based on simply removing a specific node for every subject in the data set and then retraining a new model. By comparing the predictive performance of the retrained model with a reference model trained on data with all nodes intact, an indication of the importance of that node may be obtained. This is the case since a large loss in performance means vital information for the prediction was removed, which is interpreted to be indicative of the importance of that node. The method may then be repeated for all nodes in order to obtain a measure of how important each node is.
 
-\subsection{Node masking: Zorro}
-Another masking method for analysing neural network models with graphs as input is the Zorro algorithm \cite{}. This algorithm is by the writers introduced for analysing models performing semi-supervised node classification. This means that the dataset consists of one big graph with one adjacency matrix and one feature matrix. Since we are doing graphs classification where each subject has a unique adjacency matrix some alterations must be done to the algorithm. First we, in a big picture, describe how the Zorro algorithm works and then what alterations have been made by us.
+\subsection{Zorro}
 
-To describe the Zorro algorithm we introduce a model $\Phi_n(X,A)$ which takes as input an adjacency matrix and a feature matrix and gives a prediction for each node $n$. The general idea is to replace the feature matrix $X$ by noise and then reintroduce nodes and feature which makes the model prediction similar to the original. The way the noise is introduced is by 
-\begin{equation*}
-    Y_s = X \odot S + Z \odot (1- S), \quad Z \sim \mathcal{N}, 
-\end{equation*}
-where $S = \{V, F\}$ is refereed to as a explanation where the nodes $V$ and features $F$ is unmasked. The noise $\mathcal{N}$ is proposed by the authors of \cite{} to be set to the distribution of the dataset. The prediction of the model $\Phi$ on the masked data is then $\Phi_n(Y_s, A)$. To evaluate an explanation $S$ i.e. if a node and feature is important for the prediction of a specific node the fidelity of the explanation is calculated by
-\begin{equation*}
-    \mathcal{F}(S) = \mathbb{E}_{Y_s|Z\sim\mathcal{N}}[1_{\Phi_n(X,A) = \Phi_n(Y_s,A)}].
-\end{equation*}
-The fidelity of an explanation is a measure of how likely it is for a model with a masked dataset to give the same prediction as model with the original dataset. The algorithm then consists by iterative add the node or feature that increases the fidelity the most until the fidelity of an explanation is higher then $\tau$, which can be chosen.
+The Zorro algorithm which is described in \ref{sec:zorro}, was developed for semi-supervised learning on a node classification task. To be used for analysing the models considered in this thesis it thus needs to be modified.
 
-Now to what modification that have been made to the algorithm to suit our models. First of all both GCNBase and the baseline model for individual graph prediction are completely featureless approaches that only takes an adjacency matrix as input and give one prediction per graph. Therefore it is note possible to mask the feature matrix and it must be done on the adjacency matrix. The unmasking can be done in two ways either on a connection level where entries in the adjacency matrix is unmasked or on a nodal level were hole rows and columns in matrix are unmasked. Since we primarily are interested in which nodes are important we decided on the latter, which also has computationally benefits. An explanation $S = \{V\}$, thus now only contains a set of nodes to be unmasked. The mask is now given by 
+The need for modification arises since the Baseline and Base models are completely featureless approaches that only takes an adjacency matrix as input. Therefore it is not possible to mask the feature matrix and it must be done on the adjacency matrix. The unmasking can be done in two ways; either on a connection level where entries in the adjacency matrix are unmasked or on a nodal level were whole rows and columns in the matrix are unmasked. Since we primarily where interested in which nodes are important the latter was used. Masking whole nodes instead of connections also give computational benefits, since the number of nodes is much less then the number of connections. 
+
+An explanation $\mathcal{S} = \{V\}$, thus now only contains a set of nodes to be unmasked. The masked adjacency matrix is now given by 
 \begin{equation*}
     B_S = A \odot S + Z \odot (1- S), \quad Z \sim \mathcal{N},
 \end{equation*}
-and the model predictions as $\Phi(A)$ and $\Phi(B_S)$. The noise is drawn from a Gaussian distribution with mean and standard deviation given by the entries of $A$ over the dataset. The fidelity are calculated in the same way and an explanation for a individual subject is still accepted if the fidelity of the explanation is higher then $\tau$. Lastly since the algorithm gives which nodes are important for the prediction of a individual subject the procedure is repeated for several subjects and the final score indicating how important a node is is given by the number of time the node was included in the explanations. 
+where $S$ is the masking matrix for the explanation $\mathcal{S}$, and the model predictions are $\Phi(A)$ and $\Phi(B_S)$. The noise is drawn from a Gaussian distribution with mean and standard deviation given by the entries of $A$ over the data set. The fidelity is calculated in the same way as in the original algorithm and an explanation $\mathcal{S}$ for an individual subject is still accepted if the fidelity of $\mathcal{S}$ is higher then $\tau$. 
+
+Lastly, since the algorithm yields which nodes are important for the prediction of an individual subject, the procedure was repeated for several subjects to get a sense of which nodes are generally important. To evaluate the importance of each node an importance score $\mathcal{I}$ was introduced as the number of explanations $\mathcal{S}$ a node was included in, divided by the total number of subjects. An importance score of $\mathcal{I}=1$ indicates that the node was considered important for the prediction of all subjects, and a score of $\mathcal{I}=0$ for none.  
 
 
-%This algorithm is by the writers introduced which nodes and features are important when the model are doing node predictions. Since the models we analys is graphs calssifications models some alterations are needed. Furthermore the algorithm is designed for datasets with a constant node 
+% \subsection{Salience mapping, GRAD-CAM}
+% Another method not utilizing different kinds of masking algorithms is the GRAD-CAM method which is a method for opening up the black box. The basic principle of the GRAD-CAM algorithm is to study activations of different graph-nodes in the model when predictions are made. By identifying the nodes where the activations impact the predictions the most important graphs-nodes can be identified. 
 
-%ZORRO is based on replacing all the entries of the feature matrix by random noise. By then reintroduce features and nodes by demasking them and selecting nodes and features that gives the most similar performance as the original performance 
+% The GRAD-CAM algorithm was initially made for convolutional neural network where important pixels in an image was identified \cite{} but was generalized to GCNs in \cite{}. The algorithm calculates the importance score for node $n$ at the GCN layer $l$, for class $c$ by 
+% \begin{equation*}
+%     L_c[l,n] =  \text{RELU}(\sum_k \alpha^{l, c}_k F_{K,n}^l). 
+% \end{equation*}
+% Here $F_{K,n}^l$ is the activations of the $k$-th feature of the $l$-th GCN layer at node $n$ and $\alpha^{l, c}_k$ is a set of class specific weights for layers $l$ given by 
+% \begin{equation*}
+%     \alpha^{l, c}_k = \frac{1}{N}\sum_{i = 1}^N \frac{\partial y^c}{\partial F^l_{k,n}}.
+% \end{equation*}
 
-\subsection{Salience mapping, GRAD-CAM}
-Another method not utilizing different kinds of masking algorithms are the GRAD-CAM method which is a method for opening up the black box. The basic principle of the GRAD-CAM algorithm is to study activations of different graph-nodes in the model when predictions are made. By identifying the nodes where the activations impact the predictions the most important graphs-nodes can be identified. 
-
-The GRAD-CAM algorithm was initially made for convolutional neural network where important pixels in a image was identified \cite{} but was generalized to GCNs in \cite{}. The algorithm calculates the importance score for node $n$ at the GCN layer $l$, for class $c$ by 
-\begin{equation*}
-    L_c[l,n] =  \text{RELU}(\sum_k \alpha^{l, c}_k F_{K,n}^l). 
-\end{equation*}
-Here $F_{K,n}^l$ is the activations of the $k$-th feature of the $l$-th GCN layer at node $n$ and $\alpha^{l, c}_k$ is a set of class specific weights for layers $l$ given by 
-\begin{equation*}
-    \alpha^{l, c}_k = \frac{1}{N}\sum_{i = 1}^N \frac{\partial y^c}{\partial F^l_{k,n}}.
-\end{equation*}
-
-This algorithm depends on the architecture of the model having a GAP layer between the last GCN layer and the fully connected output layer. A GAP layers is average global pooling layer which averages all the features of the last layer over the nodes before passing them to the dens layer. This is a big problem since GCNBase has primarily two significant differences. The first one being that GCNBase does not utilize any GAP layer before the output layer and thus has a specific weight for all nodes and features not only one weight per feature. The second problem is that GCNBase in addition to the activations of the last GCN layer also utilizes the activations of all previous GCN-layers. The solution to these problem is to do some slight alterations to the GRAD-CAM algorithm in the form of 
-\begin{equation*}
-    L_c[l,n] =  \text{RELU}(\sum_k \alpha^{l, c}_{k,n} F_{K,n}^l)
-\end{equation*}
-and
-\begin{equation*}
-    \alpha^{l, c}_k = \frac{\partial y^c}{\partial F^l_{k,n}}.
-\end{equation*}
+% This algorithm depends on the architecture of the model having a GAP layer between the last GCN layer and the fully connected output layer. A GAP layers is average global pooling layer which averages all the features of the last layer over the nodes before passing them to the dens layer. This is a big problem since GCNBase has primarily two significant differences. The first one being that GCNBase does not utilize any GAP layer before the output layer and thus has a specific weight for all nodes and features not only one weight per feature. The second problem is that GCNBase in addition to the activations of the last GCN layer also utilizes the activations of all previous GCN-layers. The solution to these problem is to do some slight alterations to the GRAD-CAM algorithm in the form of 
+% \begin{equation*}
+%     L_c[l,n] =  \text{RELU}(\sum_k \alpha^{l, c}_{k,n} F_{K,n}^l)
+% \end{equation*}
+% and
+% \begin{equation*}
+%     \alpha^{l, c}_k = \frac{\partial y^c}{\partial F^l_{k,n}}.
+% \end{equation*}
