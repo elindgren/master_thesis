@@ -7,10 +7,11 @@ Before presenting the result of the analysis the models need to be evaluated.
 
 \subsection{Sex - classification}
 To evaluate the models performance for sex classification three metric will be presented. These metrics are the loss binary cross entropy, the accuracy and also Matthews correlation coefficient. 
-The Matthews correlation coefficient is measure of how good a binary classification prediction is and it's defined to be identical to Pearsons correlation, thus +1 indicate a perfect prediction -1 all miss-predicted and 0 randomly guessing. Matthews correlation can also be calculated directly from a confusion matrix and can thus be interpreted as a  one number summarising of it. 
+The Matthews correlation coefficient is measure of how good a binary classification prediction is and it's defined to be identical to Pearsons correlation, thus +1 indicate a perfect prediction -1 all miss-predicted and 0 randomly guessing. Matthews correlation can also be calculated directly from a confusion matrix and can thus be interpreted as a one number summarising of it. 
 
 
-In table \ref{tab:sex_model_results} all three metrics are presented for evaluating the four models. The metrics are calculated by performing a ten folded cross validation where the models are trained and then evaluating all ten models on one external test set. 
+The model was evaluated by performing a ten folded cross validation where the data in each fold was divided into training and validation sets in a way such that all data was used as validation data once. The models was then trained on the training data and evaluated on the validation data.
+In table \ref{tab:sex_model_results} the average and standard deviation of all three metrics are presented for all models. 
 
 %%% 
 % tabbel med cross validerade modeler evaluerar test settet
@@ -35,14 +36,26 @@ In table \ref{tab:sex_model_results} all three metrics are presented for evaluat
          &  loss & acc & r\\ \hline
         Baseline & $0.450\pm0.008$ & $0.790\pm0.006$ &$0.58\pm 0.01$\\
         Base &$0.45\pm0.02$ & $0.792\pm0.009$& $0.59\pm0.02$\\
-        Poptoy &$0.668\pm 0.003$ & $0.591\pm0.009$ &$0.18\pm0.01$\\
-        Popencoder &$0.440\pm0.005$& $0.795\pm 0.005$ & $0.59\pm0.02$\\
+        Poptoy &$0.674\pm 0.006$ & $0.58\pm0.01$ &$0.17\pm0.02$\\
+        Popencoder &$0.446\pm0.009$& $0.793\pm 0.006$ & $0.59\pm0.01$\\
     \end{tabular}
     \label{tab:sex_model_results}
 \end{table}
 
+All three metrics indicates that the Baseline, Base and Popencoder models have comparable performance with an accuracy of about 79 \%. It is also clear that these three models significantly outperforms the Poptoy model whatever metric used.
+
+The result has several interesting implications, the first one by comparing the results of baseline and base. Since the performances of the two models are the same the increased complexity of Base was not beneficial. The Baseline model only consider connection strengths while Base utilizes the graphs structure of the data. The similar performance thus indicates that the graph structure of the data do not contain any information about the subjects sex. 
+
+Comparing the results thus indicates that the increased complexity of Base does not yield any considerably increase in performance. This can be interpreted as the individual connections of the graph (which Baseline utilize) contains an equal amount of information as taking the information about the graph structure into account (which base do). 
+
+The fact that Popencoder significantly outperforms Poptoy indicates that Poptoy is missing vital information that the decoder in popencoder provides. The information about similarities in the data set according to the similarity measure utilized in Poptoy is not enough information. Nevertheless Poptoy performs better then random guessing which indicates that the similarity measure still containes some useful information from which sex 
+of a subject can be predicted. 
+
+And lastly when comparing the models doing graph classification Baseline and Base with the model doing node classification Popencoder and excluding Poptoy. The results are very similar once again indicating that the increased complexity by introducing the population graph is unnecessary. One interpretation of this is that the introduced information from the similarity measure, which is non zero since Poptoy performs better then random guessing, is only a subset of all the information contained in the individual graphs. The hope however was that by introducing  similarities between all subjects in the dataset some complex structures would form. These structer does not however seem to help with the prediction of sex
 
 
+
+After the models had been cross validated a final model trained on all the data which previously constituted both the training and validation data was trained. The final models was evaluated on an external test set and its performance is presented in \ref{tab:sex_final_model_results}.
 \begin{table}[H]
     \centering
     \caption{Caption}
@@ -53,17 +66,8 @@ In table \ref{tab:sex_model_results} all three metrics are presented for evaluat
         Poptoy & & &\\
         Popencoder & & & \\
     \end{tabular}
-    \label{tab:sex_model_results}
+    \label{tab:sex_final_model_results}
 \end{table}
-All three metrics indicates that the Baseline, Base and Popencoder models have comparable performance with an accuracy of about 79 \%. It is also clear that these three models significantly outperforms the Poptoy model whatever metric used.
-
-Although Base gives slightly better performance the discrepancies between Base and Baseline is small, at most one standard deviation. Comparing the results thus indicates that the increased complexity of Base does not yield any considerably increase in performance. This can be interpreted as the individual connections of the graph (which Baseline utilize) contains an equal amount of information as taking the information about the graph structure into account (which base do). 
-
-The fact that Popencoder significantly outperforms Poptoy indicates that Poptoy is missing vital information that the decoder in popencoder provides. The information about similarities in the data set according to the similarity measure utilized in Poptoy is not enough information. Nevertheless Poptoy performs better then random guessing which indicates that the similarity measure still containes some useful information from which sex 
-of a subject can be predicted. 
-
-And lastly when comparing the models doing graph classification Baseline and Base with the model doing node classification Popencoder and excluding Poptoy. The results are very similar once again indicating that the increased complexity by introducing the population graph is unnecessary. One interpretation of this is that the introduced information from the similarity measure, which is non zero since Poptoy performs better then random guessing, is only a subset of all the information contained in the individual graphs. The hope however was that by introducing  similarities between all subjects in the dataset some complex structures would form. These structer does not however seem to help with the prediction of sex
-
 
 \subsection{Age}
 The evaluation of the age prediction is also evaluated using three metrics: the loss mean squared error (MSE), the mean absolute error (MAE) and Pearsons correlation coefficient $r$. 
@@ -91,8 +95,8 @@ In table \ref{tab:age_model_results} the three metrics are presented for all fou
          &  loss & mae & $r$ \\ \hline 
         Baseline &$52\pm1$& $5.9\pm0.1$&$0.52\pm0.01$\\
         Base & $53\pm1$& $5.96\pm 0.09 $& $0.52\pm0.01$\\
-        Poptoy &$71\pm 1$ & $7.23\pm0.06$ &$ 0.11\pm 0.02$\\
-        Popencoder &$53\pm1$& $5.92\pm 0.09$ & $0.52\pm0.01$\\
+        Poptoy &$71\pm 1$ & $7.24\pm0.07$ &$ 0.11\pm 0.01$\\
+        Popencoder &$53\pm1$& $5.93\pm 0.09$ & $0.52\pm0.02$\\
     \end{tabular}
     \caption{Caption}
     \label{tab:age_model_results}
@@ -229,3 +233,190 @@ When comparing the results for sex and age prediction, we observe that nodes 16 
 \end{table}
 
 % \subsection{Salience mappings: grad-cam?}
+
+\section{Analysis v2}
+
+\subsection{Sex prediction}
+
+We begin by presenting the results for performing naive node removal analysis on the baseline and GCN models. The impact on model loss is given in figures \ref{fig:naive_sex_baseline} and \ref{fig:naive_sex_gcn} respectively \todo{byt figurer}. To obtain these results, ten models of each type were trained from scratch on all available training/validation data, roughly 34 000 subjects, and the loss evaluated on a test set of $\sim4000$ subjects. Mean and standard deviations over the ten models of each type were calculated, where the dot represents the mean and the error bars one standard deviation. The uncertainties in the figures thus represent model variability, and estimates the model uncertainty.
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/node_masking/sex_ffnn.pgf}
+                }
+            \end{center}
+            \caption{Baseline}
+            \label{fig:naive_sex_baseline}
+        \end{subfigure}%
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/node_masking/sex_base.pgf}
+                }
+            \end{center}
+            \caption{GCN}
+            \label{fig:naive_sex_gcn}
+        \end{subfigure}
+    \caption{TODO byt ut figurer.}
+    \label{fig:naive_sex}
+\end{figure}
+
+
+
+We begin by observing that the impact on model loss when removing nodes is small in both cases, on the order of $\Delta \text{BCE} \sim 0.01$. For reference, the loss obtained for the baseline and GCN model when evaluated on the test set are $\text{BCE} \approx 0.45$. From this we may conclude that the effect of removing nodes has somewhat limited effect on model performance, and hardly statistically significant when compared to the in some cases large error bars. Hence, we will be careful not to draw too sweeping conclusions from the naice node removal results.
+
+Furthermore, we observe that the error bars for GCN are larger than for baseline, indiciating that GCN exhibits a larger model uncertainty. This could be due to several reasons. Firstly, all ten GCN models where trained for the same number of epochs, which where fixed arbitrarily to a a number after which the models were generally observed to overfit to the training data. It is possibly that the models may have converged to different degrees at that point, depending on model initialization. Another possible explanation is that GCN is a more complex and deeper model than the simple, shallow baseline, and hence convergence may be more difficult to achieve. 
+
+When it comes to what nodes affect the model performance the most, both baseline and GCN are somewhat in agreement. Nodes 12, 15, 16, 17 and 20 all yield relatively large impact on the model loss at around $\Delta \text{BCE} \approx 0.025$. On the other end of the spectrum, nodes 1--7 and 18 and 19 have relatively small impact on the model performance, with $\Delta \text{BCE} \approx 0.005$. With the interpretation that the more a node affects the loss, the more important it is, the results thus indicates that nodes 12, 15, 16 and 17 may be more important for predicting subject sex, whilst nodes 1--7 and 18 and 19 are not very important. Note though that all nodes have a $\Delta\text{BCE}>0$, i.e. removing any node impairs the prediction, which could imply that all nodes to some extent carry information that is important for predicting sex. 
+
+
+Zorro
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/zorro/ffnn_sex_tau0.9.pgf}
+                }
+            \end{center}
+            \caption{Baseline}
+            \label{fig:zorro_sex_baseline}
+        \end{subfigure}%
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/zorro/base_sex_tau0.9.pgf}
+                }
+            \end{center}
+            \caption{GCN}
+            \label{fig:zorro_sex_gcn}
+        \end{subfigure}
+    \caption{TODO byt ut figurer.}
+    \label{fig:zorro_sex}
+\end{figure}
+
+Comparison
+
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/node_masking/sex_ffnn_base.pgf}
+                }
+            \end{center}
+            \caption{Baseline}
+            \label{fig:comparison_sex_naive}
+        \end{subfigure}%
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/zorro/ffnn_base_sex_tau0.9.pgf}
+                }
+            \end{center}
+            \caption{GCN}
+            \label{fig:comparison_sex_zorro}
+        \end{subfigure}
+    \caption{TODO byt ut figurer.}
+    \label{fig:comparison_sex}
+\end{figure}
+
+
+
+\subsection{Age prediction}
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/node_masking/age_ffnn.pgf}
+                }
+            \end{center}
+            \caption{Baseline}
+            \label{fig:naive_age_baseline}
+        \end{subfigure}%
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/node_masking/age_base.pgf}
+                }
+            \end{center}
+            \caption{GCN}
+            \label{fig:naive_age_gcn}
+        \end{subfigure}
+    \caption{TODO byt ut figurer.}
+    \label{fig:naive_age}
+\end{figure}
+
+
+
+Zorro
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/zorro/ffnn_age_tau0.9.pgf}
+                }
+            \end{center}
+            \caption{Baseline}
+            \label{fig:zorro_age_baseline}
+        \end{subfigure}%
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/zorro/base_age_tau0.9.pgf}
+                }
+            \end{center}
+            \caption{GCN}
+            \label{fig:zorro_age_gcn}
+        \end{subfigure}
+    \caption{TODO byt ut figurer.}
+    \label{fig:zorro_age}
+\end{figure}
+
+Comparison
+
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/node_masking/age_ffnn_base.pgf}
+                }
+            \end{center}
+            \caption{Baseline}
+            \label{fig:comparison_age_naive}
+        \end{subfigure}%
+        \begin{subfigure}{.5\textwidth}
+            \centering
+            \begin{center}
+                \resizebox {1.0\linewidth} {!} {
+                    \input{chapters/images_results/zorro/ffnn_base_age_tau0.9.pgf}
+                }
+            \end{center}
+            \caption{GCN}
+            \label{fig:comparison_age_zorro}
+        \end{subfigure}
+    \caption{TODO byt ut figurer.}
+    \label{fig:comparison_age}
+\end{figure}
