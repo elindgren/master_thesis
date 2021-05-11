@@ -1,6 +1,7 @@
 %%%% TODO
 % Remove "retrieved"?
 % Change notes to begin with lowercase?
+% Lägg in alla källor igen, med uppdaterad info
 
 %%% Articles
 @article{grady,
@@ -133,6 +134,21 @@
 }
 
 
+@article{higcn,
+    abstract = {Purpose: Recently, brain connectivity networks have been used for the classification of neurological disorder, such as Autism Spectrum Disorders (ASD) or Alzheimer's disease (AD). Network analysis provides a new way for exploring the association between brain functional deficits and the underlying structural disruption related to brain disorders. Network embedding learning that aims to automatically learn low-dimensional representations for brain networks has drawn increasing attention in recent years. Method: In this work we build upon graph neural network in order to learn useful representations for graph classification in an end-to-end fashion. Specifically, we propose a hierarchical GCN framework (called hi-GCN) to learn the graph feature embedding while considering the network topology information and subject's association at the same time. Results: To demonstrate the effectiveness of our approach, we evaluate the performance of the proposed method on the Alzheimer's Disease Neuroimaging Initiative (ADNI) dataset and Autism Brain Imaging Data Exchange (ABIDE) dataset. Extensive experiments on ABIDE and ADNI datasets have demonstrated competitive performance of the hi-GCN model. Specifically, we obtain an average accuracy of 73.1\%/78.5\% as well as AUC of 82.3\%/86.5\% on ABIDE/ADNI. The comprehensive experiments demonstrate that our hi-GCN is effective for graph classification with brain disorders diagnosis. Conclusion: The proposed hi-GCN method performs the graph embedding learning from a hierarchical perspective while considering the structure in individual brain network and the subject's correlation in the global population network, which can capture the most essential embedding features to improve the classification performance of disease diagnosis. Moreover, the proposed jointly optimizing strategy also achieves faster training and easier convergence than both the hi-GCN with pre-training and two-step supervision.},
+    author = {Jiang, Hao and Cao, Peng and Xu, Ming Yi and Yang, Jinzhu and Zaiane, Osmar},
+    doi = {10.1016/j.compbiomed.2020.104096},
+    issn = {18790534},
+    journal = {Computers in Biology and Medicine},
+    keywords = {Alzheimer's disease,Autism spectrum disorder,Brain network,Graph classification,Graph convolutional network},
+    month = {12},
+    pmid = {33166800},
+    title = {{Hi-GCN: A hierarchical graph convolution network for graph embedding learning of brain network and brain disorders prediction}},
+    volume = {127},
+    year = {2020}
+}
+
+
 @article{braph,
     abstract = {The brain is a large-scale complex network whose workings rely on the interaction between its various regions. In the past few years, the organization of the human brain network has been studied extensively using concepts from graph theory, where the brain is represented as a set of nodes connected by edges. This representation of the brain as a connectome can be used to assess important measures that reflect its topological architecture. We have developed a freeware MatLab-based software (BRAPH–BRain Analysis using graPH theory) for connectivity analysis of brain networks derived from structural magnetic resonance imaging (MRI), functional MRI (fMRI), positron emission tomography (PET) and electroencephalogram (EEG) data. BRAPH allows building connectivity matrices, calculating global and local network measures, performing non-parametric permutations for group comparisons, assessing the modules in the network, and comparing the results to random networks. By contrast to other toolboxes, it allows performing longitudinal comparisons of the same patients across different points in time. Furthermore, even though a user-friendly interface is provided, the architecture of the program is modular (object-oriented) so that it can be easily expanded and customized. To demonstrate the abilities of BRAPH, we performed structural and functional graph theory analyses in two separate studies. In the first study, using MRI data, we assessed the differences in global and nodal network topology in healthy controls, patients with amnestic mild cognitive impairment, and patients with Alzheimer's disease. In the second study, using resting-state fMRI data, we compared healthy controls and Parkinson's patients with mild cognitive impairment.},
     author = {Mijalkov, Mite and Kakaei, Ehsan and Pereira, Joana B. and Westman, Eric and Volpe, Giovanni},
@@ -183,6 +199,20 @@
     year = {2020}
 }
 
+@article{yuan_survey,
+    abstract = {Deep learning methods are achieving ever-increasing performance on many artificial intelligence tasks. A major limitation of deep models is that they are not amenable to interpretability. This limitation can be circumvented by developing post hoc techniques to explain the predictions, giving rise to the area of explainability. Recently, explainability of deep models on images and texts has achieved significant progress. In the area of graph data, graph neural networks (GNNs) and their explainability are experiencing rapid developments. However, there is neither a unified treatment of GNN explainability methods, nor a standard benchmark and testbed for evaluations. In this survey, we provide a unified and taxonomic view of current GNN explainability methods. Our unified and taxonomic treatments of this subject shed lights on the commonalities and differences of existing methods and set the stage for further methodological developments. To facilitate evaluations, we generate a set of benchmark graph datasets specifically for GNN explainability. We summarize current datasets and metrics for evaluating GNN explainability. Altogether, this work provides a unified methodological treatment of GNN explainability and a standardized testbed for evaluations.},
+    archivePrefix = {arXiv},
+    arxivId = {2012.15445},
+    author = {Yuan, Hao and Yu, Haiyang and Gui, Shurui and Ji, Shuiwang},
+    eprint = {2012.15445},
+    file = {:C\:/Users/ericl/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Yuan et al. - 2020 - Explainability in Graph Neural Networks A Taxonomic Survey.pdf:pdf},
+    month = {dec},
+    title = {{Explainability in Graph Neural Networks: A Taxonomic Survey}},
+    url = {http://arxiv.org/abs/2012.15445},
+    year = {2020}
+}
+
+
 @article{neuro_ml,
     abstract = {The observation and description of the living brain has attracted a lot of research over the past centuries. Many noninvasive imaging modalities have been developed, such as topographical techniques based on the electromagnetic field potential [i.e., electroencephalography (EEG) and magnetoencephalography (MEG)], and tomography approaches including positron emission tomography and magnetic resonance imaging (MRI). Here we will focus on functional MRI (fMRI) since it is widely deployed for clinical and cognitive neurosciences today, and it can reveal brain function due to neurovascular coupling (see ?From Brain Images to fMRI Time Series?). It has led to a much better understanding of brain function, including the description of brain areas with very specialized functions such as face recognition. These neuroscientific insights have been made possible by important methodological advances in MR physics, signal processing, and mathematical modeling. {\textcopyright} 1991-2012 IEEE.},
     author = {Richiardi, Jonas and Achard, Sophie and Bunke, Horst and {Van De Ville}, Dimitri},
@@ -211,6 +241,22 @@
     abstract = {Current breakthroughs in the field of machine learning are fueled by the deployment of deep neural network models. Deep neural networks models are notorious for their dependence on large amounts of labeled data for training them. Active learning is being used as a solution to train classification models with less labeled instances by selecting only the most informative instances for labeling. This is especially important when the labeled data are scarce or the labeling process is expensive. In this paper, we study the application of active learning on attributed graphs. In this setting, the data instances are represented as nodes of an attributed graph. Graph neural networks achieve the current state-of-the-art classification performance on attributed graphs. The performance of graph neural networks relies on the careful tuning of their hyperparameters, usually performed using a validation set, an additional set of labeled instances. In label scarce problems, it is realistic to use all labeled instances for training the model. In this setting, we perform a fair comparison of the existing active learning algorithms proposed for graph neural networks as well as other data types such as images and text. With empirical results, we demonstrate that state-of-the-art active learning algorithms designed for other data types do not perform well on graph-structured data. We study the problem within the framework of the exploration-vs.-exploitation trade-off and propose a new count-based exploration term. With empirical evidence on multiple benchmark graphs, we highlight the importance of complementing uncertainty-based active learning models with an exploration term.},
     DOI = {10.3390/e22101164}
 }
+
+@inproceedings{gradcam,
+    abstract = {With the growing use of graph convolutional neural networks (GCNNs) comes the need for explainability. In this paper, we introduce explainability methods for GCNNs. We develop the graph analogues of three prominent explainability methods for convolutional neural networks: contrastive gradient-based (CG) saliency maps, Class Activation Mapping (CAM), and Excitation Back-Propagation (EB) and their variants, gradient-weighted CAM (Grad-CAM) and contrastive EB (c-EB). We show a proof-of-concept of these methods on classification problems in two application domains: visual scene graphs and molecular graphs. To compare the methods, we identify three desirable properties of explanations: (1) their importance to classification, as measured by the impact of occlusions, (2) their contrastivity with respect to different classes, and (3) their sparseness on a graph. We call the corresponding quantitative metrics fidelity, contrastivity, and sparsity and evaluate them for each method. Lastly, we analyze the salient subgraphs obtained from explanations and report frequently occurring patterns.},
+    author = {Pope, Phillip E and Kolouri, Soheil and Rostami, Mohammad and Martin, Charles E and Hoffmann, Heiko},
+    booktitle = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+    doi = {10.1109/CVPR.2019.01103},
+    file = {:C\:/Users/ericl/Desktop/pope.pdf:pdf},
+    isbn = {9781728132938},
+    issn = {10636919},
+    keywords = {Deep Learning},
+    pages = {10764--10773},
+    title = {{Explainability methods for graph convolutional neural networks}},
+    volume = {2019-June},
+    year = {2019}
+}
+
 
 @misc{zorro,
     title={Hard Masking for Explaining Graph Neural Networks},
@@ -341,6 +387,7 @@
     year = {2020},
     note = {Retrieved 2021-03-29}
 }
+
 
 @misc{jansson_sandstrom,
     author =       "Jansson, L. and Sandström, T.",

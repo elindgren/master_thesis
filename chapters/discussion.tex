@@ -1,1 +1,107 @@
 \chapter{Discussion}
+
+% diskutera resultat för de olika modellerna
+    % stat major findinga: more complex model not beneficial, graph structure no information and similarity measure is not good enough. 
+    % Vad betyder findings (för låg dimensionel data, sim meas för simpelt/inte korrelerat med age) -- importance (kanske är bra att enkla modeller presterar bra)
+    % Väv in alternative tolkningar -- grafstrukteren kanske är viktig, men ger inte högre prestanda, modellen inte generell.
+    % Relatera till andra studier -- indikerar att våra modeller är begränsade av datans upplösning
+    
+Our results indicate two main findings with regards to the model performance. Firstly, there seems to be no benefit to using more complex models than the Baseline regression model in general, and secondly the similarity measure does not seem to be informative for predicting sex and brain age. 
+
+% Each node is in itself an aggregation of multiple regions whose activations are highly correlated in time. Thus, the actual brain graphs that are fed into the models are separated from the original time-series data for the activation throughout the brain by several levels of abstraction.
+
+A possible explanation as to why there is no benefit in using more complex models could be that the data is too low-resolved. The brain graphs that have been used in this study corresponds to networks of 21 nodes, where each node represents a functional network in the brain.  That the performance could be improved by using more highly resolved fMRI data is supported by similar works in the field, which reach higher predictive performance using similar models but with more highly-resolved data. Two examples of these for sex prediction are Arslan et al. \cite{arslan} and Kim and Ye \cite{understanding_gnn}. Kim and Ye reaches a sex classification accuracy of $84.61\pm2.9\%$ for a GNN known as a Graph Isomorphism Network (GIN), using brain graphs of 400 nodes where each node corresponds to a region of the brain. Arslan et al. also uses fMRI data from the UK Biobank, but aggregated into a network of 55 nodes, with which they reach a sex classification accuracy of $88.06\pm1.57\%$. These accuracies are higher than our results of $79.2\pm0.9\%$ accuracy for sex classification for a GCN, which indicates that our model performance could possibly be improved by using more highly-resolved data. This would likely improve the model performance for age prediction as well, where for example Stankevicieute et al. \cite{stankeviciute} obtains a mean squared error of $28.045\pm0.595$ years$^2$ and Amoroso et al. \cite{amoroso_multiplex_age} a mean absolute error of $4.7\pm0.1$ years. However, both of these studies utilise structural MRI data rather than fMRI data, and hence direct comparison is not possible. Another possibility is that better model performance could be achieved by investigating other model types, since all of the more complex models were based on graph convolutional layers, but that is outside the scope of this study. 
+
+Low resolution of the 21 node data could also be a reason as to why there is no benefit in using GCNs specifically over Baseline. It is possible that the 21 node graphs are too small to exhibit complex graph structures that the GCN extracts information from, and that it thus focuses solely on the connections. This is supported by the fact that most applications of GCNs usually involve larger graphs. Examples of this includes Arslan et al. and Kim and Ye mentioned above, but also Kipf et al. \cite{kipf_semi_supervised}, the paper that originally introduces GCNs, which performs node prediction in citation networks with several thousand nodes. It is also possible that the graph structure in the 21 node graphs are informative for the GCNs, but that the graphs are so small that the Baseline regression model also manages to extract information from the graph structure. However, the number of parameters in Baseline and other fully connected networks grow very rapidly with the size of the graph, which makes them impractical for large graphs. In the case of either explanation, it is possible that the performance of the GCNs could increase by using more highly resolved graph data.
+
+One possible explanation of why the similarity measure is not informative for predicting sex and age could be due to its design. The motivation behind the design of the similarity measure was to capture the similarity between two subjects based on their brain graphs, but summarising the information contained in the graphs into a single number may lead to the loss of a lot of information that would be useful for the prediction. We believed the information on similarity would compensate for this loss in information, but it seems not to be the case. Another approach for designing the similarity measure is to include other types of information for each subject. For example, in Stankeviceute et al. mentioned above, the similarity between subjects is calculated based on other information than brain imaging data that may be related to brain age, with the imaging data being used as features for the models. Such an approach was not attempted in this study, since selecting what data to use for the similarity measure requires extensive domain knowledge, and because the aim of the thesis was to study fMRI data for sex and brain age prediction. However, it would be interesting to investigate in the future.
+
+
+On the other hand, there are several benefits of using the more highly abstracted 21 node brain graphs, with the most prominent one being ease of interpretation, since each node corresponds to a functional brain network. From this perspective, one could argue that a trade-off in model performance is worth it for the sake of interpretability of the results. Interpretability is important both for research purposes, but also for clinical applications. Another benefit of using the 21 node data is that, as our results indicate, the use of more complex models is not necessary. Using simpler models, such as the Baseline regression model used in this study, makes the models themselves more explainable, for more of a white-box approach than the traditional black-box approach that are neural networks. The combination of using abstracted data with simple models that doesn't reach state-of-the-art performance but are inherently more interpretable, thus have the benefit of improving the transparency of the sex and age prediction procedures, which simplifies understanding and analysis of models and data. 
+
+In summary, the main limitations of the model performance can thus be argued to be the low resolution of the 21 node brain graphs. This is a both a direct limitation in the model performance, but also for the model analysis which will be presented next. The aim of the analysis is to determine important functional brain networks for sex and age prediction, and is hence based on the assumption that the models that are analysed are accurate and can extract relevant information for predicting sex and age. There is thus a direct trade-off between model performance and interpretability, where the models have to perform well enough to be analysed, but still not be too complex and use simple data as to be easily interpretable.
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+% diskutera analys resultaten
+    % Major findings: 
+        % - alla noder är to some extent important men Ingen är jätte viktig. (ingen random guessing om någon tas bart)
+        %     - Hela hjärnan påverkas när man åldras/kön, verkar inte vara så "enkelt" som ett nätverk som styr. 
+        % - vissa verkar var mer viktiga än andra (relativt, kanske inte absolut)
+        %     - Nämn specifikt vissa nätverk (inte noder)     
+    % Nytt stycke, diskutera kring metoderna
+        % - Verkar vara skillnader mellan GCN/FFNN 
+        %     - Det kanske finns något i grafstrukturen
+        %     - GCN är mer robust mot brus i indatan
+    % explain meaning of the findings
+        % - Varför ger zorro olika resultat för basline och gcn. 
+        % - Varför får vi lite olika resultat för niave och zorro.
+    % Relate to other findings 
+        % - Relatera metod
+        % - Relatera resultat
+    % Limitations
+        % Analysen bygger på modellresultaten, begränsningar i e.g. lågupplöst data propagerar
+        % Kan finnas fler
+        % Fördelar: 80% ändå ganska bra, 21 nodersdata är mer lättolkad
+% Övergripande diskussion - jämför modellresultat & analysresultat med andra papers
+
+
+%%% New idea 
+    % major findings
+        % - for sex class node 12 seems to be most important but also nodes ... have some indications of higher imortance
+        % - for age prediction node 12 and 15 seems to be most important but other nodes with mixed results may be important
+        % - Zorro seems to give slightly different results for baseline and GCN
+        % - The two analysis methods are generally in agreement with some differences (in addition to the spikes for baseline)
+        
+        % ... importance of validation (Zorro and naive) and Zorro might give higher importance than necessary \implicerar node 12 and 15 stands out. 
+
+
+The result from the analysis part of the thesis states that all functional brain network are to some extent important for sex and age prediction. Nevertheless the result indicates that certain functional brain networks are more important then others. For sex classification SMN seems to be of greatest importance but also the cerebellum, the ???(16), the ???(17) and the ???(20) of some importance, while for age prediction the cerebellum and SMN is most prominent. 
+
+
+The result of the analysis has however imposed some room for discussion. First off all the fact that the Zorro algorithm gives slightly different results for Baseline and GCN is peculiar. 
+
+Next also the fact that their are some differences between results for naive node masking and Zorro is interesting. As propoused in the result section this might be because the two methods answers slightly different questions. 
+
+
+
+In \cite{understanding_gnn} which used similar models for performing sex classification the saliency mapping generally indicated that the SMN and DMN were the most important. Also in \cite{arslan} the DMN was deemed important for sex classification. In both these articles the  saliency mapping was conducted  by investigating gradients in the model, which is an alternative approach to the methods used in this thesis. Comparing the results is very interesting since our findings is in agreement with \cite{understanding_gnn} in the sense that SMN seems to be important, but it is in disagreement with both \cite{gin, arslan} because we don't find the DMN to be as important. 
+
+An explanation to the disagreement can be because of the different methods used to perform the salience mapping. Just as for the naive node masking method and Zorro the methods in \cite{understanding_gnn, arslan} might answer different question and thus gives different results. This highlight the complexity of understanding machine learning models, and simply stating that a node is important might be insufficient. To be sure a specific network is related to sex or age the important question to answers is why is this network important for the prediction. 
+
+Another possible explanation for the difference in \cite{understanding_gnn, arslan} can be that they uses more highly resolved data, which previously has been regarded as an explanation of the lower performance of our models. For example \cite{arslan} identifies four important brain region for the prediction, which all resides in the DMN, but in our data DMN constitutes one node. The connection between the regions in the DMN or their individual connection to other brain regions may be important for the classification, which can explain the lower performance of our models. It would also explain why the DMN is not deemed important from the analysis made in this thesis, since the information important for sex classification that resided in the DMN is not present in our data.
+
+
+% Mer jämförelser med andra resultat. Måste inte vara ML utan bara nått som sett att vissa nätverk verkar vara kopllade till kön eller ålder.
+
+
+
+Since the analysis methods of this thesis is based on investigating the machine learning models the significance of the result is limited by the performance of the models. If a model performance poorly functional brain network deemed important might not be important at all. mening här om att modellerna ändå är tillräckligt bra för att ge indikationer. Since the models performance is limited because of the dimensionallity of the data also the analysis is. The attitude towards the 21 node data is from the analysis perspective twofolded. As pointed out the low dimensionallity inhibits the significance due to worse model performance. The analysis however in a sens becomes easier to do since each node corresponds to a single functional brain network. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

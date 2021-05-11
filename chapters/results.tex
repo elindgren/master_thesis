@@ -1,244 +1,112 @@
 \chapter{Results}
 
-Ta upp training procedures. Keras/tensorflow, stratification, loss, relu etc.
+% Ta upp training procedures. Keras/tensorflow, stratification, loss, relu etc.
 
-\section{Model comparison -- subject-wise vs. population graphs}
-Before presenting the result of the analysis the models need to be evaluated. 
+To reliably evaluate the models, the data set was split into a training/validation set and a test set. These data sets where then undersampled to make them unbiased, which yielded training/validation sets of size 30000 and 20000, and test sets of size  4678 and 3148 for sex and age prediction respectively. For age prediction, an unbiased data set corresponds to a uniform distribution of ages. Furthermore, model training and evaluation was implemented using Keras with the Tensorflow backend. See Appendix \ref{app:model_training} for further details. 
 
-\subsection{Sex - classification}
-To evaluate the models performance for sex classification three metric will be presented. These metrics are the loss binary cross entropy, the accuracy and also Matthews correlation coefficient. 
-The Matthews correlation coefficient is measure of how good a binary classification prediction is and it's defined to be identical to Pearsons correlation, thus +1 indicate a perfect prediction -1 all miss-predicted and 0 randomly guessing. Matthews correlation can also be calculated directly from a confusion matrix and can thus be interpreted as a one number summarising of it. 
+This chapter consists of two main parts. First, the results from training models for predicting sex and brain age from brain graphs will be presented. The models were first evaluated using ten folded cross validation on the training/validation set. Then, a final model was trained and evaluated on the test set. In the second part of the chapter, the analysis of these final models will be presented, with the aim of gaining insight into what functional brain networks are related to age and sex differences. 
 
 
-The model was evaluated by performing a ten folded cross validation where the data in each fold was divided into training and validation sets in a way such that all data was used as validation data once. The models was then trained on the training data and evaluated on the validation data.
-In table \ref{tab:sex_model_results} the average and standard deviation of all three metrics are presented for all models. 
+\section{Model comparison}
+The model performance for both sex and age prediction is presented in the form of the loss and two additional metrics. For sex classification these metrics are binary cross entropy (BCE) loss, accuracy and Matthews correlation coefficient (MCC). For age regression they are mean squared error (MSE), mean absolute error (MAE) and Pearssons correlation ($r$). MCC is identical to Pearsons correlation but refers to the performance of a binary classifier. A MCC of +1 thus indicates a perfect prediction, -1 all miss-predicted and 0 randomly guessing.
 
-%%% 
-% tabbel med cross validerade modeler evaluerar test settet
-%\begin{table}[H]
-%    \centering
-%    \caption{Caption}
-%    \begin{tabular}{c|c|c|c}
-%         &  loss & acc & r\\ \hline
-%        Baseline & $0.44825\pm0.0006$&$0.790\pm0.001$ %&$0.581\pm0.002$\\
-%        Base &$0.440\pm0.006$ & $0.796\pm0.005$ & %$0.591\pm0.007$\\
-%        Poptoy &$0.700\pm 0.001$ & $0.591\pm0.004$ &$ %0.182\pm 0.003$\\
-%        Popencoder &$0.440\pm0.005$& $0.795\pm 0.005$ & %$0.590\pm0.007$\\
-%    \end{tabular}
-%    \label{tab:sex_model_results}
-%\end{table}
+\subsection{Sex classification based on fMRI brain graphs}
 
-
+To evaluate the model performance for sex classification, the three metrics calculated from cross-validation is presented in \ref{tab:sex_model_results}.
 \begin{table}[H]
     \centering
-    \caption{Caption}
+    \caption{Binary crossentropy loss (BCE), accuracy and Matthew's correlation coefficient (MCC) for each of the four models evaluated using ten-fold cross validation, with the mean and standard deviation calculated over the ten folds.}    
     \begin{tabular}{c|c|c|c}
-         &  loss & acc & r\\ \hline
+         & BCE & Accuracy & MCC\\ \hline
         Baseline & $0.450\pm0.008$ & $0.790\pm0.006$ &$0.58\pm 0.01$\\
-        Base &$0.45\pm0.02$ & $0.792\pm0.009$& $0.59\pm0.02$\\
+        GCN &$0.45\pm0.02$ & $0.792\pm0.009$& $0.59\pm0.02$\\
         Poptoy &$0.674\pm 0.006$ & $0.58\pm0.01$ &$0.17\pm0.02$\\
         Popencoder &$0.446\pm0.009$& $0.793\pm 0.006$ & $0.59\pm0.01$\\
     \end{tabular}
     \label{tab:sex_model_results}
 \end{table}
-
-All three metrics indicates that the Baseline, Base and Popencoder models have comparable performance with an accuracy of about 79 \%. It is also clear that these three models significantly outperforms the Poptoy model whatever metric used.
-
-The result has several interesting implications, the first one by comparing the results of baseline and base. Since the performances of the two models are the same the increased complexity of Base was not beneficial. The Baseline model only consider connection strengths while Base utilizes the graphs structure of the data. The similar performance thus indicates that the graph structure of the data do not contain any information about the subjects sex. 
-
-Comparing the results thus indicates that the increased complexity of Base does not yield any considerably increase in performance. This can be interpreted as the individual connections of the graph (which Baseline utilize) contains an equal amount of information as taking the information about the graph structure into account (which base do). 
-
-The fact that Popencoder significantly outperforms Poptoy indicates that Poptoy is missing vital information that the decoder in popencoder provides. The information about similarities in the data set according to the similarity measure utilized in Poptoy is not enough information. Nevertheless Poptoy performs better then random guessing which indicates that the similarity measure still containes some useful information from which sex 
-of a subject can be predicted. 
-
-And lastly when comparing the models doing graph classification Baseline and Base with the model doing node classification Popencoder and excluding Poptoy. The results are very similar once again indicating that the increased complexity by introducing the population graph is unnecessary. One interpretation of this is that the introduced information from the similarity measure, which is non zero since Poptoy performs better then random guessing, is only a subset of all the information contained in the individual graphs. The hope however was that by introducing  similarities between all subjects in the dataset some complex structures would form. These structer does not however seem to help with the prediction of sex
-
-
-
-After the models had been cross validated a final model trained on all the data which previously constituted both the training and validation data was trained. The final models was evaluated on an external test set and its performance is presented in \ref{tab:sex_final_model_results}.
+All three metrics indicates that the Baseline, GCN and Popencoder models have comparable performance with an accuracy of about 79 \%. It is also clear that these three models significantly outperforms the Poptoy model whatever metric used. The performance of the final models, evaluated on an external test set, is presented in \ref{tab:sex_final_model_results}.
 \begin{table}[H]
     \centering
-    \caption{Caption}
+    \caption{Binary crossentropy loss (BCE), accuracy and Matthew's correlation coefficient (MCC) for each of the four models evaluated on the test set.}
     \begin{tabular}{c|c|c|c}
-         &  loss & acc & r\\ \hline
-        Baseline &  &  &\\
-        Base & & & \\
-        Poptoy & & &\\
-        Popencoder & & & \\
+         & BCE & Accuracy & MCC\\ \hline
+        Baseline & 0.444 & 0.795 &0.59\\
+        GCN & 0.43& 0.802 & 0.60 \\
+        Poptoy &0.678 &0.574 &0.16\\
+        Popencoder & 0.450 & 0.791& 0.59\\
     \end{tabular}
     \label{tab:sex_final_model_results}
 \end{table}
+The final models performances are in line with the results from the cross-validation in table \ref{tab:sex_model_results}, where all metrics are within or around one standard deviation. Thus, the performance of the models generalises to external data.
+
+The results presented in \ref{tab:sex_model_results} and \ref{tab:sex_final_model_results} have several interesting implications. First, there is basically no performance difference between Baseline, GCN and Popencoder, implying that increasing model complexity beyond Baseline is not necessary for classifying sex. 
+
+Furthermore, the main difference between Popencoder and Baseline and GCN is that Popencoder takes a population graph as input in addition to the brain graphs for all subjects. One explanation of why including the population graph does not improve performance could be that the similarity measure does not introduce any extra information relevant for sex classification. Since the similarity measure is calculated from each subject's brain graph, it is possible that the information encoded by the similarity measure is only a subset of all the information contained in the individual graphs. Another explanation is that the similarity measure adds some extra information on the similarity between subjects, but that the amount of information is small. In the case of either explanation, the similarity measure can be interpreted to not be very informative in predicting a subject's sex. 
+
+That the similarity measure is uninformative is further supported by the poor performance of Poptoy relative to Popencoder. Both models are architecturally similar, with the difference that Poptoy only bases its prediction solely on the population graph. Hence, the results indicates that the information of similarity between subjects encoded in the popoulation graph is not enough for an accurate prediction for a subject's sex. However, the Poptoy model still performs slightly better than random guessing, indicating that some valuable information resides in the population graph. 
+
+% Annan approach
+% The results presented in \ref{tab:sex_model_results} and \ref{tab:sex_final_model_results} have several interesting implications. First, there is basically no performance difference between Baseline and GCN, implying that the increased complexity of GCN is not necessary. 
+
+% Another interesting result is that Popencoder significantly outperforms the Poptoy model. Since the two models are architecturaly very similar, with the difference that Popencoder additionally takes subject brain graphs as input and compresses them using the Encoder, this indicates that Poptoy is missing vital information about individual subjects which for Popencoder is provided by the Encoder. A possible interpretation is that the information about similarities in the data set contained in the population graph is by itself not enough to make an accurate prediction for a subject's sex. However, the Poptoy model still performs slightly better than random guessing, indicating that some valuable information resides in the population graph. 
+
+% Finally, it is also interesting to compare the subject-wise models, Baseline and GCN with the population graph models, Poptoy and Popencoder. The results are very similar for Baseline, GCN and Popencoder, once again indicating that increasing model complexity is unnecessary. In the case of Popencoder, the added model complexity comes from introducing the population graph. One explanation of why the population graph does not improve performance could be that the similarity measure does not introduce any extra information. Since the similarity measure is calculated from each subject's brain graph, it is possible that the information encoded by the similarity measure is only a subset of all the information contained in the individual graphs. Another explanation is that the similarity measure adds some extra information on the similarity between subjects, but that the amount of information is small. Too small to make a difference for the performance of Popencoder relative to Baseline and GCN, but large enough for Poptoy to perform better than random guessing. In the case of either explanation, the similarity measure can be interpreted to not be very informative in predicting a subject's sex. 
 
 \subsection{Age}
-The evaluation of the age prediction is also evaluated using three metrics: the loss mean squared error (MSE), the mean absolute error (MAE) and Pearsons correlation coefficient $r$. 
-
-In table \ref{tab:age_model_results} the three metrics are presented for all four models. They are presented with a 10 fold cross validated uncertainty on a test set as in the sex classification case. 
-
-%%%
-% table with cross validated models evaluated on test set
-%\begin{table}[H]
-%    \centering
-%    \begin{tabular}{c|c|c|c}
-%         &  loss & mae & $r$ \\ \hline 
-%        Baseline &$44.43\pm0.08$& %$5.467\pm0.005$&$0.474\pm0.001$\\
-%        Base & $45.09\pm0.46$& $5.47\pm 0.03 $& %$0.471\pm0.003$\\
-%        Poptoy &$56.4\pm 0.1$ & $6.296\pm0.007$ &$ 0.111\pm %0.002$\\
-%        Popencoder &$45.1\pm0.6$& $5.43\pm 0.03$ & %$0.486\pm0.004$\\
-%    \end{tabular}
-%    \caption{Caption}
-%    \label{tab:age_model_results}
-%\end{table}
+To evaluate the model performance for age regression, the three metrics calculated from cross-validation is presented in \ref{tab:age_model_results}.
 
 \begin{table}[H]
     \centering
+    \caption{Mean squared error (MSE), mean absolute error (MAE) and Pearsson's correlation coefficient ($r$) for each of the four models evaluated using ten-fold cross validation, with the mean and standard deviation calculated over the ten folds.}
     \begin{tabular}{c|c|c|c}
-         &  loss & mae & $r$ \\ \hline 
+         &  MSE & MAE & $r$ \\ \hline 
         Baseline &$52\pm1$& $5.9\pm0.1$&$0.52\pm0.01$\\
-        Base & $53\pm1$& $5.96\pm 0.09 $& $0.52\pm0.01$\\
+        GCN & $53\pm1$& $5.96\pm 0.09 $& $0.52\pm0.01$\\
         Poptoy &$71\pm 1$ & $7.24\pm0.07$ &$ 0.11\pm 0.01$\\
         Popencoder &$53\pm1$& $5.93\pm 0.09$ & $0.52\pm0.02$\\
     \end{tabular}
-    \caption{Caption}
     \label{tab:age_model_results}
 \end{table}
+From table \ref{tab:age_model_results}, the three metrics clearly indicates that, just as for sex classification, Baseline, GCN and Popencoder all performs within the uncertainty of each other, while Poptoy performs significantly worse. The performance of the final models trained on all data and evaluated on an external test set, is presented in table \ref{tab:sex_final_model_results}. The results are within one standard deviation of the results in table \ref{tab:age_model_results}, which indicates that the models generalise well to external data. One possible exception is Popencoder, which performs slightly better on the test set than during cross-validation. However, the difference in performance is still small and could possibly be attributed to a fluke.
 
-From table \ref{tab:age_model_results} it is clear that all three metrics indicates that the baseline, Base and Popencoder models have very similar performance, while the Poptoy models have significantly lower performance. This was also observed when the models was used for sex classification. The similar results once again indicates that the increased complexity of Base and Popencoder is unnecessary.  Since Poptoy once again performs much worse it also strengthen the conclusion that the information encoded by the similarity measure utilized in Poptoy is not informatic enough. 
+\begin{table}[H]
+    \centering
+    \caption{Mean squared error (MSE), mean absolute error (MAE) and Pearsson's correlation coefficient ($r$) for each of the four models evaluated on the test set.}
+    \begin{tabular}{c|c|c|c}
+         &  MSE & MAE & $r$ \\ \hline 
+        Baseline & $51 $& $5.9 $&$0.53 $\\
+        GCN & $51 $& $5.9  $& $0.53 $\\
+        Poptoy &$71 $ & $7.18 $ &$ 0.09 $\\
+        Popencoder &50 & $5.7 $ & $0.55 $\\
+    \end{tabular}
+    \label{tab:age_final_model_results}
+\end{table}
 
-To set the performance of PopToy into perspective consider making a prediction for the whole test set as the average age of the test set. The loss would for that prediction be evaluated to ??? the MAE as ??? and the correlation 0. This strongly indicates that the Poptoy model for most subjects predicts around the average age and thus can't see the difference between a young and old subject. 
+As was the case for sex classification, Poptoy performs much worse than the other models, regardless of metric. To set the performance of Poptoy into perspective, consider a naive age prediction model that always outputs the average age of the population when predicting a subject's age. This naive model can thus be seen as equivalent to a randomly guessing model for sex classification. The performance of such a model on the test set would yield a MSE of ???, a MAE of ??? and a correlation of 0. Comparing this with the results for Poptoy, one can conclude that Poptoy performs only slightly better than the equivalent of random guessing. 
 
-Turning to the results for the three other models which all has a loss around 45 y$^2$, a MAE at 5.4 y and a correlation around 0.47-0.49. An average error of around 5.4 years does not sound to bad but focus solely on the MAE or MSE can be misleading. The fact that the correlation is much lower then 1 indicates that increased actually age does not on average get an equal increase in predicted age. In fact it turns out that all these models are somewhat biased in predicting the center of the age interval. This can clearly be seen in figure \ref{} where a prediction with the baseline model for some fold on the test set is performed. The figure suggests that the model to some extant can say if a subject is old or young but with a uncertainty that seams to be larger then the MAE score of the model. This is because the MAE gets lower then the uncertainty because the model are biased to predict the average age more often then not. 
-This is very common in regression problems; when the model are not general enough to make a good prediction a prediction of the average age will minimise the loss.   
+% This strongly indicates that the Poptoy model predicts close to the average age for most subjects, and thus poorly differentiates between them.
+
+% To set the performance of PopToy into perspective, consider making a prediction for the whole test set as the average age of the test set. The MSE would for that prediction be evaluated to ???, the MAE as ??? and the correlation 0. This strongly indicates that the Poptoy model for most subjects predicts around the average age and thus can't see the difference between a young and old subject. 
+
+% Turning to the results for the three other models which all have a loss of around 52-32 y$^2$, a MAE of 5.9 y and a correlation around 0.52. An average error of around 5.9 years does not sound too bad, but focusing solely on the MAE or MSE can be misleading. The fact that the correlation is much lower then one indicates that increased actual age does not on average get an equal increase in predicted age. In fact it turns out that all these models are somewhat biased in predicting the center of the age interval. This can clearly be seen in figure \ref{} where a prediction with the baseline model for some fold on the test set is performed. The figure suggests that the model to some extent can say if a subject is old or young but with a uncertainty that seams to be larger then the MAE score of the model. This is because the MAE gets lower then the uncertainty because the model are biased to predict the average age more often then not. This is very common in regression problems; when the model are not general enough to make a good prediction a prediction of the average age will minimise the loss.
+
+Turning to the results for the three other models which all have a loss of around
+52 years$^2$, a MAE of 5.9 years and a correlation around 0.52. An average error of around 5.9 years does not seem to bad, but focusing solely on the MAE or MSE can be misleading. The fact that the correlation is much lower than 1 indicates that increased actual age does not on average correspond to an equal increase in predicted age. In fact, it turns out that all these models are somewhat biased in predicting the mean of the age distribution in the data set. This can clearly be seen in figure \ref{} where a prediction with the baseline model for some fold on the test set is performed. The figure suggests that the model to some extent can determine if a subject is old or young, but that the error in the age prediction is much larger for younger and older subjects than for subjects close to the mean age. To this end, it is important to also consider the correlation coefficient, to get a sense of the relation between the predicted ages and the actual subject ages. 
+
+The age prediction results for the different models are also in line with the two main conclusions for sex classification in the previous section. Firstly, Baseline, GCN and Popencoder perform very similarly which indicates that increasing the model complexity beyond Baseline is unnecessary. Secondly, the poor performance of Poptoy combined with that Popencoder does not perform better than Baseline and GCN indicates that the similarity  measure is not very informative with regards to age as well. 
 
 
-Ev. några stödfigurer som vidare styrker att individual \& population 
-
-% \section{Graph classification -- subject-wise}
-% \section{Node classification -- population graphs}
-
-%\section{Batch population graphs}
 
 
 \section{Analysis}
-% \subsection{Feature selection}
-\subsection{Naive node masking}
+The analysis consisted of two methods: naive node masking and Zorro, which where both applied for sex and age on the Baseline and GCN models. Popotoy is not analysed because of its low performance and Popencoder because of its high complexity.
 
-A summary of the results from the naive node masking analysis for the baseline and GCNBase models are given in figure \ref{fig:naive_results}. The figures visualizes the difference in loss (binary crossentropy $\Delta$BCE for sex prediction and mean squared error, MSE, for age prediction) between a baseline model trained on data with all 21 nodes and a model trained with one node masked, when evaluated on the test set. The effect of masking each node is represented by a marker with error bars corresponding to mean and standard deviations calculated over ten folds of cross validation. This is then interpreted as the more important a node is for performing predictions, the more the loss will increase when it is masked, i.e. the change in loss will be larger.
+Naive node masking was performed with the loss evaluated on the test set. Thus, the change in binary cross-entropy ($\Delta$BCE) and mean squared error ($\Delta$MSE) indicates node importance for the sex and age prediction models respectively. The naive analysis was repeated ten times with different model initialisations to estimate the impact of model uncertainty on node importance. Zorro was performed with $\tau=0.9$ for a fixed model, due to it's computational complexity, but repeated for 25 different sub-groups of the test set. The variation in the Zorro results for these sub-groups hence estimates node importance uncertainty with regard to subjects. 
 
-\begin{figure}[H]
-    \centering
-        \begin{subfigure}{.5\textwidth}
-            \centering
-            \begin{center}
-                \resizebox {1.0\linewidth} {!} {
-                    \input{chapters/images_results/sex_ffnn_base.tex}
-                }
-            \end{center}
-            \caption{Naive sex}
-            \label{fig:naive_results_sex}
-        \end{subfigure}%
-        \begin{subfigure}{.5\textwidth}
-            \centering
-            \begin{center}
-                \resizebox {1.0\linewidth} {!} {
-                    \input{chapters/images_results/age_ffnn_base.tex}
-                }
-            \end{center}
-            \caption{Naive age}
-            \label{fig:naive_results_age}
-        \end{subfigure}
-    \caption{Zorro analysis results for both FFNN and GCNBase, for predicting sex and age.}
-    \label{fig:naive_results}
-\end{figure}
-
-
-For both sex and age prediction, we observe that the differences in loss when removing nodes are very small, $\Delta\text{BCE} \sim 0.01$ and $\Delta\text{MSE} \sim 1$. For reference, the loss obtained for the baseline model evaluated on the test set for both prediction tasks are $\text{BCE} \approx 0.448$ and $\text{MSE} \approx 44.4$. From this we may conclude that the effect of removing nodes are very small, and hardly statistically significant due to the relatively large errors bars. Hence we will be careful not to draw too sweeping conclusions from these results. This exemplifies the limitation of the naive approach in identifying what nodes are important for the predictions, and motivates the use of more advanced methods such as Zorro.
-
-Furthermore, note specifically that the error bars for GCN are large when compared to the change in loss, and that they are much larger than for the baseline model. This could be due to several reasons. First, it could be a sign that the GCN model overfits somewhat to the training data for each cross-validation fold, and hence does not converge fully, adding to the uncertainty. Secondly, it could also be because the GCN model is more complex than the Baseline model, which would make it more difficult to train and have converge to the same extent as the Baseline model.
-
-For sex prediction in figure \ref{fig:naive_results_sex}, both models yield similar results for the importance of each node. The nodes that most significantly affect the loss, and thus are interpreted to be most important, are primarily nodes 12, 15, 16 and 20. There are some differences between the results for certain nodes of lesser, secondary, importance between Baseline and GCN, for instance nodes 8, 15 and 20. However, these differences may not be statistically significant due to the relatively large standard deviation of GCN.
-
-For age prediction in figure \ref{fig:naive_results_age}, yet again both models produce similar results. Here, the most important nodes are nodes 1, 12, 15, and the model differences are not statistically significant either.
-
-Comparing the results for sex and age prediction, we observe that nodes 12 and 15 are selected for both models and for both prediction tasks. 
- 
-\subsection{Node masking: Zorro}
-
-The results from performing Zorro analysis of the baseline model and GCNBase, for sex and age prediction, are summarized in figure \ref{fig:zorro_results}. The figures plot each node against an importance score $\mathcal{I}$. $\mathcal{I}$ is calculated as the fraction of times that node has been included in an explanation out of all explanations (one for each subjects, 1000 explanations in total). The higher the fraction, and thus the more often a node is included in an explanation, the more important the node is interpreted to be. In this case, the Zorro algorithm was run with a threshold of $\tau = 0.9$, which can be interpreted as that nodes are added to an explanation until 90\% of the predictive power of the original model is restored.
-
-In the case of predicting sex, in figure \ref{fig:zorro_results_sex}, we observe that the node that primarily receives a high importance score is node 12, with $\mathcal{I}\sim 0.4$. This means that node 12 was included in the explanation for around 400 of the 1000 subjects. The importance score of node 12 is almost a twice as large as for the secondarily most important nodes for both models at $\mathcal{I} \sim 0.2$; nodes 15, 16, 17 and 20. Interestingly, the baseline model deems node 8 to also have an importance of around 0.2, whilst the GCN model considers it to have a much smaller importance score. This discrepancy between the models could further indicate that even though both the baseline and GCN model perform fairly similarly, the GCN model possibly learns something differently than the baseline model. 
-
-When predicting age, see figure \ref{fig:zorro_results_age}, the differences between the baseline model and the GCNBase model are a bit larger. Common to both models is that node 11 seem to be important. 
-
-In general for both sex and age, nodes 12 and 15 seems to be included in explanations most often, and thus are most important. Note that both in the case of predicting sex and age that every node has been included at least a few times, since no node has an importance score of 0. A more suitable wording of the results in figure \ref{fig:zorro_results} could thus be that all nodes are important, but that some nodes are slightly more important than others. 
-
-\begin{figure}[H]
-    \centering
-        \begin{subfigure}{.5\textwidth}
-            \centering
-            % \includegraphics[width=.9\linewidth]{chapters/images_results/zorro_sex_base.png}
-            \begin{center}
-                \resizebox {1\linewidth} {!} {
-                    \input{chapters/images_results/tau0.9_ffnn_base.tex}
-                }
-            \end{center}
-            \caption{Zorro sex}
-            \label{fig:zorro_results_sex}
-        \end{subfigure}%
-        \begin{subfigure}{.5\textwidth}
-            \centering
-            \includegraphics[width=.9\linewidth]{chapters/images_theory/placeholder.jpg}
-            \caption{Zorro age}
-            \label{fig:zorro_results_age}
-        \end{subfigure}
-    \caption{Zorro analysis results for both FFNN and GCNBase, for predicting sex and age.}
-    \label{fig:zorro_results}
-\end{figure}
-
-\subsection{Summary node analysis}
-
-We conclude this chapter by comparing the results for our own naive node analysis with the Zorro analysis. See table \ref{tab:node_analaysis_summary} for a summary of what nodes where deemed most important by each both methods. In general, we observe that node 12 and 15 are deemed important in all cases, regardless of model, method and problem type (sex/age prediction). These nodes may thus be generally slightly more important for deriving information on a subject's sex and age. 
-
-When comparing the results for sex and age prediction, we observe that nodes 16 and 20 are often selected in the case of sex prediction. For age prediction, node 1 is instead often selected. This could indicate that nodes 16 and 20 represent functional networks that are more affected or closely related to sex, whilst node 1 could be linked to ageing. 
-
-\begin{table}[H]
-    \caption{Summary of selected nodes from naive and zorro methods, for sex and age prediction}
-    \begin{subtable}{.5\linewidth}
-      \centering
-        \caption{Sex prediction}
-         \begin{tabular}{||c c c||} 
-            \hline
-            \textbf{Sex} & Naive & Zorro \\ [0.5ex] 
-            \hline\hline
-            Baseline & 12, 15, 16, 20 & 1, 12, 15, 16, 17, 20 \\ 
-            \hline
-            GCNBase & 12, 15, 16, 20 & 1, 8, 12, 15, 16, 17, 20  \\ [1ex] 
-            \hline
-        \end{tabular}
-    \end{subtable}
-    \label{tab:node_analaysis_summary} 
-    \\
-    \begin{subtable}{.5\linewidth}
-      \centering
-        \caption{Age prediction}
-        \begin{tabular}{||c c c||} 
-            \hline
-            \textbf{Age} & Naive & Zorro \\ [0.5ex] 
-            \hline\hline
-            Baseline & 1, 12, 15 & -- \\ 
-            \hline
-            GCNBase & 1, 12, 15 & --  \\ [1ex] 
-            \hline
-        \end{tabular}
-    \end{subtable} 
-\end{table}
-
-% \subsection{Salience mappings: grad-cam?}
-
-\section{Analysis v2}
 
 \subsection{Sex prediction}
-
-We begin by presenting the results for performing naive node removal analysis on the baseline and GCN models. The impact on model loss is given in figures \ref{fig:naive_sex_baseline} and \ref{fig:naive_sex_gcn} respectively \todo{byt figurer}. To obtain these results, ten models of each type were trained from scratch on all available training/validation data, roughly 34 000 subjects, and the loss evaluated on a test set of $\sim4000$ subjects. Mean and standard deviations over the ten models of each type were calculated, where the dot represents the mean and the error bars one standard deviation. The uncertainties in the figures thus represent model variability, and estimates the model uncertainty.
+As a measure of node importance, $\Delta$BCE when performing naive node masking for Baseline and GCN is presented in figures \ref{fig:naive_sex_baseline} and \ref{fig:naive_sex_gcn} respectively.
 
 \begin{figure}[H]
     \centering
@@ -262,20 +130,26 @@ We begin by presenting the results for performing naive node removal analysis on
             \caption{GCN}
             \label{fig:naive_sex_gcn}
         \end{subfigure}
-    \caption{TODO byt ut figurer.}
+    \caption{Results from performing the naive node removal analysis for Baseline and GCN, for sex prediction. The analysis was repeated for ten different model initializations, over which the dots and error bars in the figures represent the mean and standard deviation, respectively.}
     \label{fig:naive_sex}
 \end{figure}
 
+Observe that the impact on model loss when removing nodes is small in both cases, on the order of $\Delta \text{BCE} \sim 0.01$. For reference, the loss obtained for the baseline and GCN model when evaluated on the test set are $\text{BCE} \approx 0.45$. This indicates that the effect of removing nodes has somewhat limited effect on model performance. Furthermore, note that the error bars for GCN are larger than for Baseline, indiciating that GCN exhibits a larger model uncertainty. This could be due to GCN not converging to the same degree as Baseline, either due to overfitting, early stopping or because of it being a more complex model.
+
+When it comes to what nodes affect the model performance the most, for both models nodes 12, 15, 16, and 20 all yield relatively large impact on the model loss at around $\Delta \text{BCE} \approx 0.02$. On the other end of the spectrum, node 7 has the smallest impact on the model performance, with $\Delta \text{BCE} < 0.005$. Note though that all nodes have a $\Delta\text{BCE}>0$, i.e. removing any node impairs the prediction.
 
 
-We begin by observing that the impact on model loss when removing nodes is small in both cases, on the order of $\Delta \text{BCE} \sim 0.01$. For reference, the loss obtained for the baseline and GCN model when evaluated on the test set are $\text{BCE} \approx 0.45$. From this we may conclude that the effect of removing nodes has somewhat limited effect on model performance, and hardly statistically significant when compared to the in some cases large error bars. Hence, we will be careful not to draw too sweeping conclusions from the naice node removal results.
+The result from the analysis with the Zorro algorithm on the Baseline and GCN models is presented in \ref{fig:zorro_age_baseline} and \ref{fig:zorro_sex_gcn}. The uncertainties for the analysis of Zorro is small for both models, but do not include potential uncertainties regarding the models which had great effect for the naive approach. The Zorro algorithm is however believed to have much smaller uncertainties due to model variance then the naive approach. This is motiveted by the fact that the naive approach has very small differences in loss which makes small variations in the models have large effect. Small changes in the model will not effect the result from Zorro since two slightly different models will probably give the same explanations a subject. For a more in depth investigation of these uncertainties see appendix ???. 
 
-Furthermore, we observe that the error bars for GCN are larger than for baseline, indiciating that GCN exhibits a larger model uncertainty. This could be due to several reasons. Firstly, all ten GCN models where trained for the same number of epochs, which where fixed arbitrarily to a a number after which the models were generally observed to overfit to the training data. It is possibly that the models may have converged to different degrees at that point, depending on model initialization. Another possible explanation is that GCN is a more complex and deeper model than the simple, shallow baseline, and hence convergence may be more difficult to achieve. 
-
-When it comes to what nodes affect the model performance the most, both baseline and GCN are somewhat in agreement. Nodes 12, 15, 16, 17 and 20 all yield relatively large impact on the model loss at around $\Delta \text{BCE} \approx 0.025$. On the other end of the spectrum, nodes 1--7 and 18 and 19 have relatively small impact on the model performance, with $\Delta \text{BCE} \approx 0.005$. With the interpretation that the more a node affects the loss, the more important it is, the results thus indicates that nodes 12, 15, 16 and 17 may be more important for predicting subject sex, whilst nodes 1--7 and 18 and 19 are not very important. Note though that all nodes have a $\Delta\text{BCE}>0$, i.e. removing any node impairs the prediction, which could imply that all nodes to some extent carry information that is important for predicting sex. 
+From figure \ref{fig:zorro_age_baseline} and \ref{fig:zorro_sex_gcn} it is clear that the result for Baseline and GCN is to a large extent in agreement: for both models node 12 i pointed out to be the most important node. Other nodes that may be regarded to somewhat important according to both models is node 15, 16, 17 and 20. Node 8 is however deemed more important when analysing the Baseline model compared to the GCN model. 
 
 
-Zorro
+analysis points out that node 12 as being the most important for both models. Other nodes that 
+
+
+
+
+Moving on to the result for Zorro analysis for sex prediction. See figure \ref{fig:zorro_sex_baseline} for the results for the baseline model, and figure \ref{fig:zorro_sex_gcn} for the GCN model. The uncertainties from varying subjects for both models are similar, at $\Delta \mathcal{I} \sim 0.05$. This uncertainty is relatively small when compared to the overall scale of the importance for each node, $\mathcal{I} \sim 0.2$, and thus the Zorro method may give more statistically significant indications of the importance of each node, as compared to the naive node masking approach in figure \ref{fig:naive_sex}.
 
 \begin{figure}[H]
     \centering
@@ -299,11 +173,28 @@ Zorro
             \caption{GCN}
             \label{fig:zorro_sex_gcn}
         \end{subfigure}
-    \caption{TODO byt ut figurer.}
+    \caption{Zorro analysis results for the Baseline and GCN models. The analysis was run over 25 different groups of subjects for each model, to yield a mean and standard deviation in importance for each node.}
     \label{fig:zorro_sex}
 \end{figure}
 
-Comparison
+
+Overall, the primary node that obtains the highest importance by a significant margin is node 12 for both models, with importance $\mathcal{I}\sim0.4$. An importance of $0.4$ means that node 12 was included in the explanations for around 40\% of the subjects in the test set. Other nodes that are fairly important for both models include nodes 15, 16, 17 and 20. Interestingly, node 8 is much more prominent for Baseline, $\mathcal{I}\sim0.25$ than for GCN, $\mathcal{I}\sim0.1$. However, we may not deem it important since the models aren't in agreement. The least important nodes, at $\mathcal{I}<0.1$, are nodes 6, 7, 10 and 18 for Baseline, nodes 6 and 7 for GCN. Further note that no node has an importance score of 0. Thus, every node was included in the explanations for at least a few subjects.
+
+
+A summary of the results in figures \ref{fig:naive_sex} and \ref{fig:zorro_sex} for both analysis methods can be seen in figures \ref{fig:comparison_sex_naive} and \ref{fig:comparison_sex_zorro} respectively. The results have been plotted without error bars for visibility reasons. For both models and analysis methods, nodes 12 and 15 are generally among the most important nodes, and node 7 among the least important. Since this is the case for two different model types over two different analysis methods, these nodes could thus be interpreted to be important and not very important for sex prediction, respectively. Furthermore, no node obtains a $\Delta\text{BCE}<0$ or $\mathcal{I}=0$. All nodes are hence in some sense important for sex prediction, albeit to varying degree. 
+
+Interestingly, there is some variability between the methods, where additionally nodes 16 and 20 are important for naive node removal, and node 17 for Zorro. The reason the two methods aren't completely in agreement could be due to the slightly different questions they answer. 
+
+Naive node masking investigates the effect on model performance when retraining a model without a node to infer it's importance, whilst in Zorro node importance is determined by how important it is for reconstructing the prediction for a model that has been trained on data with all nodes available. The first is a case of investigating model variability, whilst the second studies what nodes . 
+
+Naive node masking investigates the effect on model performance when information about a single node is removed. Zorro investigates which nodes is important for a model to make its original prediction. 
+
+Another interesting observation is that Zorro seems to give different importance to node 8 when analysing Baseline and GCN, it is more important for Baselines prediction. This is very strange since the analysis of the two models for all other nodes are in agreement. Turning to the naive approach node 8 seems to be unimportant for both models. This could indicate node 8 is for some reason regarded as important for the Baseline model even if its not so important for sex classification. Remember that Zorro investigate importance with regards to the initial prediction. Why this happens only for node 8 is however not clear. 
+
+
+
+% Direct comparison between both analysis methods is not possible, for two main reasons. First, recall that the mean and standard deviation represent different types of variability, model uncertainty for fixed subjects in the case of the naive masking approach, and subject variability for fixed models in the case of Zorro. Secondly, the impact on model performance in the naive node masking results where small, and hardly statistically significant in the case of GCN, and should be taken with a grain of salt. However, both analysis methods can be interpreted to indicate the importance of each node for sex prediction, so some general conclusions can be drawn.
+
 
 
 \begin{figure}[H]
@@ -315,7 +206,7 @@ Comparison
                     \input{chapters/images_results/node_masking/sex_ffnn_base.pgf}
                 }
             \end{center}
-            \caption{Baseline}
+            \caption{Naive}
             \label{fig:comparison_sex_naive}
         \end{subfigure}%
         \begin{subfigure}{.5\textwidth}
@@ -325,16 +216,23 @@ Comparison
                     \input{chapters/images_results/zorro/ffnn_base_sex_tau0.9.pgf}
                 }
             \end{center}
-            \caption{GCN}
+            \caption{Zorro}
             \label{fig:comparison_sex_zorro}
         \end{subfigure}
-    \caption{TODO byt ut figurer.}
+    \caption{Comparison of the results for naive node masking and Zorro for sex prediction, in figures \ref{fig:naive_sex} and \ref{fig:zorro_sex} respectively. Note that the error bars are omitted for visibility.}
     \label{fig:comparison_sex}
 \end{figure}
 
 
 
 \subsection{Age prediction}
+As a measure of node importance, $\Delta$MSE when performing naive node masking for Baseline and GCN is presented in figures \ref{fig:naive_age_baseline} and \ref{fig:naive_age_gcn} respectively. Similarly as for sex prediction, the general change in loss is observed in the figures to be small, $\Delta\text{MSE}\sim1$ relative to $\text{MSE}\sim50\text{ y}^2$. Furthermore, the model uncertainty is larger for Baseline than for GCN in the case of age prediction as well. 
+
+It is also observed from the figures that the most important nodes for both models are nodes 12, 15 and 20, with also node 1 havin a high importancy score for Baseline. The models are generally in agreement and the small differences observed are barley uncertainty the uncertainty regions. 
+
+%The most important nodes for both models are nodes 12, 15 and 20. In addition, node 1 is important for Baseline. The least important node in both cases is node 4, with $\Delta \text{MAE}\sim0$. As for the case in sex prediction, all nodes affect the loss, with the possible exclusion of node 4.
+
+
 
 \begin{figure}[H]
     \centering
@@ -358,13 +256,16 @@ Comparison
             \caption{GCN}
             \label{fig:naive_age_gcn}
         \end{subfigure}
-    \caption{TODO byt ut figurer.}
+    \caption{Results from performing the naive node removal analysis for Baseline and GCN, for age prediction. The analysis was repeated for ten different model initializations, over which the dots and error bars in the figures represent the mean and standard deviation, respectively.}
     \label{fig:naive_age}
 \end{figure}
 
+%For Zorro, the results for both models can be found in figures \ref{fig:zorro_age_baseline} and \ref{fig:zorro_age_gcn} respectively. As for sex prediction, both models have similar uncertainty with regards to varying subjects. There are some differences in what nodes are deemed important between the models. For GCN, the most important node is node 15 at $\mathcal{I}\sim 0.8$ followed by node 12 at $\mathcal{I}\sim 0.7$. For Baseline, the most important nodes are node 9 ($\mathcal{I}\sim 0.9$) followed by nodes 1 and 15 ($\mathcal{I}\sim 0.8$) and nodes 12 and 14 ($\mathcal{I}\sim 0.7$). There is no clear outlier that is clearly the least important node for both models, but the least important nodes include 5, 7 and 13.
+
+%Generally, the importance of nodes for GCN are lower than for Baseline. This means that each node is included in more explanations, which could indicate that Baseline requires more nodes for the explanations to reach $\tau>0.9$. Furthermore, all nodes have $\mathcal{I}>0$ for both models, indicating that all nodes are important. 
 
 
-Zorro
+The result from analysis with the Zorro algorithm is presented for both models in figures \ref{fig:zorro_age_baseline} and \ref{fig:zorro_age_gcn}. From the figure it is observed that the algorithm finds node 1, 9, 12, 14, 15, and 16 important for Baseline and node 12 and 15 for GCN. The Zorro algorithm has low uncertainties, which is motivated in \ref{sec:}, which indicates that it is a significant difference between which nodes are deemed important for the two models. Another observation is the the importancy score of Baseline is higher then for GCN. This means that more nodes is included in the explanations for Baseline to reach a fidelity of $\tau>0.9$.
 
 \begin{figure}[H]
     \centering
@@ -388,12 +289,29 @@ Zorro
             \caption{GCN}
             \label{fig:zorro_age_gcn}
         \end{subfigure}
-    \caption{TODO byt ut figurer.}
+    \caption{Zorro analysis results for the Baseline and GCN models for age prediction. The analysis was run over 25 different groups of subjects for each model, to yield a mean and standard deviation in importance for each node.}
     \label{fig:zorro_age}
 \end{figure}
 
-Comparison
 
+To more easily compare the result of the naive node masking and Zorro for both models figure \ref{fig:comparison_age} is presented. By comparing the result for both methods and models node 12 and 15 stand out since they are deemed important for in all cases. In addition to node 12 and 15 nodes that might be important but not consistently for all methods and models are 1, 9, 14, 16 and 20. Most of these are nodes that is only considered important by Zorro for the Baseline model. This might indicate that they are not so important for age prediction which will be investigated more in the discussion. One can also note from the figure that in addition to the differences observed for Zorro between Baseline and GCN some differences might be observed between the naive node masking method and Zorro. For example node 20 may be deemed more important by the naive method then Zorro. The Differences between naive and Zorro seems however to be smaller then the differences for Zorro between the models. 
+
+
+%Comparing the results across both models and analysis methods in figure \ref{fig:comparison_age}, nodes 12 and 15 are among the most important nodes in all cases, and can thus be interpreted to be important for age prediction. Recall that they were also important for sex prediction, and hence they could be relevant for both sex and age. No node is consistently least important in all cases, but the node that is most often the least important is node 4, indicating that it is the least important node for age prediction. Further, note that node 9, the most important node for Baseline according to Zorro, is an outlier, in the sense that node 9 is deemed fairly unimportant in all other cases. Finally, as was the case for sex prediction, generally all nodes have $\Delta\text{MSE}>0$ and $\Delta\mathcal{I}>0$, and hence all nodes are in some sense also important for age prediction. 
+
+%Note from \ref{fig:comparison_age_zorro} that the Zorro gives higher importance to node 0, 9 and 14 for Baseline then GCN. This was also observed, but to a lesser extent, for node 8 in sex classification. Comparing with naive node masking the nodes is deemed fairly unimportant for both models, with a potential exception of node 0 for Baseline. Following the reasoning for sex classification it is interpreted that these nodes are deemed important by Zorro without being important for age prediction. 
+
+
+
+
+
+
+
+%In addition to difference in three specific nodes figure \ref{fig:comparison_age_zorro} indicates that the nodes in Baseline generally have higher importance. This means that Baseline needs more unmasked nodes then GCN to make the prediction enough like its origins. This can be interpreted as the GCN model are more robust in the sense it is not as susceptible to noise. This indicates that i might be some differences between the two model, even if it is augmented not to be in \ref{sec:}. An explanation for this can be that the models are equal in the sense of performance and what information is important, but the differences lies in how the decisions are made. The fact that GCN uses graph structure might make it more robust even if it do not add any information to improve the performance.
+
+%Also note that a increased number of nodes in the explanation can be the result of changing the hyper parameter $\tau$. Increasing $\tau$ means that the likelihood of making the initial prediction need to be higher to stop adding nodes. The role $\tau$ plays make the difference in results for baseline and GCN interesting since if $\tau$ was increased a bit for GCN more nodes would have been added. Then Baseline and GCN might have identical results once again if the right nodes for GCN was added. Also note that if $\tau$ is chosen to high all nodes will probably need to be included in the explanation, not because they are related to age but because, they are needed to replicate the exact prediction. This highlights the importance of choosing $\tau$ and also strengthen the interpretation that node 0, 9 and 14 may not be important for age. This discussion makes the importance of validating the Zorro result against the naive node masking results eminent. To be more sure about the interpretation of Zorro the result when the hyper parameter $\tau$ is varied need to be studied. This was however not possible in this thesis due to time limitations and left as future work. 
+
+%With the importance of validating Zorros result against naive node masking established the differences observed in \ref{fig:comparison_age_naive} and \ref{fig:comparison_age_zorro} between the two methods need to be addressed. Although the differences may to some extent be explained by the discussion above about the importance of $\tau$ it is important to remember that they are two different methods answering slightly different questions. Naive node masking answers the question which removed node effect the performance of the models the most, whilst Zorro answers the question which node is most important to unmask for a prediction close to the original. Even if the two questions seem to be very related the result should not be expected to be identical. With this said since two methods generally is in agreement the differences is probably due to the slightly different questions answered and the effect of the choice of hyper parameter $\tau$ may have. 
 
 \begin{figure}[H]
     \centering
@@ -417,6 +335,6 @@ Comparison
             \caption{GCN}
             \label{fig:comparison_age_zorro}
         \end{subfigure}
-    \caption{TODO byt ut figurer.}
+    \caption{Comparison of the results for naive node masking and Zorro for age prediction, in figures \ref{fig:naive_sex} and \ref{fig:zorro_sex} respectively. Note that the error bars are omitted for visibility.}
     \label{fig:comparison_age}
 \end{figure}
