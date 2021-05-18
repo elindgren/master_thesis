@@ -10,17 +10,17 @@ The approach of using graphs and graph theory to model networks is abundant in m
 %     }
 % \end{center}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
         \begin{subfigure}{.5\textwidth}
             \centering
-            \includegraphics[width=1\linewidth]{chapters/images_theory/graph_classification.png}
+            \includegraphics[width=0.95\linewidth]{chapters/images_theory/graph_classification_v2.png}
             \caption{Graph classification}
             \label{fig:subject_prediction}
         \end{subfigure}%
         \begin{subfigure}{.5\textwidth}
             \centering
-            \includegraphics[width=1\linewidth]{chapters/images_theory/node_classification.png}
+            \includegraphics[width=0.95\linewidth]{chapters/images_theory/population_node_classification.png}
             \caption{Node classification}
             \label{fig:population_prediction}
         \end{subfigure}
@@ -72,20 +72,20 @@ In a population graph, each node corresponds to an individual, and the edges rel
     \label{eq:similarity_measure}
 \end{equation}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{chapters/images_theory/multiplex.png}
+    \includegraphics[width=0.7\textwidth]{chapters/images_theory/multiplex_graph.png}
     \caption{An example of a two-layered multiplex graph, with the same nodes in each layer but different edges.}
     \label{fig:multiplex_graph}
 \end{figure}
 Another type of graph relevant for this thesis is a multiplex graph. A multiplex graph is a layered graph where each layer can represent a different type of interaction between nodes \cite{multiplex_book_chap2}. One example of a multiplex graph with the same nodes in all layers is a graph with cities as nodes and different means of transportation as edges. Edges representing highways and railways makes up two different graphs, but they might be combined into a multiplex graph since they share the same nodes, the cities. See figure \ref{fig:multiplex_graph} for a visual representation of a two-layered multiplex graph, in which the nodes are fixed, but the edges are different in each layer.
 
-\section{Graph Convolutional Neural Networks}
+\section{Graph Convolutional Networks}
 \label{sec:gcn}
 
-Graph Convolutional Neural Networks (GCNs) are a class of neural networks that generalize the notion of convolutions from grid data to graph structured data \cite{wu_review}. Regular convolutional operations operate on structured grids of data, for instance the pixels in an image, where each grid point is only connected to its adjacent neighbours. This may not be the case for graph structured data, where any pair of nodes can be connected. Generalizing the convolutional operator to the graph domain enables a GCN to utilize information about the graph structure, in the same way a regular CNN can utilize information about structures in e.g. an image \cite{wu_review}.
+\acrlong{gcn}s (\acrshort{gcn}) are a class of neural networks that generalize the notion of convolutions from grid data to graph structured data \cite{wu_review}. Regular convolutional operations operate on structured grids of data, for instance the pixels in an image, where each grid point is only connected to its adjacent neighbours. This may not be the case for graph structured data, where any pair of nodes can be connected. Generalizing the convolutional operator to the graph domain enables a \acrshort{gcn} to utilize information about the graph structure, in the same way a regular \acrshort{cnn} can utilize information about structures in e.g. an image \cite{wu_review}.
 
-The theoretical foundations for GCNs will be explained in three parts. First, the concept of convolutions in the graph domain, and how they are implemented in a computationally efficient manner. Then, a layer-wise propagation rule for a graph convolutional layer based on the implementation of convolutions, and finally a heuristic interpretation known as \textit{message passing}.
+The theoretical foundations for \acrshort{gcn}s will be explained in three parts. First, the concept of convolutions in the graph domain, and how they are implemented in a computationally efficient manner. Then, a layer-wise propagation rule for a graph convolutional layer based on the implementation of convolutions, and finally a heuristic interpretation known as \textit{message passing}.
 
 \subsection{Efficient convolutions in the graph domain}
 
@@ -125,9 +125,9 @@ The convolutional operation may now be generalized to a signal $X \in \mathbb{R}
     Z = \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2} X \Theta,
     \label{eq:propagation_rule}
 \end{equation}
-with $\Theta \in \mathbb{R}^{C\times F}$ being a matrix of filter parameters and $Z \in \mathbb{R}^{N\times F}$ as the convolved signal. This propagation rule in equation \eqref{eq:propagation_rule}, when paired with an activation function $\sigma$ such that $H = \sigma\left(Z \right)$, forms the basis for a GCN. 
+with $\Theta \in \mathbb{R}^{C\times F}$ being a matrix of filter parameters and $Z \in \mathbb{R}^{N\times F}$ as the convolved signal. This propagation rule in equation \eqref{eq:propagation_rule}, when paired with an activation function $\sigma$ such that $H = \sigma\left(Z \right)$, forms the basis for a \acrshort{gcn}. 
 
-Recall that in order to arrive at equation \eqref{eq:propagation_rule}, the Chebyshev polynomial expansion in equation \eqref{eq:convolution_approximation} was truncated at $K=1$. By truncating the Chebyshev polynomial, the convolution operator only considers each node and its closest neighbours, and becomes a linear function in $L$. These two points may seem to be limitations in the representational strength of the graph convolutional layer, however this is not necessarily the case \cite{kipf_semi_supervised}. First, larger neighbourhoods can be convolved over by stacking multiple layers, with the first layer considering a node and its neghbours, the second layer considering the neighbours neighbours and so on. Secondly, keeping the representation linear in $L$ actually makes it more flexible, since it is not dependant on the explicit parametrization given by the Chebyshev polynomials \cite{kipf_semi_supervised}. Combined, a deep GCN consisting of several stacked graph convolutional layers paired with possibly non-linear activation functions $\sigma$ can still model a rich class of convolutional filter functions, whilst keeping computational costs low. 
+Recall that in order to arrive at equation \eqref{eq:propagation_rule}, the Chebyshev polynomial expansion in equation \eqref{eq:convolution_approximation} was truncated at $K=1$. By truncating the Chebyshev polynomial, the convolution operator only considers each node and its closest neighbours, and becomes a linear function in $L$. These two points may seem to be limitations in the representational strength of the graph convolutional layer, however this is not necessarily the case \cite{kipf_semi_supervised}. First, larger neighbourhoods can be convolved over by stacking multiple layers, with the first layer considering a node and its neghbours, the second layer considering the neighbours neighbours and so on. Secondly, keeping the representation linear in $L$ actually makes it more flexible, since it is not dependant on the explicit parametrization given by the Chebyshev polynomials \cite{kipf_semi_supervised}. Combined, a deep \acrshort{gcn} consisting of several stacked graph convolutional layers paired with possibly non-linear activation functions $\sigma$ can still model a rich class of convolutional filter functions, whilst keeping computational costs low. 
 
 
 \subsection{Message passing interpretation for GCNs}
@@ -137,23 +137,20 @@ Heuristically, a graph convolutional layer can be seen to perform a sort of \tex
 \begin{equation}
     z_i = \theta \left(\left(\tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}\right)_{ii} x_{i} + \sum_{j \neq i} \left(\tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}\right)_{ij} x_{j} \right) = \theta \left(h_{ii} + \sum_{j \neq i} h_{ij} \right).
 \end{equation}
-$z_i$ and $x_i$ corresponds to the activation and feature for node $i$, respectively. $h_{ij}$ can be interpreted as a normalized message, communicating the state $x_j$ weighted by the normalized connection between node $j$ and $i$. The activation $z_i$ can then be seen as an aggregation of normalized messages from all neighbouring nodes, $h_{ij}$, and itself, $h_{ii}$. See figure \ref{fig:message_passing} for a visual representation of how the messages are passed to node $i$ from it's neighbours. In this manner information can flow through the graph, and by stacking multiple graph convolutional layers the information can spread over successively larger neighbourhoods. With the message passing interpretation, a deep GCN can be seen to draw upon the informational flow patterns in the graph. This enables it to learn from the graph structure, similarly to how a deep CNN can extract information from structures in an image.
+$z_i$ and $x_i$ corresponds to the activation and feature for node $i$, respectively. $h_{ij}$ can be interpreted as a normalized message, communicating the state $x_j$ weighted by the normalized connection between node $j$ and $i$. The activation $z_i$ can then be seen as an aggregation of normalized messages from all neighbouring nodes, $h_{ij}$, and itself, $h_{ii}$. See figure \ref{fig:message_passing} for a visual representation of how the messages are passed to node $i$ from it's neighbours. In this manner information can flow through the graph, and by stacking multiple graph convolutional layers the information can spread over successively larger neighbourhoods. With the message passing interpretation, a deep \acrshort{gcn} can be seen to draw upon the informational flow patterns in the graph. This enables it to learn from the graph structure, similarly to how a deep \acrshort{cnn} can extract information from structures in an image.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{chapters/images_theory/message_passing.png}
+    \includegraphics[width=0.5\linewidth]{chapters/images_theory/message_passing_v2.png}
     \caption{A schematic representation of the message passing interpretation of a graph convolutional layer. The messages $h_{ij}$ are sent from node $j$ to node $i$.}
     \label{fig:message_passing}
 \end{figure}
-
-
-
 
 \section{Zorro -- an algorithm for explainability in GCNs}
 \label{sec:zorro}
 % To describe the Zorro algorithm
 
-Zorro is an algorithm for determining which nodes and features are important for a trained GCN model performing node classification on a graph with adjacency matrix $A$ and feature matrix $X$ \cite{zorro}. The model is denoted $\Phi_n(X,A)$ and takes $A$ and $X$ as input, and gives a prediction for a node $n$ in the graph. The general idea is to replace the feature matrix $X$ by noise and then reintroduce nodes and features to successively make the model prediction similar to the original. The reintroduced nodes $V$ and features $F$ are referred to as an explanation $\mathcal{S} = \{V, F\}$. Noise is applied to $X$ through element-wise multiplication with a masking matrix $S$ representing $\mathcal{S}$ and a matrix of random noise $Z$, according to
+Zorro is an algorithm for determining which nodes and features are important for a trained \acrshort{gcn} model performing node classification on a graph with adjacency matrix $A$ and feature matrix $X$ \cite{zorro}. The model is denoted $\Phi_n(X,A)$ and takes $A$ and $X$ as input, and gives a prediction for a node $n$ in the graph. The general idea is to replace the feature matrix $X$ by noise and then reintroduce nodes and features to successively make the model prediction similar to the original. The reintroduced nodes $V$ and features $F$ are referred to as an explanation $\mathcal{S} = \{V, F\}$. Noise is applied to $X$ through element-wise multiplication with a masking matrix $S$ representing $\mathcal{S}$ and a matrix of random noise $Z$, according to
 \begin{equation}
     Y_\mathcal{S} = X \odot S + Z \odot (1- S), \quad Z \sim \mathcal{N}.
 \end{equation}
@@ -164,14 +161,14 @@ The noise distribution $\mathcal{N}$ is set to the distribution of all features 
 \end{equation}
 The fidelity of an explanation is a measure of how likely it is for a model with a masked data set to give the same prediction as a model with the original data set.
 
-For each node $n$, the algorithm begins with an empty explanation $S_n = \{\emptyset, \emptyset\}$, and thus $\Phi_n(Y_s, A)$ will have a completely random input according to equation \ref{eq:Ys}. Then, the node or feature that increases the fidelity of the explanation the most is added to the explanation. More and more nodes and features are iteratively added until the fidelity of the explanation exceeds a hyper parameter $\tau$. The resulting explanation indicates which nodes and features where important to make the prediction of node $n$. The algorithm can then be repeated for all the nodes in the graph.
+For each node $n$, the algorithm begins with an empty explanation $S_n = \{\emptyset, \emptyset\}$, and thus $\Phi_n(Y_s, A)$ will have a completely random input according to equation \ref{eq:Ys}. Then, the node or feature that increases the fidelity of the explanation the most is added to the explanation. More and more nodes and features are iteratively added until the fidelity of the explanation exceeds a hyper parameter $\tau$. The resulting explanation indicates which nodes and features where important to make the prediction of node $n$. The algorithm can then be repeated for all the nodes in the graph, yielding a saliency map detailing the importance of each node.
 
 \section{Similar works: the intersection of GCNs and neuroscience}
 
 % Ta upp relaterade arbeten och knyt ihop med introduction inför metoden. E.g. Jansson sandström, stankeviciute.
 
-There have been numerous papers published in the last few years applying graph neural networks in neuroscience with similar aims as that of this thesis; to develop and explain accurate classifiers for brain age and sex prediction. For age prediction, notable works include Stankevicuete et al. \cite{stankeviciute} and Amoroso et al. \cite{amoroso_multiplex_age}, which both utilize structural MRI data. Stankevicuete et al. applies GCNs to a population graph of subjects, and Amoroso et al. uses an ANN with graph measures as input features to predict age. The problem of sex prediction is approached in Arslan et al. \cite{arslan}, which uses GCNs, and in the work by Kim and Ye \cite{understanding_gnn}, which uses a variant of GNN known as a Graph Isomorphism Network (GIN). Both of these studies applies their models to fMRI data. Furthermore, Arslan et al. and Kim and Ye also analyses the gradients within the models, with the goal of identifying which functional brain networks are related to sex. 
+There have been numerous papers published in the last few years applying graph neural networks in neuroscience with similar aims as that of this thesis; to develop and explain accurate classifiers for brain age and sex prediction. For age prediction, notable works include Stankevicuete et al. \cite{stankeviciute} and Amoroso et al. \cite{amoroso_multiplex_age}, which both utilize structural \acrshort{mri} data. Stankevicuete et al. applies \acrshort{gcn}s to a population graph of subjects, and Amoroso et al. uses an \acrshort{ann} with graph measures as input features to predict age. The problem of sex prediction is approached in Arslan et al. \cite{arslan}, which uses \acrshort{gcn}s, and in the work by Kim and Ye \cite{understanding_gnn}, which uses a variant of \acrshort{gnn} known as \acrshort{gin}s. Both of these studies applies their models to \acrshort{fmri} data. Furthermore, Arslan et al. and Kim and Ye also analyses the gradients within the models, with the goal of identifying which functional brain networks are related to sex. 
 
-What sets this thesis apart from the work in \cite{stankeviciute, amoroso_multiplex_age, arslan, understanding_gnn} is threefold: Firstly, resting-state fMRI data is used for age prediction. Secondly, relevant functional brain networks for age prediction are investigated. Finally, the relevant functional brain networks are mapped using Zorro, a new method for analysing black-box models.
+What sets this thesis apart from the work in \cite{stankeviciute, amoroso_multiplex_age, arslan, understanding_gnn} is threefold: Firstly, resting-state \acrshort{fmri} data is used for age prediction. Secondly, relevant functional brain networks for age prediction are investigated. Finally, the relevant functional brain networks are mapped using Zorro, a new method for analysing black-box models.
 
 % Another relevant publication for this specific thesis is the Master Thesis by Jansson and Sandström \cite{jansson_sandstrom}, in which the applications of GCNs in neuroscience where explored and applied on the problem of classifying Alzheimer's Disease based on MRI data. The thesis by Jansson and Sandström is the precursor to this very thesis, and it's their interesting findings that motivated this master thesis project. 
