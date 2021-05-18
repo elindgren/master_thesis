@@ -1,0 +1,200 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.290196078431373,0.564705882352941,0.886274509803922}
+
+\begin{axis}[
+legend cell align={left},
+legend style={fill opacity=0.8, draw opacity=1, text opacity=1, draw=white!80!black},
+minor xtick={2,4,6,8,10,12,14,16,18,20},
+minor xticklabels={VL,VM,DAL,VV1M,PSS,SMM,SN,PL,BG,PMC},
+tick align=outside,
+tick pos=left,
+x grid style={white!69.0196078431373!black},
+xlabel={Network},
+xmin=0, xmax=22,
+xtick style={color=black},
+xtick={1,3,5,7,9,11,13,15,17,19,21},
+xticklabel style={rotate=60.0},
+xticklabels={CB1,SSN,DAR,FP,DMN,PMN,VA,CB2,TS,VV1L,TM},
+y grid style={white!69.0196078431373!black},
+ylabel={Importance score, \(\displaystyle \mathcal{I}\)},
+ymin=0.0146027829684175, ymax=0.944585423221919,
+ytick style={color=black},
+ytick={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1},
+yticklabels={
+  \(\displaystyle {0.0}\),
+  \(\displaystyle {0.1}\),
+  \(\displaystyle {0.2}\),
+  \(\displaystyle {0.3}\),
+  \(\displaystyle {0.4}\),
+  \(\displaystyle {0.5}\),
+  \(\displaystyle {0.6}\),
+  \(\displaystyle {0.7}\),
+  \(\displaystyle {0.8}\),
+  \(\displaystyle {0.9}\),
+  \(\displaystyle {1.0}\)
+}
+]
+\path [draw=black, thick]
+(axis cs:1,0.753112870852396)
+--(axis cs:1,0.802220462480937);
+
+\path [draw=black, thick]
+(axis cs:2,0.171328431902491)
+--(axis cs:2,0.216671568097509);
+
+\path [draw=black, thick]
+(axis cs:3,0.505237584823002)
+--(axis cs:3,0.580762415176998);
+
+\path [draw=black, thick]
+(axis cs:4,0.213803005603318)
+--(axis cs:4,0.278863661063349);
+
+\path [draw=black, thick]
+(axis cs:5,0.0908090940417271)
+--(axis cs:5,0.117190905958273);
+
+\path [draw=black, thick]
+(axis cs:6,0.0568747211617585)
+--(axis cs:6,0.100458612171575);
+
+\path [draw=black, thick]
+(axis cs:7,0.328769070913084)
+--(axis cs:7,0.369897595753583);
+
+\path [draw=black, thick]
+(axis cs:8,0.130688605991241)
+--(axis cs:8,0.18131139400876);
+
+\path [draw=black, thick]
+(axis cs:9,0.846353181638089)
+--(axis cs:9,0.902313485028578);
+
+\path [draw=black, thick]
+(axis cs:10,0.214155460292876)
+--(axis cs:10,0.271177873040457);
+
+\path [draw=black, thick]
+(axis cs:11,0.314075869709774)
+--(axis cs:11,0.365257463623559);
+
+\path [draw=black, thick]
+(axis cs:12,0.598497039050601)
+--(axis cs:12,0.664169627616066);
+
+\path [draw=black, thick]
+(axis cs:13,0.0923531172956115)
+--(axis cs:13,0.131646882704389);
+
+\path [draw=black, thick]
+(axis cs:14,0.644153077215269)
+--(axis cs:14,0.691180256118064);
+
+\path [draw=black, thick]
+(axis cs:15,0.745248409707822)
+--(axis cs:15,0.810751590292178);
+
+\path [draw=black, thick]
+(axis cs:16,0.567701274810554)
+--(axis cs:16,0.638298725189446);
+
+\path [draw=black, thick]
+(axis cs:17,0.333419983946976)
+--(axis cs:17,0.41924668271969);
+
+\path [draw=black, thick]
+(axis cs:18,0.18535673235033)
+--(axis cs:18,0.261309934316336);
+
+\path [draw=black, thick]
+(axis cs:19,0.395395320432391)
+--(axis cs:19,0.441938012900943);
+
+\path [draw=black, thick]
+(axis cs:20,0.260234432505324)
+--(axis cs:20,0.309765567494676);
+
+\path [draw=black, thick]
+(axis cs:21,0.142711752916507)
+--(axis cs:21,0.191954913750159);
+
+\addplot [semithick, black, mark=-, mark size=5, mark options={solid}, only marks]
+table {%
+1 0.753112870852396
+2 0.171328431902491
+3 0.505237584823002
+4 0.213803005603318
+5 0.0908090940417271
+6 0.0568747211617585
+7 0.328769070913084
+8 0.130688605991241
+9 0.846353181638089
+10 0.214155460292876
+11 0.314075869709774
+12 0.598497039050601
+13 0.0923531172956115
+14 0.644153077215269
+15 0.745248409707822
+16 0.567701274810554
+17 0.333419983946976
+18 0.18535673235033
+19 0.395395320432391
+20 0.260234432505324
+21 0.142711752916507
+};
+\addlegendentry{Baseline}
+\addplot [semithick, black, mark=-, mark size=5, mark options={solid}, only marks]
+table {%
+1 0.802220462480937
+2 0.216671568097509
+3 0.580762415176998
+4 0.278863661063349
+5 0.117190905958273
+6 0.100458612171575
+7 0.369897595753583
+8 0.18131139400876
+9 0.902313485028578
+10 0.271177873040457
+11 0.365257463623559
+12 0.664169627616066
+13 0.131646882704389
+14 0.691180256118064
+15 0.810751590292178
+16 0.638298725189446
+17 0.41924668271969
+18 0.261309934316336
+19 0.441938012900943
+20 0.309765567494676
+21 0.191954913750159
+};
+\addlegendentry{Baseline}
+\addplot [thick, color0, mark=*, mark size=5, mark options={solid,draw=black}]
+table {%
+1 0.777666666666667
+2 0.194
+3 0.543
+4 0.246333333333333
+5 0.104
+6 0.0786666666666667
+7 0.349333333333333
+8 0.156
+9 0.874333333333333
+10 0.242666666666667
+11 0.339666666666667
+12 0.631333333333333
+13 0.112
+14 0.667666666666667
+15 0.778
+16 0.603
+17 0.376333333333333
+18 0.223333333333333
+19 0.418666666666667
+20 0.285
+21 0.167333333333333
+};
+\addlegendentry{Baseline}
+\end{axis}
+
+\end{tikzpicture}

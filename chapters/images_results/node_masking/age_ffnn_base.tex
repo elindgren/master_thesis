@@ -1,0 +1,96 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.290196078431373,0.564705882352941,0.886274509803922}
+\definecolor{color1}{rgb}{0.96078431372549,0.650980392156863,0.137254901960784}
+
+\begin{axis}[
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.97)},
+  anchor=north west,
+  draw=white!80!black
+},
+minor xtick={2,4,6,8,10,12,14,16,18,20},
+minor xticklabels={VL,VM,DAL,VV1M,PSS,SMM,SN,PL,BG,PMC},
+tick align=outside,
+tick pos=left,
+x grid style={white!69.0196078431373!black},
+xlabel={Network},
+xmin=0, xmax=22,
+xtick style={color=black},
+xtick={1,3,5,7,9,11,13,15,17,19,21},
+xticklabel style={rotate=60.0},
+xticklabels={CB1,SSN,DAR,FP,DMN,PMN,VA,CB2,TS,VV1L,TM},
+y grid style={white!69.0196078431373!black},
+ylabel={\(\displaystyle \Delta\)MSE},
+ymin=-0.102003402709961, ymax=2.50023109436035,
+ytick style={color=black},
+ytick={-0.5,0,0.5,1,1.5,2,2.5,3},
+yticklabels={
+  \(\displaystyle {−0.5}\),
+  \(\displaystyle {0.0}\),
+  \(\displaystyle {0.5}\),
+  \(\displaystyle {1.0}\),
+  \(\displaystyle {1.5}\),
+  \(\displaystyle {2.0}\),
+  \(\displaystyle {2.5}\),
+  \(\displaystyle {3.0}\)
+}
+]
+\addplot [thick, color0, mark=*, mark size=5, mark options={solid,draw=black}]
+table {%
+1 1.45724639892578
+2 0.767973709106445
+3 1.04867668151855
+4 0.215860366821289
+5 0.506681823730469
+6 0.517279434204102
+7 1.14848480224609
+8 0.451789093017578
+9 0.6376953125
+10 0.468221664428711
+11 0.854912567138672
+12 1.85029830932617
+13 0.585014343261719
+14 1.02188491821289
+15 1.94016876220703
+16 1.27017936706543
+17 0.974282073974609
+18 0.798994827270508
+19 0.687212753295898
+20 1.6117919921875
+21 1.10824737548828
+};
+\addlegendentry{Baseline}
+\addplot [thick, color1, dashed, mark=square*, mark size=5, mark options={solid,draw=black}]
+table {%
+1 0.86070442199707
+2 0.768532562255859
+3 0.602510452270508
+4 0.0162799835205078
+5 0.464287948608398
+6 0.306121063232422
+7 0.652607345581055
+8 0.38412971496582
+9 0.459709548950195
+10 0.250495910644531
+11 0.695998001098633
+12 1.65663948059082
+13 0.314445495605469
+14 0.578920745849609
+15 2.38194770812988
+16 1.1585334777832
+17 0.582329177856445
+18 1.09899024963379
+19 0.996397018432617
+20 1.64974632263184
+21 0.984822845458984
+};
+\addlegendentry{GCN}
+\end{axis}
+
+\end{tikzpicture}

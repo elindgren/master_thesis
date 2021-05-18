@@ -32,11 +32,13 @@
 \usepackage{hhline}                 % Double horizontal lines in table
 \usepackage{diagbox}                % Slash in tables
 
+\usepackage{makecell}
+
 % TABLE LAYOUT (optional)
-%\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
-%\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
-%\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
-%\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAPTION LAYOUT
@@ -44,7 +46,7 @@
 \captionsetup{
     labelfont       = bf,
     font            = footnotesize,
-    textfont        = normal,
+    textfont        = footnotesize, % Default: normal
     width           = .95\textwidth,
     justification   = justified,
     singlelinecheck = true

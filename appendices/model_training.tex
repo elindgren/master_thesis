@@ -1,21 +1,85 @@
-\chapter{Models and training procedure}
+\chapter{Model architectures}
 \label{app:model_training}
-\section{Models}
-TODO
-\section{Training procedure}
-TODO
-\begin{table}[]
+
+This chapter goes into more detail on the specific architectures for the models presented in \cref{chap:method}. Specifically, the output shape, number of parameters and the connections for each layer in all models is presented in the form of Tables \ref{tab:Models_Baseline}, \ref{tab:Models_GCN}, \ref{tab:Models_Poptoy} and \ref{tab:Models_Popencoder}.
+
+\todo{Lägg in modellnamn i tabellen}
+\begin{table}[H]
     \centering
-    \begin{tabular}{c|c|c}
-         Layer & Output shape & Params\\ \hline
-         input layer A & &  \\
-         input layer X & &  \\
-         GCN layer & (42,10) & 430 \\
+    \caption{A description of the Baseline model. Layer specifie the name of each layer in the model, the output shape the shape of the activations after each layer, Params number of parameters in each layer and Connected to descirbes which layers each layer takes as input. When two values are presented they refeer to the model for predicting age/sex. }
+    \begin{tabular}{c|c c c}
+         Layer & Output shape & Params & Connected to\\ \hline\hline
+         Input layer A &(210) & & \\ \hline
+         Dense layer & (1/2) & 211/422 & Input layer A \\ \hline\hline
+         Total params:& & 211/422
     \end{tabular}
-    \caption{Caption}
-    \label{tab:my_label}
+    \label{tab:Models_Baseline}
 \end{table}
 
+\begin{table}[H]
+    \centering
+    \caption{A description of the GCN model. Layer specifie the name of each layer in the model, the output shape the shape of the activations after each layer, Params number of parameters in each layer and Connected to descirbes which layers each layer takes as input. When two values are presented they refeer to the model for predicting age/sex. }
+    \begin{tabular}{c|c c c}
+         Layer & Output shape & Params & Connected to\\ \hline\hline
+         Input layer popgraph &(42, 42) & & \\ \hline
+         Input layer X &  (42, 42)& & \\ \hline
+         GCN layer 1 & (42,10) & 430 & \thead{Input layer popgraph \\ Input layer X}   \\ \hline
+         GCN layer 2 & (42,10)& 110 & GCN layer 1\\ \hline
+         GCN layer 3 & (42,10)& 110  &GCN layer 2\\ \hline
+         Concatenate &(42, 30)  & 0 & \thead{GCN layer 1\\GCN layer 2\\GCN layer 3} \\ \hline
+         Dense layer & (1/2) & 1261/2522 & Concatenate \\ \hline\hline
+         Total params:& & 1911/3172
+    \end{tabular}
+    \label{tab:Models_GCN}
+\end{table}
 
+\begin{table}[H]
+    \centering
+    \caption{A description of the Poptoy model. Layer specifie the name of each layer in the model, the output shape the shape of the activations after each layer, Params number of parameters in each layer and Connected to descirbes which layers each layer takes as input. When two values are presented they refeer to the model for predicting age/sex. }
+    \begin{tabular}{c|c c c}
+         Layer & Output shape & Params & Connected to\\ \hline\hline
+         Input layer popgraph &(100, 100) & & \\ \hline
+         Input layer X &  (100, 100)& & \\ \hline
+         GCN layer 1 & (100,10) & 20 & \thead{Input layer popgraph \\ Input layer X}   \\ \hline
+         GCN layer 2 & (100,10)& 110 & GCN layer 1\\ \hline
+         GCN layer 3 & (100,10)& 110  &GCN layer 2\\ \hline
+         GCN layer 4 & (100,10)& 110  &GCN layer 3\\ \hline
+         GCN layer 5 & (100,10)& 110  &GCN layer 4\\ \hline
+         Concatenate & (100, 50)  & 0 & \thead{GCN layer 1\\GCN layer 2\\GCN layer 3\\GCN layer 4\\GCN layer 5} \\ \hline
+         Dense layer 1& (32) & 1632 & Concatenate \\
+         Dense layer 2& (16) & 528 & Dense layer 1\\
+         Dense layer 3& (1/2) & 17/34 & Dense layer 2\\
+         \hline\hline
+         Total params:& & 3,627/3,644
+    \end{tabular}
+    \label{tab:Models_Poptoy}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{A description of the Popencoder model. Layer specifie the name of each layer in the model, the output shape the shape of the activations after each layer, Params number of parameters in each layer and Connected to descirbes which layers each layer takes as input. When two values are presented they refeer to the model for predicting age/sex. }
+    \begin{tabular}{c|c c c}
+         Layer & Output shape & Params & Connected to\\ \hline\hline
+         Input layer A &(100, 42,42) & & \\ \hline
+         Input layer X &  (100, 42,42)& & \\ \hline
+         Input layer popgraph &  (100,100)& & \\ \hline
+         Encoder GCN layer 1 & (100,42,10) & 430 & \thead{Input layer A \\ Input layer X} \\ \hline
+         Encoder GCN layer 2 & (100,42,10) & 110 & \thead{Encoder GCN layer 1} \\ \hline
+         Concatenate 1& (100, 42, 20)  & 0 & \thead{Encoder GCN layer 1\\Encoder GCN layer 2} \\ \hline
+         Dense encoder& (100,1/2) & 841/1682 & \thead{Concatenate 1}   \\ \hline
+         GCN layer 1 & (100,10) & 1010 & \thead{Input layer popgraph \\ Dense encoder}   \\ \hline
+         GCN layer 2 & (100,10)& 110 & GCN layer 1\\ \hline
+         GCN layer 3 & (100,10)& 110  &GCN layer 2\\ \hline
+         GCN layer 4 & (100,10)& 110  &GCN layer 3\\ \hline
+         GCN layer 5 & (100,10)& 110  &GCN layer 4\\ \hline
+         Concatenate 2& (100, 51/52)  & 0 & \thead{GCN layer 1\\GCN layer 2\\GCN layer 3\\GCN layer 4\\GCN layer 5} \\ \hline
+         Dense layer 1& (32) & 1664/1696 & Concatenate 2\\
+         Dense layer 2& (16) & 528 & Dense layer 1\\
+         Dense layer 3& (1/2) & 17/34 & Dense layer 2\\
+         \hline\hline
+         Total params:& & 4050/4950
+    \end{tabular}
+    \label{tab:Models_Popencoder}
+\end{table}
 % -- Model parameters
 % -- Training details
