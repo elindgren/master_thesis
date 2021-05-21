@@ -1,7 +1,7 @@
 \chapter{Model architectures}
 \label{app:model_training}
 
-This chapter goes into more detail on the specific architectures for the models presented in \cref{chap:method}. Specifically, the output shape, number of parameters and the connections for each layer in all models is presented in the form of Tables \ref{tab:Models_Baseline}, \ref{tab:Models_GCN}, \ref{tab:Models_Poptoy} and \ref{tab:Models_Popencoder}. When numbers are presented for either output shape or number of parameter they refer to age/sex. 
+This chapter goes into more detail on the specific architectures for the models presented in \cref{chap:method}. Specifically, the output shape, number of parameters and the connections for each layer in all models is presented in the form of Tables \ref{tab:Models_Baseline}, \ref{tab:Models_GCN}, \ref{tab:Models_Poptoy} and \ref{tab:Models_Popencoder}. When numbers are presented for either output shape or number of parameters they refer to age/sex. 
 
 \todo{Lägg in modellnamn i tabellen}
 \begin{table}[H]
@@ -11,7 +11,7 @@ This chapter goes into more detail on the specific architectures for the models 
          Layer & Output shape & Params & Connected to\\ \hline\hline
          Input layer A &(210) & & \\ \hline
          Dense layer & (1/2) & 211/422 & Input layer A \\ \hline\hline
-         Total params:& & 211/422
+         Total params & & 211/422
     \end{tabular}
     \label{tab:Models_Baseline}
 \end{table}
@@ -28,7 +28,7 @@ This chapter goes into more detail on the specific architectures for the models 
          GCN layer 3 & (42,10)& 110  &GCN layer 2\\ \hline
          Concatenate &(42, 30)  & 0 & \thead{GCN layer 1\\GCN layer 2\\GCN layer 3} \\ \hline
          Dense layer & (1/2) & 1261/2522 & Concatenate \\ \hline\hline
-         Total params:& & 1911/3172
+         Total params & & 1911/3172
     \end{tabular}
     \label{tab:Models_GCN}
 \end{table}
@@ -46,11 +46,11 @@ This chapter goes into more detail on the specific architectures for the models 
          GCN layer 4 & (100,10)& 110  &GCN layer 3\\ \hline
          GCN layer 5 & (100,10)& 110  &GCN layer 4\\ \hline
          Concatenate & (100, 50)  & 0 & \thead{GCN layer 1\\GCN layer 2\\GCN layer 3\\GCN layer 4\\GCN layer 5} \\ \hline
-         Dense layer 1& (32) & 1632 & Concatenate \\
-         Dense layer 2& (16) & 528 & Dense layer 1\\
-         Dense layer 3& (1/2) & 17/34 & Dense layer 2\\
+         Dense layer 1& (100, 32) & 1632 & Concatenate \\
+         Dense layer 2& (100, 16) & 528 & Dense layer 1\\
+         Dense layer 3& (100, 1/2) & 17/34 & Dense layer 2\\
          \hline\hline
-         Total params:& & 3,627/3,644
+         Total params & & 3627/3644
     \end{tabular}
     \label{tab:Models_Poptoy}
 \end{table}
@@ -73,11 +73,11 @@ This chapter goes into more detail on the specific architectures for the models 
          GCN layer 4 & (100,10)& 110  &GCN layer 3\\ \hline
          GCN layer 5 & (100,10)& 110  &GCN layer 4\\ \hline
          Concatenate 2& (100, 51/52)  & 0 & \thead{GCN layer 1\\GCN layer 2\\GCN layer 3\\GCN layer 4\\GCN layer 5} \\ \hline
-         Dense layer 1& (32) & 1664/1696 & Concatenate 2\\
-         Dense layer 2& (16) & 528 & Dense layer 1\\
-         Dense layer 3& (1/2) & 17/34 & Dense layer 2\\
+         Dense layer 1& (100, 32) & 1664/1696 & Concatenate 2\\
+         Dense layer 2& (100, 16) & 528 & Dense layer 1\\
+         Dense layer 3& (100, 1/2) & 17/34 & Dense layer 2\\
          \hline\hline
-         Total params:& & 4050/4950
+         Total params & & 4050/4950
     \end{tabular}
     \label{tab:Models_Popencoder}
 \end{table}

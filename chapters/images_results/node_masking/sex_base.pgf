@@ -590,7 +590,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=4.552250in,y=0.626333in,,top]{\color{textcolor}\rmfamily\fontsize{24.000000}{28.800000}\selectfont Network}%
+\pgftext[x=4.552250in,y=0.626333in,,top]{\color{textcolor}\rmfamily\fontsize{24.000000}{28.800000}\selectfont Node}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%

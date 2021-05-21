@@ -1,5 +1,4 @@
 %%%% TODO
-% Remove "retrieved"?
 % Change notes to begin with lowercase?
 % Lägg in alla källor igen, med uppdaterad info
 
@@ -242,6 +241,23 @@
     DOI = {10.3390/e22101164}
 }
 
+@article{995_peng,
+    abstract = {Deep learning has huge potential for accurate disease prediction with neuroimaging data, but the prediction performance is often limited by training-dataset size and computing memory requirements. To address this, we propose a deep convolutional neural network model, Simple Fully Convolutional Network (SFCN), for accurate prediction of brain age using T1-weighted structural MRI data. Compared with other popular deep network architectures, SFCN has fewer parameters, so is more compatible with small dataset size and 3D volume data. The network architecture was combined with several techniques for boosting performance, including data augmentation, pre-training, model regularization, model ensemble and prediction bias correction. We compared our overall SFCN approach with several widely-used machine learning models. It achieved state-of-the-art performance in UK Biobank data (N = 14,503), with mean absolute error (MAE) = 2.14y in brain age prediction and 99.5\% in sex classification. SFCN also won (both parts of) the 2019 Predictive Analysis Challenge for brain age prediction, involving 79 competing teams (N = 2,638, MAE = 2.90y). We describe here the details of our approach, and its optimisation and validation. Our approach can easily be generalised to other tasks using different image modalities, and is released on GitHub.},
+    author = {Peng, Han and Gong, Weikang and Beckmann, Christian F. and Vedaldi, Andrea and Smith, Stephen M.},
+    doi = {10.1016/j.media.2020.101871},
+    file = {:C\:/Users/ericl/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Peng et al. - 2021 - Accurate brain age prediction with lightweight deep neural networks.pdf:pdf},
+    issn = {13618423},
+    journal = {Medical Image Analysis},
+    keywords = {Brain age prediction,Convolutional neuralnetworks,Neuroimaging,Predictive analysis},
+    month = {2},
+    pmid = {33197716},
+    publisher = {Elsevier B.V.},
+    title = {{Accurate brain age prediction with lightweight deep neural networks}},
+    volume = {68},
+    year = {2021}
+}
+
+
 @inproceedings{gradcam,
     abstract = {With the growing use of graph convolutional neural networks (GCNNs) comes the need for explainability. In this paper, we introduce explainability methods for GCNNs. We develop the graph analogues of three prominent explainability methods for convolutional neural networks: contrastive gradient-based (CG) saliency maps, Class Activation Mapping (CAM), and Excitation Back-Propagation (EB) and their variants, gradient-weighted CAM (Grad-CAM) and contrastive EB (c-EB). We show a proof-of-concept of these methods on classification problems in two application domains: visual scene graphs and molecular graphs. To compare the methods, we identify three desirable properties of explanations: (1) their importance to classification, as measured by the impact of occlusions, (2) their contrastivity with respect to different classes, and (3) their sparseness on a graph. We call the corresponding quantitative metrics fidelity, contrastivity, and sparsity and evaluate them for each method. Lastly, we analyze the salient subgraphs obtained from explanations and report frequently occurring patterns.},
     author = {Pope, Phillip E and Kolouri, Soheil and Rostami, Mohammad and Martin, Charles E and Hoffmann, Heiko},
@@ -263,7 +279,7 @@
     author={Thorben Funke and Megha Khosla and Avishek Anand},
     year={2021},
     url={https://openreview.net/forum?id=uDN8pRAdsoC},
-    note = {Under double blind review as a conference paper at ICLR 2021. Retrieved 2021-08-04}
+    note = {Under double blind review as a conference paper at ICLR 2021}
 }
 
 @article{meier_svm,
@@ -369,7 +385,6 @@
   timestamp = {Mon, 19 Apr 2021 16:45:47 +0200},
   biburl    = {https://dblp.org/rec/journals/corr/abs-2104-06750.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org},
-  note      = {Retrieved 2021-05-05}
 }
 
 @article{kipf_semi_supervised,
@@ -385,7 +400,6 @@
   timestamp = {Mon, 13 Aug 2018 16:48:31 +0200},
   biburl    = {https://dblp.org/rec/journals/corr/KipfW16.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org},
-  note      = {Retrieved 2021-02-04},
 }
 
 @misc{kipf_vae,
@@ -395,7 +409,6 @@
     eprint={1611.07308},
     archivePrefix={arXiv},
     primaryClass={stat.ML},
-    note = {Retrieved 2021-02-04},
 }
 
 @article{wu_review,
@@ -415,7 +428,6 @@
     timestamp = {Thu, 31 Jan 2019 13:52:49 +0100},
     biburl    = {https://dblp.org/rec/journals/corr/abs-1901-00596.bib},
     bibsource = {dblp computer science bibliography, https://dblp.org},
-    note = {Retrieved 2021-02-04},
 }
 
 @article{arslan,
@@ -429,7 +441,6 @@
     title = {{Graph Saliency Maps through Spectral Convolutional Networks: Application to Sex Classification with Brain Connectivity}},
     url = {http://arxiv.org/abs/1806.01764},
     year = {2018},
-    note = {Retrieved 2021-04-07}
 }
 
 
@@ -444,7 +455,6 @@
     title = {{Graph Attention Networks}},
     url = {http://arxiv.org/abs/1710.10903},
     year = {2017},
-    note = {Retrieved 2021-05-04}
 }
 
 @article{gin,
@@ -458,7 +468,6 @@
     title = {{How Powerful are Graph Neural Networks?}},
     url = {http://arxiv.org/abs/1810.00826},
     year = {2018},
-    note = {Retrieved 2021-05-04}
 }
 
 @misc{stankeviciute,
@@ -472,7 +481,6 @@
     publisher = {bioRxiv},
     title = {{Population graph GNNs for brain age prediction}},
     year = {2020},
-    note = {Retrieved 2021-03-29}
 }
 
 
@@ -537,19 +545,21 @@
 
 %%% Online
 @online{ukbiobank_brain_imaging,
-    author =       "UK Biobank",
+    author =       "UKBiobank",
     title =        "UK Biobank brain imaging -- online resources",
     url =          "https://www.fmrib.ox.ac.uk/ukbiobank/",
     addendum =     "Accessed 2021-04-14",
+    year =         "2021",
 }
 
 @online{ukbiobank,
-    author =       "UK Biobank",
-    title =        "UK Biobank",
+    author =       "UKBiobank",
+    publisher =    "UK Biobank",
+    title =        "UK Biobank -- Enabling sciencitif discoveries that improve human health",
     url =          "https://www.ukbiobank.ac.uk/",
     addendum =     "Retrieved 2021-04-28",
+    year =          "2021",
 }
-
 
 
 % Not used
