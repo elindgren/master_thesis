@@ -29,7 +29,11 @@
 % TABLES
 \usepackage{array}                  % (TODO)
 \usepackage{tabularx}               % (TODO)
-\usepackage{hhline}                 % Double horizontal lines in table
+% \usepackage{hhline}                 % Double horizontal lines in table
+\usepackage{booktabs}               % Improved rules in tables
+
+% Reduce weight of top and bottom rules
+\setlength{\heavyrulewidth}{0.075em}
 \usepackage{diagbox}                % Slash in tables
 
 \usepackage{makecell}
@@ -42,15 +46,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAPTION LAYOUT
-\usepackage{caption}
-\captionsetup{
+\usepackage[
     labelfont       = bf,
-    font            = footnotesize,
-    textfont        = footnotesize, % Default: normal
-    width           = .95\textwidth,
+    font            = footnotesize, % Default: normal - footnotesize
+    textfont        = footnotesize,
+    width           = 0.92\textwidth,
     justification   = justified,
     singlelinecheck = true
-}
+]{caption}
 
 % Caption for subfigures (optional)
 \usepackage{subcaption}
@@ -187,7 +190,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TITLE AND TOC LAYOUT
-\usepackage{titlesec}
+\usepackage[raggedright]{titlesec}
 \usepackage{titletoc}
 \usepackage[title]{appendix}
 
@@ -201,7 +204,7 @@
 \ifnum\thesisChapterStyle=1
     \titleformat{\chapter}[hang]{\fontsize{30}{10}\selectfont}
     {{\fontsize{30pt}{1em}\vspace{-5.2ex}\selectfont \textnormal{\thechapter. \hspace{1pt}}}}
-    {.5ex}{}[\rule{\textwidth}{0.3pt}]
+    {.5ex}{\raggedright}[\rule{\textwidth}{0.3pt}]
     \titlespacing{\chapter}{0pt}{0pt}{\parskip}
 \fi
 
@@ -290,8 +293,8 @@
     citecolor   = blue,
     anchorcolor = blue,
 ]{hyperref}
-\usepackage{url}                    % Clickable url links
-\usepackage[nameinlink]{cleveref}   % Clever references
+\usepackage{url}                                        % Clickable url links
+\usepackage[capitalise,noabbrev,nameinlink]{cleveref}   % Clever references
 % optional: [nameinlink], makes e.g. "Table" part of the link
 
 % CREF
@@ -299,6 +302,7 @@
 \crefname{equation}{}{}
 \crefname{table}{Table}{Tables}
 \crefname{section}{Section}{Sections}
+\crefname{chapter}{Chapter}{Chapters}
 \crefname{appendix}{Appendix}{Appendices}
 
 % NUMBERING:

@@ -1,5 +1,5 @@
 % COVER PAGE
-{ % make parskip changes local
+\begingroup % make parskip changes local
 \ifx\thesisType\undefined
 Undefined Thesis type in settings.tex
 \else
@@ -96,4 +96,4 @@ Undefined Thesis type in settings.tex
 \thispagestyle{empty}
 \mbox{}
 \fi
-}
+\endgroup
