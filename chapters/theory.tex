@@ -1,7 +1,7 @@
 \chapter{Theory}
 \label{chap:theory}
 
-The approach of using graph theory to model networks is abundant in many areas of sciences, ranging from engineering to biology \cite{network_science_chap1}. From the perspective of machine learning, there exists many graph related tasks, with two common ones being \textit{graph classification} and \textit{node classification} \cite{quadratic_graph_classification, active_learning_node_classification}. In graph classification, the task is to classify a graph as belonging to one of several classes, whilst in node classification the task is to classify each node in the graph individually. These two problems can be generalised to graph and node regression, with the aim of predicting a continuous variable instead of a class. Graph and node classification/regression will in the remainder of this thesis be referred to as graph and node prediction. 
+The approach of using graph theory to model networks is abundant in many areas of sciences, ranging from engineering to biology \cite{network_science_chap1}. From the perspective of machine learning, there exist many graph related tasks, with two common ones being \textit{graph classification} and \textit{node classification} \cite{quadratic_graph_classification, active_learning_node_classification}. In graph classification, the task is to classify a graph as belonging to one of several classes, whilst in node classification the task is to classify each node in the graph individually. These two problems can be generalised to graph and node regression, with the aim of predicting a continuous variable instead of a class. Graph and node classification/regression can be referred to as graph and node prediction. 
 % From the perspective of machine learning, there exists many applications, with two common ones being \textit{graph classification} and \textit{node classification}
 %% TODO TIKZ
 % \begin{center}
@@ -15,20 +15,20 @@ The approach of using graph theory to model networks is abundant in many areas o
         \begin{subfigure}{.5\textwidth}
             \centering
             \includegraphics[width=0.95\linewidth]{chapters/images_theory/graph_classification_v2.png}
-            \caption{Graph classification}
+            \caption{Graph prediction}
             \label{fig:subject_prediction}
         \end{subfigure}%
         \begin{subfigure}{.5\textwidth}
             \centering
             \includegraphics[width=0.95\linewidth]{chapters/images_theory/population_node_classification.png}
-            \caption{Node classification}
+            \caption{Node prediction}
             \label{fig:population_prediction}
         \end{subfigure}
-    \caption{Schematic representations of graph and node classification.}
+    \caption{Schematic representations of graph and node prediction.}
     \label{fig:graph_and_node_class}
 \end{figure}
 
-In the context of neuroscience, graph and node prediction may correspond to predicting some property of a subject, for instance sex or age. Graph prediction is relevant when each subject is associated with a graph, which in this thesis will correspond to functional networks in a subjects' brain. A schematic visualisation of graph prediction can be seen in \cref{fig:subject_prediction}. Node prediction is relevant in, for instance, \textit{population graphs}, where each node represents a single subject. See \cref{fig:population_prediction} for a representation of node prediction in population graphs. 
+In the context of neuroscience, graph and node prediction may correspond to predicting some property of a subject, for instance sex or age. Graph prediction is relevant when each subject is associated with a graph, which in this thesis will correspond to functional networks in a subject's brain. A schematic visualisation of graph prediction can be seen in \cref{fig:subject_prediction}. Node prediction is relevant in, for instance, \textit{population graphs}, where each node represents a single subject. See \cref{fig:population_prediction} for a representation of node prediction in population graphs. 
 
 % In this chapter, the foundations of graph theory, graph convolutional neural networks and explainability methods will be presented. The chapter begins with a primer on general graph theory, followed by the description of two specific types of graphs, population and multiplex graphs. Next, graph convolutional neural networks will be presented, followed by a black-box analysis methods known as Zorro. The chapter will be concluded with a brief overview of related works regarding GCNs and explainability of AI. 
 
@@ -46,7 +46,7 @@ In the context of neuroscience, graph and node prediction may correspond to pred
 \section{General graph theory}
 \label{sec:general_graph_theory}
 
-Let $\mathcal{G}$ be a graph, associated with a set of nodes $V$ and a set of edges $E$. The edges form the connections between nodes, and for a pair of nodes $(i,j)$ the corresponding edge may be denoted $e_{ij}$. The neighbours $N(v)$ to a certain node $v \in V$ are defined as the nodes $u \in V$ that are connected to $v$, $e_{vu} \neq 0$. Each node $v$ may also be associated with \textit{node features}, $x_v$. $x_v$ may represent some state or information about node $v$, which in practice can take the form of a vector of numbers \cite{active_learning_node_classification}.
+Let $\mathcal{G}$ be a graph, associated with a set of nodes $V$ and a set of edges $E$. The edges form the connections between nodes, and for a pair of nodes $(i,j)$ the corresponding edge may be denoted $e_{ij}$. The neighbours $N(v)$ to a certain node $v \in V$ are defined as the nodes $u \in V$ that are connected to $v$, i.e., $e_{vu} \in E$. Each node $v$ may also be associated with \textit{node features} $x_v$. $x_v$ may represent some state or information about node $v$, which in practice can take the form of a vector of numbers \cite{active_learning_node_classification}.
 % in applications typically takes the form of a number, a vector of numbers, or a piece of text etc
 
 A graph $\mathcal{G}$ is considered to be \textit{undirected} if all edges in the graph are undirected, $e_{ij} \equiv e_{ji}$, and \textit{directed} if all edges are directed, $e_{ij} \not\equiv e_{ji}$. The edges in $\mathcal{G}$ may be succinctly summarised in an \textit{adjacency matrix} $A$, defined as
@@ -56,10 +56,10 @@ A graph $\mathcal{G}$ is considered to be \textit{undirected} if all edges in th
 \end{equation}
 From definition \eqref{eq:adjacencydefinition} it follows that undirected graphs have a symmetric adjacency matrix, $A_{ij} = A_{ji}$. From the adjacency matrix, the degree matrix $D$ is defined as
 \begin{equation}
-    D_{ij} = \begin{cases} \sum_j A_{ij}, & \mbox{if } i = j \\ \mbox{0,} & \mbox{otherwise,} \end{cases}
+    D_{ij} = \begin{cases} \sum_k A_{ik}, & \mbox{if } i = j \\ \mbox{0,} & \mbox{otherwise,} \end{cases}
     \label{eq:degreematrixdefinition}
 \end{equation}
-which describes each node's \textit{degree}, the number of edges connected to each node.
+which describes each node's \textit{degree}, i.e., the number of edges connected to each node.
 
 Moreover, each edge in $\mathcal{G}$ may be associated with a weight $w_{ij}$, and $\mathcal{G}$ is then denoted as a \textit{weighted} graph. The adjacency matrix becomes $A_{ij} = w_{ij}$, and the degree matrix now describes the \textit{strength} of each node, which is defined as the sum of the weights of all edges connected to the node. Weights in a weighted graph may be interpreted differently depending on the application \cite{adventures_in_graph_theory_chap1}. They can be seen as the connection strength between devices in a cellular network, the cost of a ticket along a route in a train network, the flow of goods in a logistics setting etc. All graphs referenced in the remainder of this thesis will be weighted and undirected unless otherwise specified.
 
@@ -78,7 +78,7 @@ In a population graph, each node corresponds to an individual, and the edges rel
     \caption{An example of a two-layered multiplex graph, with the same nodes in each layer but different edges.}
     \label{fig:multiplex_graph}
 \end{figure}
-Another type of graph relevant for this thesis is a multiplex graph. A multiplex graph is a layered graph where each layer can represent a different type of interaction between nodes \cite{multiplex_book_chap2}. One example of a multiplex graph with the same nodes in all layers is a graph with cities as nodes and different means of transportation as edges. Edges representing highways and railways makes up two different graphs, but they might be combined into a multiplex graph since they share the same nodes, the cities. See \cref{fig:multiplex_graph} for a visual representation of a two-layered multiplex graph, in which the nodes are fixed, but the edges are different in each layer.
+Another type of graph, relevant for this thesis, is a multiplex graph. A multiplex graph is a layered graph where each layer can represent a different type of interaction between nodes \cite{multiplex_book_chap2}. One example of a multiplex graph with the same nodes in all layers is a graph with cities as nodes and different means of transportation as edges. Edges representing highways and railways make up two different graphs, but they might be combined into a multiplex graph since they share the same nodes, i.e., the cities. See \cref{fig:multiplex_graph} for a visual representation of a two-layered multiplex graph, in which the nodes are fixed, but the edges are different in each layer.
 
 \section{Graph Convolutional Networks}
 \label{sec:gcn}
@@ -94,12 +94,12 @@ Let $\mathcal{G}$ be an undirected graph, with $N$ nodes and adjacency matrix $A
     L_\text{norm} = D^{-1/2} L D^{-1/2} =  I_N - D^{-1/2} A D^{-1/2},
     \label{eq:normalized_graph_laplacian}
 \end{equation}
-where $I_N$ is the $N \times N$ identity matrix. With $L = L_{\text{norm}}$, the convolution of a signal $x \in R^N$ defined on the nodes of $\mathcal{G}$ with a filter $g_\theta = diag(\theta)$ parametrized by $\theta \in R^N$, can in the Fourier domain be written as
+where $I_N$ is the $N \times N$ identity matrix. With $L = L_{\text{norm}}$, the convolution of a signal $x \in R^N$ defined on the nodes of $\mathcal{G}$ with a filter $g_\theta = \text{diag}(\theta)$ parametrized by $\theta \in R^N$, can in the Fourier domain be written as
 \begin{equation}
     g_\theta * x = U g_\theta U^T x,
     \label{eq:graph_convolution}
 \end{equation}
-where $U$ is an orthogonal matrix containing the eigenvectors of $L$ \cite{kipf_semi_supervised}. Performing convolutions using Equation \eqref{eq:graph_convolution} may, however, be computationally intractable in practice, partly because multiplication with $U$ is $\mathcal{O}(N^2)$ and partly because calculating $U$ requires the eigendecomposition of $L$, which may be very computationally expensive for large graphs \cite{kipf_semi_supervised}. Kipf et al. \cite{kipf_semi_supervised} proposes a solution to this problem, in which the convolution is approximated with an expansion in Chebyshev polynomials $T_k(x)$,
+where $U$ is an orthogonal matrix containing the eigenvectors of $L$ \cite{kipf_semi_supervised}. Performing convolutions using Equation \eqref{eq:graph_convolution} may, however, be computationally intractable in practice, partly because multiplication with $U$ is $\mathcal{O}(N^2)$, and partly because calculating $U$ requires the eigendecomposition of $L$, which may be very computationally expensive for large graphs \cite{kipf_semi_supervised}. Kipf et al. \cite{kipf_semi_supervised} proposes a solution to this problem, in which the convolution is approximated with an expansion in Chebyshev polynomials $T_k(x)$, as,
 \begin{equation}
     g_{\theta'} * x \approx \sum_{k=0}^K \theta'_k T_k(\tilde{L})x,
     \label{eq:convolution_approximation}
@@ -107,26 +107,26 @@ where $U$ is an orthogonal matrix containing the eigenvectors of $L$ \cite{kipf_
 where $\tilde{L} =  \frac{2}{\lambda_{\text{max}}}L - I_N$, and $\lambda_{\text{max}}$ is the largest eigenvalue of $L$. $\theta'_k$ is here a vector of Chebyshev coefficients, which in the context of machine learning corresponds to trainable parameters. The interpretation of Equation \eqref{eq:convolution_approximation} is that the convolution is $K^{\text{th}}$ order local, i.e. that a convolution considers each node and its $K^{\text{th}}$ order neighbors, the neighbours that are at most $K$ steps away in the graph. 
 
 \subsection{Layer-wise propagation rule}
-By setting $K = 1$ and a single trainable parameter $\theta = \theta_0' = -\theta_1'$, the convolution in Equation \eqref{eq:convolution_approximation} can according to \cite{kipf_semi_supervised} be further simplified as 
+By setting $K = 1$ and a single trainable parameter $\theta = \theta_0' = -\theta_1'$, the convolution in Equation \eqref{eq:convolution_approximation} can be further simplified as 
 \begin{equation}
-    g_{\theta'} * x \approx \theta \left(I_N + D^{-1/2}AD^{-1/2} \right)x. 
+    g_{\theta'} * x \approx \theta \left(I_N + D^{-1/2}AD^{-1/2} \right)x,
     \label{eq:k1_approximation_step3}
 \end{equation}
-Setting $K=1$ limits the convolution to only consider a node ($k=0$) and its closest neighbours ($k=1$). Implementing convolutions as in Equation \eqref{eq:k1_approximation_step3} may, however, lead to exploding or vanishing gradients, since the eigenvalues of $I_N + D^{-1/2}AD^{-1/2}$ lies in the range $[0, 2]$. This problem can be avoided using a \textit{renormalization trick}:
+\cite{kipf_semi_supervised}. Setting $K=1$ limits the convolution to only consider a node ($k=0$) and its closest neighbours ($k=1$). Implementing convolutions as in Equation \eqref{eq:k1_approximation_step3} may, however, lead to exploding or vanishing gradients, since the eigenvalues of $I_N + D^{-1/2}AD^{-1/2}$ lies in the range $[0, 2]$. This problem can be avoided using a \textit{renormalization trick}:
 \begin{equation}
     I_N + D^{-1/2}AD^{-1/2} \rightarrow \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2},
     \label{eq:renormalization_trick}
 \end{equation}
 where $\tilde{A} = A + I_N$ and $\tilde{D} = \sum_j \tilde{A}_{ij}$.
 
-The convolutional operation may now be generalized to a signal $X \in \mathbb{R}^{N \times C}$, defined on the $N$ nodes of the graph and with a $C$-dimensional feature vector for each node. The signal $X$ thus has $C$ input channels. Furthermore, let the convolution apply $F$ filters to the $C$ input channels. The application of such a convolution can thus be written
+The convolutional operation may now be generalized to a signal $X \in \mathbb{R}^{N \times C}$, defined on the $N$ nodes of the graph and with a $C$-dimensional feature vector for each node. The signal $X$ thus has $C$ input channels. Furthermore, let the convolution apply $F$ filters to the $C$ input channels. The application of such a convolution can then be written
 \begin{equation}
     Z = \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2} X \Theta,
     \label{eq:propagation_rule}
 \end{equation}
 with $\Theta \in \mathbb{R}^{C\times F}$ being a matrix of filter parameters and $Z \in \mathbb{R}^{N\times F}$ being the convolved signal. This propagation rule in Equation \eqref{eq:propagation_rule}, when paired with an activation function $\sigma$ such that $H = \sigma\left(Z \right)$, defines a graph convolutional layer. 
 
-Recall that in order to arrive at Equation \eqref{eq:propagation_rule}, the Chebyshev polynomial expansion in Equation \eqref{eq:convolution_approximation} was truncated at $K=1$. By truncating the Chebyshev polynomial, the convolution operator only considers each node and its closest neighbours, and becomes a linear function in $L$. These two points may seem to be limitations in the representational strength of the graph convolutional layer, however, this is not necessarily the case \cite{kipf_semi_supervised}. Firstly, larger neighbourhoods can be convolved over by stacking multiple layers, with the first layer considering a node and its neghbours, the second layer considering the neighbours' neighbours and so on. Secondly, keeping the convolutional operator linear in $L$ actually makes it more flexible, since it is not dependant on the explicit parametrization given by the Chebyshev polynomials \cite{kipf_semi_supervised}. Combined, a deep \acrshort{gcn} consisting of several stacked graph convolutional layers paired with possibly non-linear activation functions $\sigma$ can still model a rich class of convolutional filter functions, whilst keeping computational costs low. 
+Recall that, in order to arrive at Equation \eqref{eq:propagation_rule}, the Chebyshev polynomial expansion in Equation \eqref{eq:convolution_approximation} was truncated at $K=1$. By truncating the Chebyshev polynomial, the convolution operator only considers each node and its closest neighbours, and becomes a linear function in $L$. These two points may seem to be limitations in the representational strength of the graph convolutional layer, however, this is not necessarily the case \cite{kipf_semi_supervised}. Firstly, larger neighbourhoods can be convolved over by stacking multiple layers, with the first layer considering a node and its neghbours, the second layer considering the neighbours' neighbours and so on. Secondly, keeping the convolutional operator linear in $L$ actually makes it more flexible, since it is not dependant on the explicit parametrization given by the Chebyshev polynomials \cite{kipf_semi_supervised}. Combined, a deep \acrshort{gcn} consisting of several stacked graph convolutional layers, paired with possibly non-linear activation functions $\sigma$, can still model a rich class of convolutional filter functions, whilst keeping the computational costs low. 
 
 
 \subsection{Message passing interpretation of GCNs}
@@ -157,9 +157,9 @@ $z_i$ and $x_i$ corresponds to the activation and feature for node $i$, respecti
 
 Zorro is an algorithm for determining which nodes and features are important for a trained \acrshort{gcn} model performing node classification on a graph with adjacency matrix $A$ and feature matrix $X$ \cite{zorro}. The model is denoted $\Phi_n(X,A)$ and takes $A$ and $X$ as input, and gives a prediction for a node $n$ in the graph. The general idea is to replace the feature matrix $X$ by noise and then reintroduce nodes and features to successively make the model prediction similar to the original. The reintroduced nodes $V$ and features $F$ are referred to as an explanation $\mathcal{S} = \{V, F\}$. The noisy signal $Y_{\mathcal{S}}$ is obtained by applying noise to $X$ through element-wise multiplication with a masking matrix $S$, representing $\mathcal{S}$, and a matrix of random noise $Z$, according to
 \begin{equation}
-    Y_\mathcal{S} = X \odot S + Z \odot (1- S), \quad Z \sim \mathcal{N}.
+    Y_\mathcal{S} = X \odot S + Z \odot (1 - S), \quad Z \sim \mathcal{N}.
 \end{equation}
-The noise distribution $\mathcal{N}$ is chosen to match the distribution of all features in $X$. The prediction of the model $\Phi$ on the masked data is then $\Phi_n(Y_{\mathcal{S}}, A)$. To evaluate an explanation $\mathcal{S}$, i.e. if the unmasked nodes and features are important for the prediction of a specific node, the fidelity of the explanation is calculated as
+$1$ is a matrix of ones, $\odot$ represents element-wise multiplication and the noise distribution $\mathcal{N}$ is chosen to match the distribution of features over the nodes, i.e, the distribution of $X$. The prediction of the model $\Phi$ on the masked data is then $\Phi_n(Y_{\mathcal{S}}, A)$. To evaluate an explanation $\mathcal{S}$, i.e., if the unmasked nodes and features are important for the prediction of a specific node, the fidelity of the explanation is calculated as
 \begin{equation}
     \mathcal{F}(\mathcal{S}) = \mathbb{E}_{Y_{\mathcal{S}}|Z\sim\mathcal{N}}\left[\mathbbm{1}_{\Phi_n(X,A) = \Phi_n(Y_{\mathcal{S}},A)}\right].
     \label{eq:Ys}
@@ -172,7 +172,7 @@ For each node $n$, the algorithm begins with an empty explanation $S_n = \{\empt
 
 % Ta upp relaterade arbeten och knyt ihop med introduction inför metoden. E.g. Jansson sandström, stankeviciute.
 
-There have been numerous papers published in the last few years applying graph neural networks in neuroscience with similar aims as that of this thesis; to develop accurate classifiers for brain age and sex prediction, and analyse them using saliency mapping techniques. For age prediction, notable works include Stankevičiūtė et al. \cite{stankeviciute} and Amoroso et al. \cite{amoroso_multiplex_age}, which both utilise structural \acrshort{mri} data. Stankevičiūtė et al. applies \acrshort{gcn}s to a population graph of subjects, and Amoroso et al. uses an \acrshort{ann} with graph measures as input features to predict age. The problem of sex prediction is approached in Arslan et al. \cite{arslan}, which uses \acrshort{gcn}s, and in the work by Kim and Ye \cite{understanding_gnn}, which uses a variant of \acrshort{gnn} known as \acrshort{gin}s. Both of these studies applies their models to \acrshort{rs-fmri} data. Furthermore, \cite{arslan} and \cite{understanding_gnn} also analyse the gradients within the models, with the goal of identifying which functional brain networks are related to sex. 
+There have been numerous papers published in the last few years applying graph neural networks in neuroscience, with similar aims as that of this thesis; to develop accurate classifiers for brain age and sex prediction, and analyse them using saliency mapping techniques. For age prediction, notable works include Stankevičiūtė et al. \cite{stankeviciute} and Amoroso et al. \cite{amoroso_multiplex_age}, which both utilise structural \acrshort{mri} data. Stankevičiūtė et al. apply \acrshort{gcn}s to a population graph of subjects, and Amoroso et al. use an \acrshort{ann} with graph measures as input features to predict age. The problem of sex prediction is approached in Arslan et al. \cite{arslan}, who use \acrshort{gcn}s, and in the work by Kim and Ye \cite{understanding_gnn}, who use a variant of \acrshort{gnn} known as \acrshort{gin}s. Both of these studies apply their models to \acrshort{rs-fmri} data. Furthermore, \cite{arslan} and \cite{understanding_gnn} also analyse the gradients within the models, with the goal of identifying which functional brain networks are related to biological sex. 
 
 There are three main differences that sets this thesis apart from the work in \cite{stankeviciute, amoroso_multiplex_age, arslan, understanding_gnn}. Firstly, resting-state \acrshort{fmri} data is used for age prediction. Secondly, relevant functional brain networks for age prediction are investigated. Finally, saliency maps of the relevant functional brain networks are obtained using methods that only considers the input-output behaviour of the models. 
 

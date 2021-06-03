@@ -1,0 +1,389 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.290196078431373,0.564705882352941,0.886274509803922}
+\definecolor{color1}{rgb}{0.96078431372549,0.650980392156863,0.137254901960784}
+
+\begin{groupplot}[group style={group size=1 by 2}]
+\nextgroupplot[
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.97)},
+  anchor=north west,
+  draw=white!80!black
+},
+minor xtick={2,4,6,8,10,12,14,16,18,20},
+minor xticklabels={VL,VM,DAL,VV1M,PSS,SMM,SN,PL,BG,PMC},
+scaled x ticks=manual:{}{\pgfmathparse{#1}},
+tick align=outside,
+tick pos=left,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+xmin=0, xmax=22,
+xtick style={color=black},
+xticklabels={},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+ymin=0.000655667771848529, ymax=0.0251823289646769,
+ytick style={color=black},
+ytick={0,0.01,0.02,0.03},
+yticklabels={
+  \(\displaystyle {0.00}\),
+  \(\displaystyle {0.01}\),
+  \(\displaystyle {0.02}\),
+  \(\displaystyle {0.03}\)
+}
+]
+\path [draw=black, thick]
+(axis cs:1,0.00334392809008486)
+--(axis cs:1,0.00774059272671812);
+
+\path [draw=black, thick]
+(axis cs:2,0.00595301206197895)
+--(axis cs:2,0.00811326687249981);
+
+\path [draw=black, thick]
+(axis cs:3,0.00660271562506739)
+--(axis cs:3,0.00848845325539525);
+
+\path [draw=black, thick]
+(axis cs:4,0.00282537662574237)
+--(axis cs:4,0.00572913563660199);
+
+\path [draw=black, thick]
+(axis cs:5,0.0099964419805831)
+--(axis cs:5,0.0124978741204911);
+
+\path [draw=black, thick]
+(axis cs:6,0.00400463136062671)
+--(axis cs:6,0.00599385706558179);
+
+\path [draw=black, thick]
+(axis cs:7,0.00177051600788618)
+--(axis cs:7,0.00317808809901689);
+
+\path [draw=black, thick]
+(axis cs:8,0.00632872531672098)
+--(axis cs:8,0.00732321789006613);
+
+\path [draw=black, thick]
+(axis cs:9,0.0078674002689169)
+--(axis cs:9,0.0111922041374399);
+
+\path [draw=black, thick]
+(axis cs:10,0.00841100583747872)
+--(axis cs:10,0.0104686700276946);
+
+\path [draw=black, thick]
+(axis cs:11,0.00576981455328948)
+--(axis cs:11,0.00776952951905244);
+
+\path [draw=black, thick]
+(axis cs:12,0.0175787130774952)
+--(axis cs:12,0.0204746802864575);
+
+\path [draw=black, thick]
+(axis cs:13,0.00934789574314553)
+--(axis cs:13,0.0119584699852328);
+
+\path [draw=black, thick]
+(axis cs:14,0.0113966792674463)
+--(axis cs:14,0.0136788576988776);
+
+\path [draw=black, thick]
+(axis cs:15,0.0217575596117843)
+--(axis cs:15,0.0240674807286392);
+
+\path [draw=black, thick]
+(axis cs:16,0.0183995174736505)
+--(axis cs:16,0.0204217684894079);
+
+\path [draw=black, thick]
+(axis cs:17,0.0091783805530117)
+--(axis cs:17,0.0119178311188175);
+
+\path [draw=black, thick]
+(axis cs:18,0.0062896707888446)
+--(axis cs:18,0.00841530171672486);
+
+\path [draw=black, thick]
+(axis cs:19,0.00400066746431582)
+--(axis cs:19,0.00757253395360715);
+
+\path [draw=black, thick]
+(axis cs:20,0.0163983948389626)
+--(axis cs:20,0.0191629760106467);
+
+\path [draw=black, thick]
+(axis cs:21,0.0101019514307862)
+--(axis cs:21,0.0121364878907317);
+
+\addplot [thick, black, mark=-, mark size=5, mark options={solid}, only marks]
+table {%
+1 0.00334392809008486
+2 0.00595301206197895
+3 0.00660271562506739
+4 0.00282537662574237
+5 0.0099964419805831
+6 0.00400463136062671
+7 0.00177051600788618
+8 0.00632872531672098
+9 0.0078674002689169
+10 0.00841100583747872
+11 0.00576981455328948
+12 0.0175787130774952
+13 0.00934789574314553
+14 0.0113966792674463
+15 0.0217575596117843
+16 0.0183995174736505
+17 0.0091783805530117
+18 0.0062896707888446
+19 0.00400066746431582
+20 0.0163983948389626
+21 0.0101019514307862
+};
+\addlegendentry{GCN}
+\addplot [thick, black, mark=-, mark size=5, mark options={solid}, only marks]
+table {%
+1 0.00774059272671812
+2 0.00811326687249981
+3 0.00848845325539525
+4 0.00572913563660199
+5 0.0124978741204911
+6 0.00599385706558179
+7 0.00317808809901689
+8 0.00732321789006613
+9 0.0111922041374399
+10 0.0104686700276946
+11 0.00776952951905244
+12 0.0204746802864575
+13 0.0119584699852328
+14 0.0136788576988776
+15 0.0240674807286392
+16 0.0204217684894079
+17 0.0119178311188175
+18 0.00841530171672486
+19 0.00757253395360715
+20 0.0191629760106467
+21 0.0121364878907317
+};
+\addlegendentry{GCN}
+\addplot [thick, color0, mark=*, mark size=5, mark options={solid,draw=black}]
+table {%
+1 0.00554226040840149
+2 0.00703313946723938
+3 0.00754558444023132
+4 0.00427725613117218
+5 0.0112471580505371
+6 0.00499924421310425
+7 0.00247430205345154
+8 0.00682597160339355
+9 0.00952980220317841
+10 0.00943983793258667
+11 0.00676967203617096
+12 0.0190266966819763
+13 0.0106531828641891
+14 0.0125377684831619
+15 0.0229125201702118
+16 0.0194106429815292
+17 0.0105481058359146
+18 0.00735248625278473
+19 0.00578660070896149
+20 0.0177806854248047
+21 0.011119219660759
+};
+\addlegendentry{GCN}
+
+\nextgroupplot[
+minor xtick={2,4,6,8,10,12,14,16,18,20},
+minor xticklabels={VL,VM,DAL,VV1M,PSS,SMM,SN,PL,BG,PMC},
+tick align=outside,
+tick pos=left,
+x grid style={white!69.0196078431373!black},
+xlabel={Node},
+xmajorgrids,
+xmin=0, xmax=22,
+xtick style={color=black},
+xtick={1,3,5,7,9,11,13,15,17,19,21},
+xticklabel style={rotate=60.0},
+xticklabels={CB1,SSN,DAR,FP,DMN,PMN,VA,CB2,TS,VV1L,TM},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+ymin=-0.00429590936097402, ymax=0.0282422203335458,
+ytick style={color=black},
+ytick={-0.01,0,0.01,0.02,0.03},
+yticklabels={
+  \(\displaystyle {0.00}\),
+  \(\displaystyle {0.01}\),
+  \(\displaystyle {0.02}\),
+  \(\displaystyle {0.03}\)
+}
+]
+\path [draw=black, thick]
+(axis cs:1,0.00619881701649863)
+--(axis cs:1,0.0181286995392875);
+
+\path [draw=black, thick]
+(axis cs:2,0.00268141505019872)
+--(axis cs:2,0.0122189832041958);
+
+\path [draw=black, thick]
+(axis cs:3,-0.00265383277391625)
+--(axis cs:3,0.0122829452559872);
+
+\path [draw=black, thick]
+(axis cs:4,-0.000161188094354398)
+--(axis cs:4,0.0122059635803468);
+
+\path [draw=black, thick]
+(axis cs:5,0.00178551221603532)
+--(axis cs:5,0.0192141458917222);
+
+\path [draw=black, thick]
+(axis cs:6,0.000407398668121235)
+--(axis cs:6,0.0120415737954866);
+
+\path [draw=black, thick]
+(axis cs:7,-0.00281690346576858)
+--(axis cs:7,0.00865612613537002);
+
+\path [draw=black, thick]
+(axis cs:8,0.00445936746422745)
+--(axis cs:8,0.0107914345758726);
+
+\path [draw=black, thick]
+(axis cs:9,0.00396992838279244)
+--(axis cs:9,0.0168064030419207);
+
+\path [draw=black, thick]
+(axis cs:10,0.00376214477579879)
+--(axis cs:10,0.0135744920058937);
+
+\path [draw=black, thick]
+(axis cs:11,0.00474059815655567)
+--(axis cs:11,0.0160835838769831);
+
+\path [draw=black, thick]
+(axis cs:12,0.0176932454942065)
+--(axis cs:12,0.0255313037993115);
+
+\path [draw=black, thick]
+(axis cs:13,0.00869372887455758)
+--(axis cs:13,0.0157724757686919);
+
+\path [draw=black, thick]
+(axis cs:14,0.00572892078964935)
+--(axis cs:14,0.0179320429840781);
+
+\path [draw=black, thick]
+(axis cs:15,0.0169208900034248)
+--(axis cs:15,0.0250589772165001);
+
+\path [draw=black, thick]
+(axis cs:16,0.0186921221323994)
+--(axis cs:16,0.0267632144383404);
+
+\path [draw=black, thick]
+(axis cs:17,0.0105906303755812)
+--(axis cs:17,0.0196538511879869);
+
+\path [draw=black, thick]
+(axis cs:18,0.0045366453062657)
+--(axis cs:18,0.0153977347482082);
+
+\path [draw=black, thick]
+(axis cs:19,0.0067850062772463)
+--(axis cs:19,0.0130057385042478);
+
+\path [draw=black, thick]
+(axis cs:20,0.0127627191100659)
+--(axis cs:20,0.0237217786755023);
+
+\path [draw=black, thick]
+(axis cs:21,0.0049239479116049)
+--(axis cs:21,0.0135051645227823);
+
+\addplot [thick, black, mark=-, mark size=5, mark options={solid}, only marks]
+table {%
+1 0.00619881701649863
+2 0.00268141505019872
+3 -0.00265383277391625
+4 -0.000161188094354398
+5 0.00178551221603532
+6 0.000407398668121235
+7 -0.00281690346576858
+8 0.00445936746422745
+9 0.00396992838279244
+10 0.00376214477579879
+11 0.00474059815655567
+12 0.0176932454942065
+13 0.00869372887455758
+14 0.00572892078964935
+15 0.0169208900034248
+16 0.0186921221323994
+17 0.0105906303755812
+18 0.0045366453062657
+19 0.0067850062772463
+20 0.0127627191100659
+21 0.0049239479116049
+};
+\addplot [thick, black, mark=-, mark size=5, mark options={solid}, only marks]
+table {%
+1 0.0181286995392875
+2 0.0122189832041958
+3 0.0122829452559872
+4 0.0122059635803468
+5 0.0192141458917222
+6 0.0120415737954866
+7 0.00865612613537002
+8 0.0107914345758726
+9 0.0168064030419207
+10 0.0135744920058937
+11 0.0160835838769831
+12 0.0255313037993115
+13 0.0157724757686919
+14 0.0179320429840781
+15 0.0250589772165001
+16 0.0267632144383404
+17 0.0196538511879869
+18 0.0153977347482082
+19 0.0130057385042478
+20 0.0237217786755023
+21 0.0135051645227823
+};
+\addplot [thick, color1, dashed, mark=square*, mark size=5, mark options={solid,draw=black}]
+table {%
+1 0.0121637582778931
+2 0.00745019912719727
+3 0.00481455624103546
+4 0.00602238774299622
+5 0.0104998290538788
+6 0.00622448623180389
+7 0.00291961133480072
+8 0.00762540102005005
+9 0.0103881657123566
+10 0.00866831839084625
+11 0.0104120910167694
+12 0.021612274646759
+13 0.0122331023216248
+14 0.0118304818868637
+15 0.0209899336099625
+16 0.0227276682853699
+17 0.0151222407817841
+18 0.00996719002723694
+19 0.00989537239074707
+20 0.0182422488927841
+21 0.0092145562171936
+};
+\end{groupplot}
+
+\draw ({$(current bounding box.south west)!0!(current bounding box.south east)$}|-{$(current bounding box.south west)!0.55!(current bounding box.north west)$}) node[
+  scale=1.1,
+  anchor= west,
+  text=black,
+  rotate=90.0
+]{$\Delta$MSE $\left[\textrm{years}^2\right]$};
+\end{tikzpicture}
